@@ -113,7 +113,7 @@ class Controller extends Package
     protected $overrides = [
         \Concrete\Core\Area\GlobalArea::class => \LgtToolkit\Area\GlobalArea::class,
         \Concrete\Core\Page\PageList::class => \LgtToolkit\Page\PageList::class,
-        \Concrete\Core\Page\Theme\Theme::class => \LgtToolkit\Page\Theme\Theme::class
+        \Concrete\Core\Page\Theme\Theme::class => \LgtToolkit\Page\Theme\Theme::class,
     ];
 
     /**
