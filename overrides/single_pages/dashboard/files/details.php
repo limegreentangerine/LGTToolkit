@@ -3,7 +3,6 @@
 use Concrete\Core\Attribute\CustomNoValueTextAttributeInterface;
 use Concrete\Core\File\Set\Set as FileSet;
 use Concrete\Core\User\User;
-use Package;
 
 defined('C5_EXECUTE') or die('Access Denied.');
 
@@ -22,12 +21,12 @@ defined('C5_EXECUTE') or die('Access Denied.');
  * @var string $thumbnail
  * @var Concrete\Core\Entity\Attribute\Key\FileKey[] $attributeKeys
  * @var Concrete\Core\Entity\Statistics\UsageTracker\FileUsageRecord[] $usageRecords
- * @var Concrete\Core\Entity\File\DownloadStatistics[][] $recentDownloads
+ * @var Concrete\Core\Entity\File\DownloadStatistics[] $recentDownloads
  */
 
 $file = $fileVersion->getFile();
 $genericType = $fileVersion->getTypeObject()->getGenericType();
-if ($view->controller->getAction() == 'preview_version') { ?>
+if (isset($view) && $view->controller->getAction() == 'preview_version') { ?>
     <div class="alert alert-info d-flex align-items-center"><div><?=t('You are currently previewing file version %s.', $fileVersion->getFileVersionID())?></div>
     <a href="<?=URL::to('/dashboard/files', 'details', $file->getFileID())?>" class="btn-sm btn btn-secondary d-flex ms-auto"><?=t('Exit Preview')?></a>
     </div>
@@ -50,7 +49,7 @@ if ($view->controller->getAction() == 'preview_version') { ?>
             </div>
         </div>
         <div class="col-lg-6">
-            <?php if ($view->controller->getAction() != 'preview_version') { ?>
+            <?php if (isset($view) && $view->controller->getAction() != 'preview_version') { ?>
 
                 <?php
                 if ($filePermissions->canEditFileProperties() || (
@@ -136,7 +135,7 @@ if ($view->controller->getAction() == 'preview_version') { ?>
                             <?php
                         }
                         ?>
-                        <?php if ($pkg = Package::getByHandle('lgt-toolkit') && $genericType === \Concrete\Core\File\Type\Type::T_IMAGE) { ?>
+                        <?php if ($pkg = \Package::getByHandle('lgt-toolkit') && $genericType === \Concrete\Core\File\Type\Type::T_IMAGE) { ?>
                             <li>
                                 <a
                                     data-bs-placement="left"
@@ -260,7 +259,7 @@ if ($view->controller->getAction() == 'preview_version') { ?>
 
 <section>
     <h3 class="mb-4"><?=t('Sets')?></h3>
-    <?php if ($view->controller->getAction() != 'preview_version') { ?>
+    <?php if (isset($view) && $view->controller->getAction() != 'preview_version') { ?>
         <a
                 class="btn btn-secondary btn-section dialog-launch"
                 dialog-title="<?= t('Sets') ?>"
@@ -377,7 +376,7 @@ if ($view->controller->getAction() == 'preview_version') { ?>
                     <tbody>
                     <?php
                     foreach ($usageRecords as $usageRecord) {
-                        $page = Page::getByID($usageRecord->getCollectionId(), $usageRecord->getCollectionVersionId());
+                        $page = \Page::getByID($usageRecord->getCollectionId(), $usageRecord->getCollectionVersionId());
                         if (!$page || $page->isError()) {
                             $page = null;
                         }
@@ -416,7 +415,7 @@ if ($view->controller->getAction() == 'preview_version') { ?>
 <hr class="mt-5 mb-4"/>
 
 <section>
-    <?php if ($view->controller->getAction() != 'preview_version') { ?>
+    <?php if (isset($view) && $view->controller->getAction() != 'preview_version') { ?>
         <?php
         if ($filePermissions->canEditFilePermissions()) {
             ?>
