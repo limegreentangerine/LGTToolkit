@@ -3,10 +3,14 @@
 namespace Concrete\Package\LgtToolkit;
 
 use Core;
+use Events;
 use LgtToolkit\Package\PageTrait;
 use Concrete\Core\Package\Package;
 use LgtToolkit\Package\BlockTrait;
 use Concrete\Core\Production\Modes;
+use LgtToolkit\Events\File as FileEvent;
+use LgtToolkit\Events\Page as PageEvent;
+use LgtToolkit\Events\Cache as CacheEvent;
 use LgtToolkit\ConcreteDebugbar\DebugBarTrait;
 use Concrete\Core\Command\Task\Manager as TaskManager;
 
@@ -57,10 +61,10 @@ class Controller extends Package
      * @var array
      */
     protected $providers = [
-        'lgt_mail' => '\LgtToolkit\Providers\LgtMail\LgtMailServiceProvider',
-        'autocache' => '\LgtToolkit\Providers\AutoCache\AutoCacheServiceProvider',
-        'focal_point' => '\LgtToolkit\Providers\FocalPoint\FocalPointServiceProvider',
-        'express_debugger' => '\LgtToolkitProviders\Express\Debugger\ExpressDebuggerServiceProvider',
+        \LgtToolkit\Providers\LgtMail\LgtMailServiceProvider::class,
+        \LgtToolkit\Providers\AutoCache\AutoCacheServiceProvider::class,
+        \LgtToolkit\Providers\FocalPoint\FocalPointServiceProvider::class,
+        \LgtToolkit\Providers\Express\Debugger\ExpressDebuggerServiceProvider::class,
     ];
 
     /**
@@ -115,10 +119,19 @@ class Controller extends Package
      *
      * @var array
      */
-    protected $overrides = [
+    protected $bindings = [
         \Concrete\Core\Area\GlobalArea::class => \LgtToolkit\Area\GlobalArea::class,
         \Concrete\Core\Page\PageList::class => \LgtToolkit\Page\PageList::class,
         \Concrete\Core\Page\Theme\Theme::class => \LgtToolkit\Page\Theme\Theme::class,
+    ];
+
+    /**
+     * Concrete Interface overrides to be copied to /application
+     *
+     * @var array
+     */
+    protected $applicationOverrides = [
+        '/single_pages/dashboard/files/details.php',
     ];
 
     /**
@@ -129,7 +142,25 @@ class Controller extends Package
     /**
      * Register Events
      */
-    private function registerEvents() {}
+    private function registerEvents()
+    {
+        Events::addListener('on_before_render', function ($event) {
+            PageEvent::redirector();
+            PageEvent::processCookiePolicy();
+        });
+
+        Events::addListener('on_user_logout', function () {
+            CacheEvent::disableDevMode();
+        });
+
+        Events::addListener('on_cache_flush', function () {
+            CacheEvent::forceCacheClear();
+        });
+
+        Events::addListener('on_file_delete', function ($event) {
+            FileEvent::removeFocalPoint($event);
+        });
+    }
 
     /**
      * Register Package Tasks
@@ -165,11 +196,14 @@ class Controller extends Package
 
         // Install Jobs/Tasks
         $this->installContentFile('tasks.xml');
+
+        // Install Interface Overrides to /application
+        $this->installApplicationOverrides();
     }
 
-    protected function registerOverrides(): void
+    protected function registerBindings(): void
     {
-        foreach ($this->overrides as $core => $override) {
+        foreach ($this->bindings as $core => $override) {
             $this->app->bind($core, $override);
         }
     }
@@ -178,6 +212,36 @@ class Controller extends Package
     {
         foreach ($this->providers as $class) {
             (new $class($this->app))->register();
+        }
+    }
+
+    protected function installApplicationOverrides(bool $overwrite = false): void
+    {
+        foreach ($this->applicationOverrides as $path) {
+            $source = DIR_PACKAGES . '/' . $this->pkgHandle . '/overrides' . $path;
+            $destination = DIR_APPLICATION . $path;
+
+            if (!file_exists($source)) {
+                throw new \RuntimeException(sprintf(
+                    'Application override not found: %s',
+                    $source,
+                ));
+            }
+
+            if (!$overwrite && file_exists($destination)) {
+                continue;
+            }
+
+            if (!is_dir(dirname($destination))) {
+                mkdir(dirname($destination), 0755, true);
+            }
+
+            if (!copy($source, $destination)) {
+                throw new \RuntimeException(sprintf(
+                    'Unable to install application override: %s',
+                    $destination,
+                ));
+            }
         }
     }
 
@@ -197,7 +261,7 @@ class Controller extends Package
         $config = $pkg->getFileConfig();
 
         $this->registerServiceProviders();
-        $this->registerOverrides();
+        $this->registerBindings();
         $this->registerRoutes();
         $this->registerEvents();
         $this->registerTasks();
