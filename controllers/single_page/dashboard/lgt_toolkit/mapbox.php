@@ -15,7 +15,7 @@ class Mapbox extends DashboardPageController
     {
         parent::on_start();
 
-        $this->pkg = Package::getByHandle('lgt_toolkit');
+        $this->pkg = Package::getByHandle('lgt-toolkit');
         $this->set('pkg', $this->pkg);
     }
 

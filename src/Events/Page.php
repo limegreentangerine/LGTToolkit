@@ -105,7 +105,7 @@ class Page
     public static function processCookiePolicy(): void
     {
         $page = ConcretePage::getCurrentPage();
-        $pkg = Package::getByHandle('lgt_toolkit');
+        $pkg = Package::getByHandle('lgt-toolkit');
 
         if (is_object($page) && is_object($pkg) && !$page->isAdminArea() && $page->getCollectionHandle() !== 'login') {
             $config = $pkg->getFileConfig();
@@ -129,15 +129,15 @@ class Page
                 $args['styles'] = $config->get('lgt_toolkit.cookie_popup.styles');
 
                 ob_start();
-                View::element('cookie_popup/cookie_popup', $args, 'lgt_toolkit');
+                View::element('cookie_popup/cookie_popup', $args, 'lgt-toolkit');
                 $policy = ob_get_contents();
                 ob_end_clean();
 
                 $html = Core::make('helper/html');
                 $controller = $page->getPageController();
-                $controller->addHeaderItem($html->css('cookie-popup.css', 'lgt_toolkit'));
+                $controller->addHeaderItem($html->css('cookie-popup.css', 'lgt-toolkit'));
                 $controller->addFooterItem('<script type="text/x-template" id="cookie-popup-code">' . $policy . '</script>');
-                $controller->addFooterItem($html->javascript('cookie-popup.js', 'lgt_toolkit'));
+                $controller->addFooterItem($html->javascript('cookie-popup.js', 'lgt-toolkit'));
 
                 if (!isset($session) || $session == null) {
                     $session = Core::make('session');

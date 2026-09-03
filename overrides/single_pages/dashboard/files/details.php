@@ -3,6 +3,7 @@
 use Concrete\Core\Attribute\CustomNoValueTextAttributeInterface;
 use Concrete\Core\File\Set\Set as FileSet;
 use Concrete\Core\User\User;
+use Package;
 
 defined('C5_EXECUTE') or die('Access Denied.');
 
@@ -135,6 +136,20 @@ if ($view->controller->getAction() == 'preview_version') { ?>
                             <?php
                         }
                         ?>
+                        <?php if ($pkg = Package::getByHandle('lgt-toolkit') && $genericType === \Concrete\Core\File\Type\Type::T_IMAGE) { ?>
+                            <li>
+                                <a
+                                    data-bs-placement="left"
+                                    class="dropdown-item launch-tooltip dialog-launch"
+                                    dialog-title="<?= t('Focal Point') ?>"
+                                    dialog-width="90%" dialog-height="75%"
+                                    title="<?= t('Set the focal point of this image.') ?>"
+                                    href="<?=URL::to('/lgt-toolkit/focal_point')?>?fID=<?=$file->getFileID()?>"
+                                >
+                                        <?= t('Set Focal Point') ?>
+                                </a>
+                            </li>
+                        <?php } ?>
                     </ul>
                 </div>
 

@@ -12,7 +12,7 @@ class LgtToolkit extends DashboardPageController
     {
         parent::on_start();
 
-        $this->pkg = Package::getByHandle('lgt_toolkit');
+        $this->pkg = Package::getByHandle('lgt-toolkit');
     }
 
     public function view()

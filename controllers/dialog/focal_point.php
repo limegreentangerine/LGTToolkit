@@ -23,7 +23,7 @@ class FocalPoint extends BackendInterfaceFileController
         parent::on_start();
 
         $html = $this->app->make('helper/html');
-        $this->addHeaderItem($html->css('focal_point.css', 'lgt_toolkit'));
+        $this->addHeaderItem($html->css('focal_point.css', 'lgt-toolkit'));
     }
 
     public function view()

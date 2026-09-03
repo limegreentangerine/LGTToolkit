@@ -1,0 +1,41 @@
+.focal-point__container {
+    position: relative;
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.focal-point__image {
+    position: relative;
+    z-index: 0;
+    max-width: 100%;
+    height: auto;
+}
+
+.focal-point__register {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.focal-point__indicator {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background-color: var(--bs-primary);
+    border: solid 1px var(--bs-white);
+    box-shadow: 0 0 10px rgba(var(--bs-black-rgb), 0.6);
+    translate: -50% -50%;
+    visibility: hidden;
+}
+
+.focal-point__indicator.active {
+    visibility: visible;
+}
