@@ -1,0 +1,18 @@
+{
+    "name": "limegreentangerine/lgt-toolkit",
+    "description": "LGT tools and defaults for Concrete CMS",
+    "type": "concrete5-package",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "LgtToolkit\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Lee Jones",
+            "email": "prolific.jones82@gmail.com"
+        }
+    ],
+    "require": {}
+}
