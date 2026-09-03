@@ -1,4 +1,5 @@
 <?php
+
 namespace LgtToolkit\ConcreteDebugbar\DataCollector;
 
 use Concrete\Core\Logging\LogList;
@@ -10,7 +11,7 @@ class LogDataCollector extends DataCollector implements Renderable
     /**
      * @inheritDoc
      */
-    function collect()
+    public function collect()
     {
         $list = new LogList();
         $list->sortBy('l.time', 'desc');
@@ -29,7 +30,7 @@ class LogDataCollector extends DataCollector implements Renderable
     /**
      * @inheritDoc
      */
-    function getName()
+    public function getName()
     {
         return 'concrete_log';
     }
@@ -37,15 +38,15 @@ class LogDataCollector extends DataCollector implements Renderable
     /**
      * @inheritDoc
      */
-    function getWidgets()
+    public function getWidgets()
     {
         return [
-            "logs" => [
-                "icon" => "fas fa-bars",
-                "widget" => "PhpDebugBar.Widgets.VariableListWidget",
-                "map" => "concrete_log",
-                "default" => "{}"
-            ]
+            'logs' => [
+                'icon' => 'fas fa-bars',
+                'widget' => 'PhpDebugBar.Widgets.VariableListWidget',
+                'map' => 'concrete_log',
+                'default' => '{}',
+            ],
         ];
     }
 

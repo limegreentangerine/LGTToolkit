@@ -1,4 +1,5 @@
 <?php
+
 namespace LgtToolkit\ConcreteDebugbar;
 
 use Doctrine\DBAL\Logging\DebugStack;

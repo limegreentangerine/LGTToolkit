@@ -1,4 +1,5 @@
 <?php
+
 namespace LgtToolkit\ConcreteDebugbar\DataCollector;
 
 use Concrete\Core\Http\Request;
@@ -11,7 +12,7 @@ class RequestDataCollector extends DataCollector implements Renderable
     /**
      * @inheritDoc
      */
-    function collect()
+    public function collect()
     {
         $app = Application::getFacadeApplication();
         /** @var Request $request */
@@ -32,7 +33,7 @@ class RequestDataCollector extends DataCollector implements Renderable
     /**
      * @inheritDoc
      */
-    function getName()
+    public function getName()
     {
         return 'concrete_request';
     }
@@ -40,15 +41,15 @@ class RequestDataCollector extends DataCollector implements Renderable
     /**
      * @inheritDoc
      */
-    function getWidgets()
+    public function getWidgets()
     {
         return [
-            "request" => [
-                "icon" => "user",
-                "widget" => "PhpDebugBar.Widgets.VariableListWidget",
-                "map" => "concrete_request",
-                "default" => "{}"
-            ]
+            'request' => [
+                'icon' => 'user',
+                'widget' => 'PhpDebugBar.Widgets.VariableListWidget',
+                'map' => 'concrete_request',
+                'default' => '{}',
+            ],
         ];
     }
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace LgtToolkit\ConcreteDebugbar\DataCollector;
 
 use DebugBar\DataCollector\Renderable;
@@ -12,8 +13,8 @@ class EnvironmentDataCollector extends DataCollector implements Renderable
         $app = Application::getFacadeApplication();
         $data['environment'] = $this->getDataFormatter()->formatVar($app->environment());
         $data['variables'] = $this->getDataFormatter()->formatVar(get_defined_vars());
-        $data['server']    = $this->getDataFormatter()->formatVar($_SERVER);
-        $data['classes']   = $this->getDataFormatter()->formatVar(get_declared_classes());
+        $data['server'] = $this->getDataFormatter()->formatVar($_SERVER);
+        $data['classes'] = $this->getDataFormatter()->formatVar(get_declared_classes());
         $data['functions'] = $this->getDataFormatter()->formatVar(get_defined_functions());
         $data['constants'] = $this->getDataFormatter()->formatVar(get_defined_constants());
 
@@ -28,11 +29,11 @@ class EnvironmentDataCollector extends DataCollector implements Renderable
     public function getWidgets()
     {
         return [
-            "environment" => [
-                "icon" => "fas fa-server",
-                "widget" => "PhpDebugBar.Widgets.VariableListWidget",
-                "map" => "concrete_environment",
-                "default" => "{}",
+            'environment' => [
+                'icon' => 'fas fa-server',
+                'widget' => 'PhpDebugBar.Widgets.VariableListWidget',
+                'map' => 'concrete_environment',
+                'default' => '{}',
             ],
         ];
     }

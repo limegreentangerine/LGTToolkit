@@ -1,4 +1,5 @@
 <?php
+
 namespace LgtToolkit\ConcreteDebugbar\DataCollector;
 
 use DebugBar\DataCollector\Renderable;
@@ -11,7 +12,7 @@ class SessionDataCollector extends DataCollector implements Renderable
     /**
      * @inheritDoc
      */
-    function collect()
+    public function collect()
     {
         $app = Application::getFacadeApplication();
         /** @var Session $session */
@@ -23,7 +24,7 @@ class SessionDataCollector extends DataCollector implements Renderable
     /**
      * @inheritDoc
      */
-    function getName()
+    public function getName()
     {
         return 'concrete_session';
     }
@@ -31,15 +32,15 @@ class SessionDataCollector extends DataCollector implements Renderable
     /**
      * @inheritDoc
      */
-    function getWidgets()
+    public function getWidgets()
     {
         return [
-            "session" => [
-                "icon" => "user",
-                "widget" => "PhpDebugBar.Widgets.VariableListWidget",
-                "map" => "concrete_session",
-                "default" => "{}"
-            ]
+            'session' => [
+                'icon' => 'user',
+                'widget' => 'PhpDebugBar.Widgets.VariableListWidget',
+                'map' => 'concrete_session',
+                'default' => '{}',
+            ],
         ];
     }
 
