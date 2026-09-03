@@ -45,6 +45,20 @@ class Controller extends Package
     protected $phpVersionRequired = '8.4';
 
     /**
+     * Package service providers to register.
+     *
+     * eg. 'Concrete\Package\PackageHandle\Src\Providers\PackageServiceProvider'
+     *
+     * @var array
+     */
+    protected $providers = [
+        // 'lgt_mail'          => '\Application\LgtMail\LgtMailServiceProvider',
+        'autocache' => '\LgtToolkit\AutoCache\AutoCacheServiceProvider',
+        'focal_point' => '\LgtToolkit\File\FocalPoint\FocalPointServiceProvider',
+        // 'express_debugger'  => '\Application\Express\Debugger\ExpressDebuggerServiceProvider'
+    ];
+
+    /**
      * An array describing the package dependencies.
      * Keys are package handles.
      * Values may be:
@@ -90,20 +104,26 @@ class Controller extends Package
     protected $tasks = [];
 
     /**
+     * Package classes to override core concrete classes
+     *
+     * eg. \Concrete\Core\SomeClass::class => \PackageHandle\SomeClass:class
+     *
+     * @var array
+     */
+    protected $overrides = [
+        \Concrete\Core\Area\GlobalArea::class => \LgtToolkit\Area\GlobalArea::class,
+        \Concrete\Core\Page\PageList::class => \LgtToolkit\Page\PageList::class,
+    ];
+
+    /**
      * Register URL Routes
      */
-    private function registerRoutes()
-    {
-
-    }
+    private function registerRoutes() {}
 
     /**
      * Register Events
      */
-    private function registerEvents()
-    {
-
-    }
+    private function registerEvents() {}
 
     /**
      * Register Package Tasks
@@ -133,6 +153,20 @@ class Controller extends Package
         $this->installContentFile('tasks.xml');
     }
 
+    protected function registerOverrides(): void
+    {
+        foreach ($this->overrides as $core => $override) {
+            $this->app->bind($core, $override);
+        }
+    }
+
+    protected function registerServiceProviders(): void
+    {
+        foreach ($this->providers as $class) {
+            (new $class($this->app))->register();
+        }
+    }
+
     public function getPackageName()
     {
         return t('LGT Toolkit');
@@ -145,6 +179,8 @@ class Controller extends Package
 
     public function on_start()
     {
+        $this->registerServiceProviders();
+        $this->registerOverrides();
         $this->registerRoutes();
         $this->registerEvents();
         $this->registerTasks();
