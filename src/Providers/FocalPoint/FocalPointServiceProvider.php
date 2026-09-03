@@ -1,6 +1,6 @@
 <?php
 
-namespace LgtToolkit\File\FocalPoint;
+namespace LgtToolkit\Providers\FocalPoint;
 
 use Concrete\Core\Foundation\Service\Provider;
 
@@ -10,7 +10,7 @@ class FocalPointServiceProvider extends Provider
     {
         $this->app->singleton(
             'focal_point',
-            FocalPointService::class,
+            \LgtToolkit\Providers\FocalPoint\FocalPointService::class,
         );
     }
 }

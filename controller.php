@@ -53,9 +53,9 @@ class Controller extends Package
      */
     protected $providers = [
         // 'lgt_mail'          => '\Application\LgtMail\LgtMailServiceProvider',
-        'autocache' => '\LgtToolkit\AutoCache\AutoCacheServiceProvider',
-        'focal_point' => '\LgtToolkit\File\FocalPoint\FocalPointServiceProvider',
-        // 'express_debugger'  => '\Application\Express\Debugger\ExpressDebuggerServiceProvider'
+        'autocache' => '\LgtToolkit\Providers\AutoCache\AutoCacheServiceProvider',
+        'focal_point' => '\LgtToolkit\Providers\FocalPoint\FocalPointServiceProvider',
+        'express_debugger' => '\LgtToolkitProviders\Express\Debugger\ExpressDebuggerServiceProvider',
     ];
 
     /**

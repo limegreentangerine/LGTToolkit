@@ -1,6 +1,6 @@
 <?php
 
-namespace LgtToolkit\AutoCache;
+namespace LgtToolkit\Providers\AutoCache;
 
 class AutoCacheService
 {

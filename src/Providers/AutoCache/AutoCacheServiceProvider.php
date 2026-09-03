@@ -1,6 +1,6 @@
 <?php
 
-namespace LgtToolkit\AutoCache;
+namespace LgtToolkit\Providers\AutoCache;
 
 use Concrete\Core\Foundation\Service\Provider;
 
@@ -10,7 +10,7 @@ class AutoCacheServiceProvider extends Provider
     {
         $this->app->singleton(
             'autocache',
-            \LgtToolkit\AutoCache\AutoCacheService::class,
+            \LgtToolkit\Providers\AutoCache\AutoCacheService::class,
         );
     }
 }

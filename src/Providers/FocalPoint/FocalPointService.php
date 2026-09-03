@@ -1,6 +1,6 @@
 <?php
 
-namespace LgtToolkit\File\FocalPoint;
+namespace LgtToolkit\Providers\FocalPoint;
 
 use Exception;
 use Concrete\Core\Entity\File\File;
