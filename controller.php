@@ -3,6 +3,7 @@
 namespace Concrete\Package\LgtToolkit;
 
 use Core;
+use LgtToolkit\Package\PageTrait;
 use Concrete\Core\Package\Package;
 use LgtToolkit\Package\BlockTrait;
 use Concrete\Core\Production\Modes;
@@ -12,6 +13,7 @@ use Concrete\Core\Command\Task\Manager as TaskManager;
 class Controller extends Package
 {
     use BlockTrait;
+    use PageTrait;
     use DebugBarTrait;
 
     /**
@@ -150,6 +152,14 @@ class Controller extends Package
      */
     protected function installOrUpgrade(\Concrete\Core\Entity\Package $pkg): void
     {
+        // Add Single Pages
+        $this->addSinglePage('/dashboard/lgt_toolkit', $pkg, t('LGT Toolkit'));
+        $this->addSinglePage('/dashboard/lgt_toolkit/cookie_popup', $pkg, t('Cookie Popup'), t('Cookie Popup settings.'));
+        $this->addSinglePage('/dashboard/lgt_toolkit/cloudflare', $pkg, t('Cloudflare'), t('Cloudflare API settings.'));
+        $this->addSinglePage('/dashboard/lgt_toolkit/mapbox', $pkg, t('Mapbox'), t('Mapbox API settings.'));
+        $this->addSinglePage('/dashboard/lgt_toolkit/uaccess', $pkg, t('UAccess'), t('UAccess Code.'));
+        $this->addSinglePage('/dashboard/lgt_toolkit/duplicate_express', $pkg, t('Duplicate Express Objects'), t('Duplicate Express Objects'));
+
         // Install Blocks
         $this->autoInstallBlocks($pkg);
 
