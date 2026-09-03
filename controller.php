@@ -52,7 +52,7 @@ class Controller extends Package
      * @var array
      */
     protected $providers = [
-        // 'lgt_mail'          => '\Application\LgtMail\LgtMailServiceProvider',
+        'lgt_mail' => '\LgtToolkit\Providers\LgtMail\LgtMailServiceProvider',
         'autocache' => '\LgtToolkit\Providers\AutoCache\AutoCacheServiceProvider',
         'focal_point' => '\LgtToolkit\Providers\FocalPoint\FocalPointServiceProvider',
         'express_debugger' => '\LgtToolkitProviders\Express\Debugger\ExpressDebuggerServiceProvider',
