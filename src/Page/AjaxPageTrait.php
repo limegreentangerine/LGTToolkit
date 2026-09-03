@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Page;
+namespace LgtToolkit\Page;
 
 use Page;
 use View;
@@ -10,6 +10,7 @@ use Exception;
 use Concrete\Core\Tree\Node\Node;
 use Concrete\Core\Attribute\Key\CollectionKey;
 
+// TODO: clean up this AjaxPageTrait
 trait AjaxPageTrait
 {
     use TranslationAdaptorTrait;

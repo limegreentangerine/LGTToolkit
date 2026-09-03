@@ -1,8 +1,9 @@
 <?php
 
-namespace Application\Page\Theme;
+namespace LgtToolkit\Page\Theme;
 
 use Events;
+use Concrete\Core\Package\Package;
 use Concrete\Core\Page\Theme\Theme as CoreTheme;
 use Symfony\Component\EventDispatcher\GenericEvent;
 
@@ -42,7 +43,7 @@ class Theme extends CoreTheme
         return $l;
     }
 
-    public static function buildImageMap($themeHandle, $pkg)
+    public static function buildImageMap(string $themeHandle, Package $pkg)
     {
         $themeInstallEvent = new GenericEvent();
         $themeInstallEvent->setArgument('theme_handle', $themeHandle);

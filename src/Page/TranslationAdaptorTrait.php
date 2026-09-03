@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\Page;
+namespace LgtToolkit\Page;
 
 use Page;
 use Concrete\Core\Localization\Localization;
