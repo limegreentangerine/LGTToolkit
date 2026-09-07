@@ -152,6 +152,12 @@ class Controller extends Package
          */
         Route::register('/ajax/lgt/file-list', 'Concrete\Package\LgtToolkit\Block\LgtAjaxFileList\Controller::getFiles');
         Route::register('/ajax/lgt/page-list', 'Concrete\Package\LgtToolkit\Block\LgtAjaxPageList\Controller::getNextPage');
+
+        /**
+         * Image Focal Point Routes
+         */
+        Route::register('/lgt-toolkit/focal_point', '\Concrete\Package\LgtToolkit\Controller\Dialog\FocalPoint::view');
+        Route::register('/lgt-toolkit/focal_point/submit', '\Concrete\Package\LgtToolkit\Controller\Dialog\FocalPoint::submit');
     }
 
     /**

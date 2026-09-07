@@ -5,7 +5,7 @@ namespace LgtToolkit\Events;
 use Core;
 use Concrete\Core\File\Event\DeleteFile;
 use Doctrine\ORM\EntityManagerInterface;
-use Application\Entity\File\ImageFocalPoint;
+use LgtToolkit\Entity\File\ImageFocalPoint;
 
 class File
 {
