@@ -2,7 +2,7 @@
 
 <?php if (isset($c) && is_object($c) && $c->isEditMode()) { ?>
     <div class="ccm-edit-mode-disabled-item"><?php echo t('LGT Video Unavailable in Edit Mode.%s', (isset($video)) ? '(' . $video->getTitle() . ')' : ''); ?></div>
-<?php } else if (isset($video)) { ?>
+<?php } elseif (isset($video)) { ?>
     <component-video>
         <section id="<?php echo $bID ?? null; ?>" class="block__lgt-video <?php echo ($this->controller->isSquare()) ? 'lgt-video__square' : ''; ?>">
             <video

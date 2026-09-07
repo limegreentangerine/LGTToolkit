@@ -1,4 +1,5 @@
 <?php
+
 namespace Concrete\Package\LgtToolkit\Block\LgtButton;
 
 defined('C5_EXECUTE') or die('Access Denied.');
@@ -36,23 +37,23 @@ class Controller extends BlockController
     public function getStyles(): array
     {
         return [
-            'primary'           => 'Primary',
-            'secondary'         => 'Secondary',
-            'success'           => 'Success',
-            'danger'            => 'Danger',
-            'warning'           => 'Warning',
-            'info'              => 'Info',
-            'light'             => 'Light',
-            'dark'              => 'Dark',
-            'link'              => 'Link',
-            'outline-primary'   => 'Outline Primary',
+            'primary' => 'Primary',
+            'secondary' => 'Secondary',
+            'success' => 'Success',
+            'danger' => 'Danger',
+            'warning' => 'Warning',
+            'info' => 'Info',
+            'light' => 'Light',
+            'dark' => 'Dark',
+            'link' => 'Link',
+            'outline-primary' => 'Outline Primary',
             'outline-secondary' => 'Outline Secondary',
-            'outline-success'   => 'Outline Success',
-            'outline-danger'    => 'Outline Danger',
-            'outline-warning'   => 'Outline Warning',
-            'outline-info'      => 'Outline Info',
-            'outline-light'     => 'Outline Light',
-            'outline-dark'      => 'Outline Dark'
+            'outline-success' => 'Outline Success',
+            'outline-danger' => 'Outline Danger',
+            'outline-warning' => 'Outline Warning',
+            'outline-info' => 'Outline Info',
+            'outline-light' => 'Outline Light',
+            'outline-dark' => 'Outline Dark',
         ];
     }
 
@@ -77,7 +78,7 @@ class Controller extends BlockController
         $types = [
             'internal' => 'Another Page',
             'external' => 'External URL',
-            'file' => 'File'
+            'file' => 'File',
         ];
 
         if (count($this->getAnchors()) > 0) {
@@ -101,9 +102,9 @@ class Controller extends BlockController
 
     public function save($args)
     {
-        $args['full_width']     = (isset($args['full_width']) && $args['full_width'] != '') ? $args['full_width'] : 0;
-        $args['new_window']     = (isset($args['new_window'])) ? 1 : 0;
-        $args['is_external']    = (isset($args['is_external']) && $args['is_external'] != '') ? $args['is_external'] : (($args['link_type'] == 'external') ? 1 : 0);
+        $args['full_width'] = (isset($args['full_width']) && $args['full_width'] != '') ? $args['full_width'] : 0;
+        $args['new_window'] = (isset($args['new_window'])) ? 1 : 0;
+        $args['is_external'] = (isset($args['is_external']) && $args['is_external'] != '') ? $args['is_external'] : (($args['link_type'] == 'external') ? 1 : 0);
 
         if ($args['is_external'] == 1) {
             $needles = ['http://', 'https://', 'mailto:', 'tel:'];
@@ -135,7 +136,7 @@ class Controller extends BlockController
                     $link = $page->getCollectionLink();
                 }
             }
-        } else if ($this->is_external == 1) {
+        } elseif ($this->is_external == 1) {
             $link = $this->external_url;
         }
 
@@ -147,14 +148,14 @@ class Controller extends BlockController
                 if (is_object($page) && !$page->isError()) {
                     $link = $page->getCollectionLink();
                 }
-            } else if ($this->link_type == 'external') {
+            } elseif ($this->link_type == 'external') {
                 $link = $this->external_url;
-            } else if ($this->link_type == 'file') {
+            } elseif ($this->link_type == 'file') {
                 $file = File::getByID($this->fID);
                 if (is_object($file) && !$file->isError()) {
                     $link = $file->getDownloadUrl();
                 }
-            } else if ($this->link_type == 'anchor') {
+            } elseif ($this->link_type == 'anchor') {
                 $link = $this->anchor;
             }
         }

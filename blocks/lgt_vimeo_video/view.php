@@ -1,8 +1,8 @@
-<?php defined('C5_EXECUTE') or die("Access Denied."); ?>
+<?php defined('C5_EXECUTE') or die('Access Denied.'); ?>
 
 <?php if (isset($c) && is_object($c) && $c->isEditMode()) { ?>
 	<div class="ccm-edit-mode-disabled-item"><?php echo t('Vimeo Video'); ?></div>
-<?php } else if (isset($vimeoVid)) { ?>
+<?php } elseif (isset($vimeoVid)) { ?>
 	<section id="<?php echo $bID; ?>" class="block__lgt-vimeo-video">
 		<div class="block__lgt-vimeo-video--wrapper">
 			<div class="block__lgt-vimeo-video--responsive <?php echo $this->controller->portrait() ? 'portrait' : ''; ?>">

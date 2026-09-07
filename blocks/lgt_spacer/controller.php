@@ -1,4 +1,5 @@
 <?php
+
 namespace Concrete\Package\LgtToolkit\Block\LgtSpacer;
 
 defined('C5_EXECUTE') or die('Access Denied.');

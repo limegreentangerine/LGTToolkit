@@ -16,9 +16,9 @@
         <?php if (!empty($files)) { ?>
             <div class="row">
                 <?php foreach ($files as $file) {
-                    $filePath   = (is_array($file) && isset($file['path'])) ? $file['path'] : $file->getRelativePath();
-                    $fileTitle  = (is_array($file) && isset($file['title'])) ? $file['title'] : $file->getTitle();
-                ?>
+                    $filePath = (is_array($file) && isset($file['path'])) ? $file['path'] : $file->getRelativePath();
+                    $fileTitle = (is_array($file) && isset($file['title'])) ? $file['title'] : $file->getTitle();
+                    ?>
                     <div class="col-12 col-lg-4">
                         <img src="<?php echo $filePath; ?>" class="img-fluid" alt="<?php echo $fileTitle; ?>" />
                     </div>

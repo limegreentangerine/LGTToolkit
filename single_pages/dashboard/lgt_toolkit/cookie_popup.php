@@ -21,29 +21,29 @@
             <div class="form-group">
                 <?php
                     echo $form->label('bgColor', t('Background Colour'));
-                    echo (string) $form->select('styles[bgColor]', $this->controller->getColourOptions(), (isset($formContent)) ? $formContent['styles']['bgColor'] : (isset($pkg) ? $pkg->getFileConfig()->get('lgt_toolkit.cookie_popup.styles.bgColor') : false));
-                ?>
+    echo (string) $form->select('styles[bgColor]', $this->controller->getColourOptions(), (isset($formContent)) ? $formContent['styles']['bgColor'] : (isset($pkg) ? $pkg->getFileConfig()->get('lgt_toolkit.cookie_popup.styles.bgColor') : false));
+    ?>
             </div>
 
             <div class="form-group">
                 <?php
-                    echo $form->label('fgColor', t('Foreground Colour'));
-                    echo (string) $form->select('styles[fgColor]', $this->controller->getColourOptions(), (isset($formContent)) ? $formContent['styles']['fgColor'] : (isset($pkg) ? $pkg->getFileConfig()->get('lgt_toolkit.cookie_popup.styles.fgColor') : false));
-                ?>
+        echo $form->label('fgColor', t('Foreground Colour'));
+    echo (string) $form->select('styles[fgColor]', $this->controller->getColourOptions(), (isset($formContent)) ? $formContent['styles']['fgColor'] : (isset($pkg) ? $pkg->getFileConfig()->get('lgt_toolkit.cookie_popup.styles.fgColor') : false));
+    ?>
             </div>
 
             <div class="form-group">
                 <?php
-                    echo $form->label('acceptAllStyle', t('Accept All Button'));
-                    echo (string) $form->select('styles[acceptAllStyle]', $this->controller->getColourOptions(), (isset($formContent)) ? $formContent['styles']['acceptAllStyle'] : (isset($pkg) ? $pkg->getFileConfig()->get('lgt_toolkit.cookie_popup.styles.acceptAllStyle') : false));
-                ?>
+        echo $form->label('acceptAllStyle', t('Accept All Button'));
+    echo (string) $form->select('styles[acceptAllStyle]', $this->controller->getColourOptions(), (isset($formContent)) ? $formContent['styles']['acceptAllStyle'] : (isset($pkg) ? $pkg->getFileConfig()->get('lgt_toolkit.cookie_popup.styles.acceptAllStyle') : false));
+    ?>
             </div>
 
             <div class="form-group">
                 <?php
-                    echo $form->label('acceptRequiredStyle', t('Accept Required Button'));
-                    echo (string) $form->select('styles[acceptRequiredStyle]', $this->controller->getColourOptions(), (isset($formContent)) ? $formContent['styles']['acceptRequiredStyle'] : (isset($pkg) ? $pkg->getFileConfig()->get('lgt_toolkit.cookie_popup.styles.acceptRequiredStyle') : false));
-                ?>
+        echo $form->label('acceptRequiredStyle', t('Accept Required Button'));
+    echo (string) $form->select('styles[acceptRequiredStyle]', $this->controller->getColourOptions(), (isset($formContent)) ? $formContent['styles']['acceptRequiredStyle'] : (isset($pkg) ? $pkg->getFileConfig()->get('lgt_toolkit.cookie_popup.styles.acceptRequiredStyle') : false));
+    ?>
             </div>
 
             <div class="form-group">
@@ -72,16 +72,16 @@
 
             <div class="form-group">
                 <?php
-                    echo $form->label('padding', t('Padding'));
-                    echo $form->number('styles[padding]', (isset($formContent)) ? $formContent['styles']['padding'] : (isset($pkg) ? $pkg->getFileConfig()->get('lgt_toolkit.cookie_popup.styles.padding') : 0), [ 'min' => 0, 'max' => 100 ]);
-                ?>
+        echo $form->label('padding', t('Padding'));
+    echo $form->number('styles[padding]', (isset($formContent)) ? $formContent['styles']['padding'] : (isset($pkg) ? $pkg->getFileConfig()->get('lgt_toolkit.cookie_popup.styles.padding') : 0), [ 'min' => 0, 'max' => 100 ]);
+    ?>
             </div>
 
             <div class="form-group">
                 <?php
-                    echo $form->label('margin', t('Margin'));
-                    echo $form->number('styles[margin]', (isset($formContent)) ? $formContent['styles']['margin'] : (isset($pkg) ? $pkg->getFileConfig()->get('lgt_toolkit.cookie_popup.styles.margin') : 0), [ 'min' => 0, 'max' => 100 ]);
-                ?>
+        echo $form->label('margin', t('Margin'));
+    echo $form->number('styles[margin]', (isset($formContent)) ? $formContent['styles']['margin'] : (isset($pkg) ? $pkg->getFileConfig()->get('lgt_toolkit.cookie_popup.styles.margin') : 0), [ 'min' => 0, 'max' => 100 ]);
+    ?>
             </div>
         </fieldset>
 
@@ -134,7 +134,7 @@
 
         <div class="ccm-dashboard-form-actions-wrapper">
             <div class="ccm-dashboard-form-actions">
-                <?php echo $form->submit('save', t('Save Settings'), array('class' => 'btn btn-primary float-end')); ?>
+                <?php echo $form->submit('save', t('Save Settings'), ['class' => 'btn btn-primary float-end']); ?>
             </div>
         </div>
     </form>

@@ -1,20 +1,20 @@
-<?php defined('C5_EXECUTE') or die("Access Denied."); ?>
+<?php defined('C5_EXECUTE') or die('Access Denied.'); ?>
 
 <fieldset>
 	<legend><?php echo t('Video Details'); ?></legend>
 
 	<div class="form-group">
 		<?php
-			echo $form->label('vimeoVid', t('<a href="http://www.vimeo.com" target="_blank">Vimeo</a> Video ID'));
-			echo $form->text('vimeoVid', $vimeoVid ?? null);
-		?>
+            echo $form->label('vimeoVid', t('<a href="http://www.vimeo.com" target="_blank">Vimeo</a> Video ID'));
+echo $form->text('vimeoVid', $vimeoVid ?? null);
+?>
 	</div>
 
 	<div class="form-group">
 		<?php
-			echo $color->output('vvColor', (isset($vvColor)) ? $vvColor : "#00adef", [ 'preferredFormat'=>'hex' ]);
-			echo $form->label('vvColor', t('Color'));
-		?>
+    echo $color->output('vvColor', (isset($vvColor)) ? $vvColor : '#00adef', [ 'preferredFormat' => 'hex' ]);
+echo $form->label('vvColor', t('Color'));
+?>
 	</div>
 </fieldset>
 
@@ -24,7 +24,7 @@
 	<div class="form-group">
 		<?php  echo $form->label('vvWidth', t('Width'));?>
 		<div class="input-group input-group-sm">
-			<?php  echo $form->text("vvWidth", (isset($vvWidth)) ? $vvWidth : "500"); ?>
+			<?php  echo $form->text('vvWidth', (isset($vvWidth)) ? $vvWidth : '500'); ?>
 			<span class="input-group-text"><?php echo t('px')?></span>
 		</div>
 	</div>
@@ -32,7 +32,7 @@
 	<div class="form-group">
 		<?php echo $form->label('vvHeight', t('Height'));?>
 		<div class="input-group input-group-sm">
-			<?php echo $form->text("vvHeight", (isset($vvHeight)) ? $vvHeight : "280"); ?>
+			<?php echo $form->text('vvHeight', (isset($vvHeight)) ? $vvHeight : '280'); ?>
 			<span class="input-group-text"><?php echo t('px')?></span>
 		</div>
 	</div>
@@ -43,9 +43,9 @@
 
 	<div class="form-group">
 		<?php
-			echo $form->label('vvTitle', t('Video Title'));
-			echo $form->text('vvTitle', $vvTitle ?? null);
-		?>
+    echo $form->label('vvTitle', t('Video Title'));
+echo $form->text('vvTitle', $vvTitle ?? null);
+?>
 	</div>
 
 	<div class="form-group">

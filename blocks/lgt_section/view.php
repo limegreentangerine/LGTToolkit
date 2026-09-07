@@ -5,19 +5,19 @@
                 <?php if (isset($mediaFile) && $mediaFile) {
                     $approvedVersion = $mediaFile->getApprovedVersion();
                     $mime = $approvedVersion->getMimeType();
-                ?>
+                    ?>
                     <div class="lgt-section__media--container">
                         <?php
-                            if (str_contains($mime, 'image')) {
-                                \View::element('picture', [
-                                    'f' => $mediaFile,
-                                    'classes' => [
-                                        'lgt-section__media'
-                                    ],
-                                    'altText' => $mediaFile->getTitle()
-                                ]);
-                            } else {
-                        ?>
+                                if (str_contains($mime, 'image')) {
+                                    \View::element('picture', [
+                                        'f' => $mediaFile,
+                                        'classes' => [
+                                            'lgt-section__media',
+                                        ],
+                                        'altText' => $mediaFile->getTitle(),
+                                    ]);
+                                } else {
+                                    ?>
                             <video class="lgt-section__media" playsinline autoplay loop muted preload>
                                 <source src="<?php echo $mediaFile->getRelativePath(); ?>" type="<?php echo $mime; ?>" />
                             </video>

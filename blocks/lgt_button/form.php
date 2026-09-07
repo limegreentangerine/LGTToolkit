@@ -27,16 +27,16 @@
                 echo '</td>';
                 echo '</tr>';
             }
-            ?>
+?>
         </table>
     </div>
 
     <div class="form-group">
         <label class="form-label"><?php echo t('Size') ?></label>
         <select name="button_size"class="form-control">
-            <option value="" <?php echo (isset($button_size) && $button_size == '' ? 'selected="selected"' : '')?>><?php echo t('Normal'); ?></option>
-            <option value="btn-sm" <?php echo (isset($button_size) && $button_size == 'btn-sm' ? 'selected="selected"' : '')?>><?php echo t('Small'); ?></option>
-            <option value="btn-lg" <?php echo (isset($button_size) && $button_size == 'btn-lg' ? 'selected="selected"' : '')?>><?php echo t('Large'); ?></option>
+            <option value="" <?php echo isset($button_size) && $button_size == '' ? 'selected="selected"' : ''?>><?php echo t('Normal'); ?></option>
+            <option value="btn-sm" <?php echo isset($button_size) && $button_size == 'btn-sm' ? 'selected="selected"' : ''?>><?php echo t('Small'); ?></option>
+            <option value="btn-lg" <?php echo isset($button_size) && $button_size == 'btn-lg' ? 'selected="selected"' : ''?>><?php echo t('Large'); ?></option>
         </select>
     </div>
 
@@ -54,37 +54,37 @@
     <div class="form-group">
         <select name="link_type" data-select="feature-link-type" class="form-control">
             <?php foreach ($this->controller->getLinkTypes() as $value => $name) { ?>
-                <option value="<?php echo $value; ?>" <?php echo ((isset($link_type) && $link_type == $value) ? 'selected="selected"' : '')?>><?php echo $name; ?></option>
+                <option value="<?php echo $value; ?>" <?php echo (isset($link_type) && $link_type == $value) ? 'selected="selected"' : ''?>><?php echo $name; ?></option>
             <?php } ?>
         </select>
     </div>
 
     <?php if (isset($ps)) { ?>
-        <div data-select-contents="feature-link-type-internal" class="form-group" <?php echo (isset($link_type) && $link_type == 'internal' ? '' : 'style="display:none;"'); ?>>
+        <div data-select-contents="feature-link-type-internal" class="form-group" <?php echo isset($link_type) && $link_type == 'internal' ? '' : 'style="display:none;"'; ?>>
             <?php
-                echo $form->label('page_cID', t('Choose Page:'));
-                echo $ps->selectPage('page_cID', isset($page_cID) && $page_cID > 0 ? $page_cID : false);
-            ?>
+    echo $form->label('page_cID', t('Choose Page:'));
+        echo $ps->selectPage('page_cID', isset($page_cID) && $page_cID > 0 ? $page_cID : false);
+        ?>
         </div>
     <?php } ?>
 
-    <div data-select-contents="feature-link-type-external" class="form-group" <?php echo (isset($link_type) && $link_type == 'external' ? '' : 'style="display:none;"'); ?>>
+    <div data-select-contents="feature-link-type-external" class="form-group" <?php echo isset($link_type) && $link_type == 'external' ? '' : 'style="display:none;"'; ?>>
         <?php echo $form->label('external_url', t('URL')); ?>
         <?php echo $form->text('external_url', $external_url ?? null); ?>
     </div>
 
-    <div data-select-contents="feature-link-type-file" class="form-group" <?php echo (isset($link_type) && $link_type == 'file' ? '' : 'style="display:none;"'); ?>>
+    <div data-select-contents="feature-link-type-file" class="form-group" <?php echo isset($link_type) && $link_type == 'file' ? '' : 'style="display:none;"'; ?>>
         <?php echo $form->label('fID', t('File')); ?>
         <?php echo $al->file('fID', 'fID', t('Choose File'), $fID ?? null); ?>
     </div>
 
     <?php if (count($this->controller->getAnchors()) > 0) { ?>
-        <div data-select-contents="feature-link-type-anchor" class="form-group" <?php echo (isset($link_type) && $link_type == 'anchor' ? '' : 'style="display:none;"'); ?>>
+        <div data-select-contents="feature-link-type-anchor" class="form-group" <?php echo isset($link_type) && $link_type == 'anchor' ? '' : 'style="display:none;"'; ?>>
             <?php echo $form->label('anchor', t('Anchor')); ?>
             <?php
-                $anchors = array_merge(['' => 'Choose anchor...' ], $this->controller->getAnchors());
-                echo (string) $form->select('anchor', $anchors, $anchor ?? null);
-            ?>
+            $anchors = array_merge(['' => 'Choose anchor...' ], $this->controller->getAnchors());
+        echo (string) $form->select('anchor', $anchors, $anchor ?? null);
+        ?>
         </div>
     <?php } ?>
 

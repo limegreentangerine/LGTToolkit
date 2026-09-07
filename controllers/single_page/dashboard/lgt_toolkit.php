@@ -1,4 +1,5 @@
 <?php
+
 namespace Concrete\Package\LgtToolkit\Controller\SinglePage\Dashboard;
 
 use Page;

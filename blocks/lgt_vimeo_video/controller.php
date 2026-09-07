@@ -1,104 +1,106 @@
-<?php namespace Concrete\Package\LgtToolkit\Block\LgtVimeoVideo;
+<?php
 
-defined('C5_EXECUTE') or die("Access Denied.");
+namespace Concrete\Package\LgtToolkit\Block\LgtVimeoVideo;
+
+defined('C5_EXECUTE') or die('Access Denied.');
 
 use Page;
 use Concrete\Core\Block\BlockController;
 
 class Controller extends BlockController
 {
-	protected $btTable = 'btVimeoVid';
+    protected $btTable = 'btVimeoVid';
     protected $btDefaultSet = 'multimedia';
     protected $btInterfaceWidth = 800;
     protected $btInterfaceHeight = 600;
-	protected string $vvColor;
-	protected bool $autoplay;
-	protected bool $vvloop;
-	protected bool $byline;
-	protected bool $portrait;
-	protected bool $introTitle;
-	protected bool $showlink;
+    protected string $vvColor;
+    protected bool $autoplay;
+    protected bool $vvloop;
+    protected bool $byline;
+    protected bool $portrait;
+    protected bool $introTitle;
+    protected bool $showlink;
 
-	public function getBlockTypeName()
-	{
-		return t('Vimeo Video');
-	}
+    public function getBlockTypeName()
+    {
+        return t('Vimeo Video');
+    }
 
-	public function getBlockTypeDescription()
-	{
-		return t('Easily add a Vimeo video to your page.');
-	}
+    public function getBlockTypeDescription()
+    {
+        return t('Easily add a Vimeo video to your page.');
+    }
 
-	public function add()
-	{
-		$this->set('color', $this->app->make('helper/form/color'));
-	}
+    public function add()
+    {
+        $this->set('color', $this->app->make('helper/form/color'));
+    }
 
-	public function edit()
-	{
-		$this->set('color', $this->app->make('helper/form/color'));
-	}
+    public function edit()
+    {
+        $this->set('color', $this->app->make('helper/form/color'));
+    }
 
-	public function view()
-	{
-		$this->set('c', Page::getCurrentPage());
-		$this->set('vimeoColor', ltrim($this->vvColor, '#'));
-	}
+    public function view()
+    {
+        $this->set('c', Page::getCurrentPage());
+        $this->set('vimeoColor', ltrim($this->vvColor, '#'));
+    }
 
-	public function autoplay()
-	{
-		return $this->autoplay;
-	}
+    public function autoplay()
+    {
+        return $this->autoplay;
+    }
 
-	public function loop()
-	{
-		return $this->vvloop;
-	}
+    public function loop()
+    {
+        return $this->vvloop;
+    }
 
-	public function showIntroTitle()
-	{
-		return $this->introTitle;
-	}
+    public function showIntroTitle()
+    {
+        return $this->introTitle;
+    }
 
-	public function showByline()
-	{
-		return $this->byline;
-	}
+    public function showByline()
+    {
+        return $this->byline;
+    }
 
-	public function portrait()
-	{
-		return $this->portrait;
-	}
+    public function portrait()
+    {
+        return $this->portrait;
+    }
 
-	public function showLink()
-	{
-		return $this->showlink;
-	}
+    public function showLink()
+    {
+        return $this->showlink;
+    }
 
-	function save($data)
-	{
-		if (isset($data['vimeoVid'])) {
-			$videoId = (int) substr(parse_url($data['vimeoVid'], PHP_URL_PATH), 1);
-			$args['vimeoVid'] = $videoId;
-		} else {
-			$args['vimeoVid'] = null;
-		}
+    public function save($data)
+    {
+        if (isset($data['vimeoVid'])) {
+            $videoId = (int) substr(parse_url($data['vimeoVid'], PHP_URL_PATH), 1);
+            $args['vimeoVid'] = $videoId;
+        } else {
+            $args['vimeoVid'] = null;
+        }
 
-		$args['vvTitle'] 	= $data['vvTitle'] ?? null;
-		$args['vvUser'] 	= $data['vvUser'] ?? null;
-		$args['vvHeight'] 	= is_numeric($data['vvHeight']) ? intval($data['vvHeight']) : '280';
-		$args['vvWidth'] 	= is_numeric($data['vvWidth']) ? intval($data['vvWidth']) : '500';
-		$args['vvColor'] 	= isset($data['vvColor']) ? $data['vvColor'] : '#00adef';
+        $args['vvTitle'] = $data['vvTitle'] ?? null;
+        $args['vvUser'] = $data['vvUser'] ?? null;
+        $args['vvHeight'] = is_numeric($data['vvHeight']) ? intval($data['vvHeight']) : '280';
+        $args['vvWidth'] = is_numeric($data['vvWidth']) ? intval($data['vvWidth']) : '500';
+        $args['vvColor'] = isset($data['vvColor']) ? $data['vvColor'] : '#00adef';
 
-		$args['autoplay'] 	= (isset($data['autoplay'])) ? '1' : '0';
-		$args['vvloop'] 	= (isset($data['vvloop'])) ? '1' : '0';
-		$args['showlink'] 	= (isset($data['showlink'])) ? '1' : '0';
+        $args['autoplay'] = (isset($data['autoplay'])) ? '1' : '0';
+        $args['vvloop'] = (isset($data['vvloop'])) ? '1' : '0';
+        $args['showlink'] = (isset($data['showlink'])) ? '1' : '0';
 
-		$args['introTitle'] = (isset($data['introTitle'])) ? '1' : '0';
-		$args['portrait'] 	= (isset($data['portrait'])) ? '1' : '0';
-		$args['byline'] 	= (isset($data['byline'])) ? '1' : '0';
+        $args['introTitle'] = (isset($data['introTitle'])) ? '1' : '0';
+        $args['portrait'] = (isset($data['portrait'])) ? '1' : '0';
+        $args['byline'] = (isset($data['byline'])) ? '1' : '0';
 
-		parent::save($args);
-	}
+        parent::save($args);
+    }
 
 }

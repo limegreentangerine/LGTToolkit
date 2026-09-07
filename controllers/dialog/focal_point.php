@@ -1,10 +1,11 @@
 <?php
+
 namespace Concrete\Package\LgtToolkit\Controller\Dialog;
 
 use Concrete\Core\File\File;
 use Concrete\Core\Permission\Checker;
-use Application\Entity\File\ImageFocalPoint;
 use Doctrine\ORM\EntityManagerInterface;
+use Application\Entity\File\ImageFocalPoint;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Concrete\Controller\Backend\UserInterface\File as BackendInterfaceFileController;
 

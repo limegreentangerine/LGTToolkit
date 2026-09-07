@@ -1,4 +1,5 @@
 <?php
+
 namespace Concrete\Package\LgtToolkit\Block\LgtSocialShare;
 
 defined('C5_EXECUTE') or die('Access Denied.');
@@ -12,25 +13,15 @@ use Concrete\Core\Sharing\SocialNetwork\ServiceList;
 class Controller extends BlockController
 {
     protected $btTable = 'btLgtSocialShare';
-    protected $btExportTables = array('btLgtSocialShare', 'btLgtSocialShareNetworks');
+    protected $btExportTables = ['btLgtSocialShare', 'btLgtSocialShareNetworks'];
     protected $btDefaultSet = 'basic';
     protected $btInterfaceWidth = 600;
     protected $btInterfaceHeight = 550;
     protected $shareableNetworks = [
         'facebook',
         'twitter',
-        'linkedin'
+        'linkedin',
     ];
-
-    public function getBlockTypeName()
-    {
-        return t('Social Share');
-    }
-
-    public function getBlockTypeDescription()
-    {
-        return t('Add a share block to a page.');
-    }
 
 
     protected function getSocialNetworks()
@@ -51,12 +42,22 @@ class Controller extends BlockController
 
         $q = 'SELECT * FROM `btLgtSocialShareNetworks` WHERE `bID` = ? ORDER BY `id` ASC';
         $v = [
-            $this->bID
+            $this->bID,
         ];
 
         $rows = $db->fetchAll($q, $v);
 
         return $rows;
+    }
+
+    public function getBlockTypeName()
+    {
+        return t('Social Share');
+    }
+
+    public function getBlockTypeDescription()
+    {
+        return t('Add a share block to a page.');
     }
 
     public function add()
@@ -108,8 +109,8 @@ class Controller extends BlockController
                 'INSERT INTO `btLgtSocialShareNetworks` (`bID`, `serviceHandle`) VALUES (?, ?)',
                 [
                     $newBID,
-                    $row['serviceHandle']
-                ]
+                    $row['serviceHandle'],
+                ],
             );
         }
     }
@@ -128,7 +129,7 @@ class Controller extends BlockController
         // Clear old data for individual links
         $q = 'DELETE FROM `btLgtSocialShareNetworks` WHERE `bID` = ?';
         $v = [
-            $this->bID
+            $this->bID,
         ];
         $db->executeQuery($q, $v);
 
@@ -139,7 +140,7 @@ class Controller extends BlockController
             foreach ($args['socialHandles'] as $k => $v) {
                 $temp_args = [
                     $this->bID,
-                    $args['socialHandles'][$k]
+                    $args['socialHandles'][$k],
                 ];
 
                 $q = 'INSERT INTO `btLgtSocialShareNetworks` (`bID`, `serviceHandle`) VALUES (?, ?)';
@@ -152,8 +153,8 @@ class Controller extends BlockController
     {
         if (count($this->getShareLinks()) > 0) {
             return false;
-        } else {
-            return true;
         }
+        return true;
+
     }
 }

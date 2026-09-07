@@ -8,22 +8,22 @@
             <div class="form-group">
                 <?php
                     echo $form->label('centerLatitude', t('Centre Latitude'));
-                    echo $form->text('centerLatitude', $centerLatitude ?? null);
-                ?>
+    echo $form->text('centerLatitude', $centerLatitude ?? null);
+    ?>
             </div>
 
             <div class="form-group">
                 <?php
-                    echo $form->label('centerLongitude', t('Centre Longitude'));
-                    echo $form->text('centerLongitude', $centerLongitude ?? null);
-                ?>
+        echo $form->label('centerLongitude', t('Centre Longitude'));
+    echo $form->text('centerLongitude', $centerLongitude ?? null);
+    ?>
             </div>
 
             <div class="form-group">
                 <?php
-                    echo $form->label('theme', t('Theme'));
-                    echo $form->text('theme', $theme ?? null);
-                ?>
+        echo $form->label('theme', t('Theme'));
+    echo $form->text('theme', $theme ?? null);
+    ?>
                 <div class="help-block">
                     <?php echo t('Styles can be found <a href="https://docs.mapbox.com/mapbox-gl-js/api/map/" target="_blank">here</a>. Custom styles can be created in <a href="https://studio.mapbox.com/" target="_blank">Mapbox Studio</a>.'); ?>
                 </div>
@@ -31,16 +31,16 @@
 
             <div class="form-group">
                 <?php
-                    echo $form->label('zoom', t('Zoom'));
-                    echo $form->text('zoom', $zoom ?? null);
-                ?>
+        echo $form->label('zoom', t('Zoom'));
+    echo $form->text('zoom', $zoom ?? null);
+    ?>
             </div>
 
             <div class="form-group">
                 <?php
-                    echo $form->label('pitch', t('Pitch'));
-                    echo $form->text('pitch', $pitch ?? null);
-                ?>
+        echo $form->label('pitch', t('Pitch'));
+    echo $form->text('pitch', $pitch ?? null);
+    ?>
             </div>
 
         </fieldset>
@@ -64,9 +64,9 @@
 
             <div class="form-group">
                 <?php
-                    echo $form->label('control_placement', t('Control Placement'));
-                    echo (string) $form->select('control_placement', $this->controller->getControlPlacementOptions(), $control_placement ?? null);
-                ?>
+        echo $form->label('control_placement', t('Control Placement'));
+    echo (string) $form->select('control_placement', $this->controller->getControlPlacementOptions(), $control_placement ?? null);
+    ?>
             </div>
         </fieldset>
 
@@ -83,9 +83,9 @@
             <?php if (isset($ch)) { ?>
                 <div class="form-group">
                     <?php
-                        echo $ch->output('extrusionColor', $extrusionColor ?? null, [ 'preferredFormat' => 'hex' ]);
-                        echo $form->label('extrusionColor', t('Building Colour'));
-                    ?>
+            echo $ch->output('extrusionColor', $extrusionColor ?? null, [ 'preferredFormat' => 'hex' ]);
+                echo $form->label('extrusionColor', t('Building Colour'));
+                ?>
                 </div>
             <?php } ?>
         </fieldset>
@@ -105,8 +105,8 @@
     <script>
         <?php
             $app = \Concrete\Core\Support\Facade\Application::getFacadeApplication();
-            $editorJavascript = $app->make('editor')->outputStandardEditorInitJSFunction();
-        ?>
+    $editorJavascript = $app->make('editor')->outputStandardEditorInitJSFunction();
+    ?>
         var launchEditor = <?=$editorJavascript?>;
         $(function() {
             var container           = $('.ccm-lgt-mapbox-block-container');

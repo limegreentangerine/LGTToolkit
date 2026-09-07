@@ -4,12 +4,12 @@
     <legend><?php echo t('Colours'); ?></legend>
 
     <div class="form-group">
-        <?php $color->output('hex_text', $hex_text ?? null, array('preferredFormat' => 'hex')); ?>
+        <?php $color->output('hex_text', $hex_text ?? null, ['preferredFormat' => 'hex']); ?>
         <?php echo $form->label('hex_text', t('Font Colour')); ?>
     </div>
 
     <div class="form-group">
-        <?php $color->output('hex_background', $hex_background ?? null, array('preferredFormat' => 'hex')); ?>
+        <?php $color->output('hex_background', $hex_background ?? null, ['preferredFormat' => 'hex']); ?>
         <?php echo $form->label('hex_background', t('Background Colour')); ?>
     </div>
 

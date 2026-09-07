@@ -1,4 +1,5 @@
 <?php
+
 namespace Concrete\Package\LgtToolkit\Controller\SinglePage\Dashboard\LgtToolkit;
 
 use Concrete\Core\Entity\Package;
@@ -8,12 +9,12 @@ use Concrete\Core\Page\Controller\DashboardPageController;
 class Uaccess extends DashboardPageController
 {
     protected $helpers = [
-        'form'
+        'form',
     ];
 
     protected $codePlacement = [
-        'header'    => 'Header',
-        'footer'    => 'Footer'
+        'header' => 'Header',
+        'footer' => 'Footer',
     ];
     protected Package $pkg;
 
@@ -43,7 +44,7 @@ class Uaccess extends DashboardPageController
 
                 $this->set('message', implode(PHP_EOL, [
                     t('UAccess code settings updated successfully.'),
-                    t('Cached files removed.')
+                    t('Cached files removed.'),
                 ]));
             } else {
                 $this->error->add($this->token->getErrorMessage());

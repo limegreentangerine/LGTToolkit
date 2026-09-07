@@ -1,4 +1,5 @@
 <?php
+
 namespace Concrete\Package\Lgttoolkit\Block\LgtFilesetGallery;
 
 defined('C5_EXECUTE') or die('Access Denied.');
@@ -14,16 +15,6 @@ class Controller extends BlockController
     protected $btInterfaceWidth = 800;
     protected $btInterfaceHeight = 600;
     protected int $fsID;
-
-    public function getBlockTypeName()
-    {
-        return t('Fileset Gallery');
-    }
-
-    public function getBlockTypeDescription()
-    {
-        return t('Create and add a fileset gallery to a page.');
-    }
 
     protected function getFileSets()
     {
@@ -48,6 +39,16 @@ class Controller extends BlockController
         }
 
         return false;
+    }
+
+    public function getBlockTypeName()
+    {
+        return t('Fileset Gallery');
+    }
+
+    public function getBlockTypeDescription()
+    {
+        return t('Create and add a fileset gallery to a page.');
     }
 
     public function add()

@@ -8,8 +8,8 @@
             <div class="form-group">
                 <?php
                     echo $form->label('nav_title', t('Nav Title'));
-                    echo $form->text('nav_title', $title ?? null);
-                ?>
+    echo $form->text('nav_title', $title ?? null);
+    ?>
             </div>
 
         </fieldset>

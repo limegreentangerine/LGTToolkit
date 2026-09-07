@@ -1,18 +1,33 @@
 <?php
+
 namespace Concrete\Package\LgtToolkit\Controller\SinglePage\Dashboard\LgtToolkit;
 
 use Concrete\Core\Entity\Package;
 use Concrete\Core\Error\UserMessageException;
+use LgtToolkit\Cloudflare\Api as CloudflareApi;
 use Concrete\Core\Http\ResponseFactoryInterface;
 use Concrete\Core\Page\Controller\DashboardPageController;
-use LgtToolkit\Cloudflare\Api as CloudflareApi;
 
 class Cloudflare extends DashboardPageController
 {
     protected Package $pkg;
     protected $helpers = [
-        'form'
+        'form',
     ];
+
+    protected function validate($request)
+    {
+        $vstrings = $this->app->make('helper/validation/strings');
+        $vnumbers = $this->app->make('helper/validation/numbers');
+
+        if (!$vstrings->notempty($request->request('base_url'))) {
+            $this->error->add(t('Please enter a URL'), 'base_url');
+        }
+
+        if (!$vstrings->notempty($request->request('zone_id'))) {
+            $this->error->add(t('Please enter Zone ID'), 'zone_id');
+        }
+    }
 
     public function on_start()
     {
@@ -31,9 +46,9 @@ class Cloudflare extends DashboardPageController
 
             if (!is_object($this->pkg)) {
                 return new UserMessageException(t('LGT Toolkit Package not found'));
-            } else {
-                $config = $this->pkg->getFileConfig();
             }
+            $config = $this->pkg->getFileConfig();
+
 
             $this->validate($this->request);
 
@@ -50,9 +65,9 @@ class Cloudflare extends DashboardPageController
 
                 $this->flash('success', t('Cloudflare settings saved.'));
                 return $this->redirect('/dashboard/lgt_toolkit/cloudflare');
-            } else {
-                $this->set('formContent', $this->request->request());
             }
+            $this->set('formContent', $this->request->request());
+
         } else {
             return $this->redirect('/dashboard/lgt_toolkit/cloudflare');
         }
@@ -71,26 +86,12 @@ class Cloudflare extends DashboardPageController
                 $config->save('lgt_toolkit.cloudflare.token', '');
 
                 return $rf->json(true);
-            } else {
-                $this->error->add(t('LGT Toolkit not found.'));
             }
+            $this->error->add(t('LGT Toolkit not found.'));
+
         }
 
         return $rf->json($this->error->jsonSerialize());
-    }
-
-    protected function validate($request)
-    {
-        $vstrings = $this->app->make('helper/validation/strings');
-        $vnumbers = $this->app->make('helper/validation/numbers');
-
-        if (!$vstrings->notempty($request->request('base_url'))) {
-            $this->error->add(t('Please enter a URL'), 'base_url');
-        }
-
-        if (!$vstrings->notempty($request->request('zone_id'))) {
-            $this->error->add(t('Please enter Zone ID'), 'zone_id');
-        }
     }
 
     public function getCloudflareDevelopmentMode(): string
@@ -102,7 +103,7 @@ class Cloudflare extends DashboardPageController
             $error_string = $response->getUrl() . ' - (' . $response->getStatusCode() . ' ' . $response->getStatusText($response->getStatusCode()) . ')';
 
             $body = $response->getBodyDecoded();
-            foreach($body->errors as $error) {
+            foreach ($body->errors as $error) {
                 $error_string = $error_string . ' ' . $error->message;
             }
 
@@ -123,8 +124,8 @@ class Cloudflare extends DashboardPageController
             }
 
             return strtoupper($r->result->value);
-        } else {
-            return t('An Unknown Error Occurred');
         }
+        return t('An Unknown Error Occurred');
+
     }
 }

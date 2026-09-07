@@ -1,4 +1,5 @@
 <?php
+
 namespace Concrete\Package\LgtToolkit\Controller\SinglePage\Dashboard\LgtToolkit;
 
 use Core;
@@ -28,7 +29,7 @@ class DuplicateExpress extends DashboardPageController
     {
         $r = $this->entityManager->getRepository('\Concrete\Core\Entity\Express\Entity');
         $entities = [];
-        foreach($r->findPublicEntities() as $entity) {
+        foreach ($r->findPublicEntities() as $entity) {
             $permissions = new Checker($entity);
             if ($permissions->canViewExpressEntries()) {
                 $entities[] = $entity;

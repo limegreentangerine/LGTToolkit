@@ -1,10 +1,11 @@
 <?php
+
 namespace Concrete\Package\LgtToolkit\Block\LgtVideo;
 
 defined('C5_EXECUTE') or die('Access Denied.');
 
-use Page;
 use File;
+use Page;
 use Concrete\Core\Block\BlockController;
 
 class Controller extends BlockController
@@ -20,6 +21,17 @@ class Controller extends BlockController
     protected bool $controls;
     protected bool $autoplay;
     protected bool $muted;
+
+    protected function getFileObject(int $fID)
+    {
+        $file = File::getByID($fID);
+
+        if ($file !== null && !$file->isError()) {
+            return $file;
+        }
+
+        return false;
+    }
 
     public function getBlockTypeName()
     {
@@ -55,17 +67,6 @@ class Controller extends BlockController
         $args['controls'] = isset($args['controls']) ? 1 : 0;
         $args['square'] = isset($args['square']) ? 1 : 0;
         parent::save($args);
-    }
-
-    protected function getFileObject(int $fID)
-    {
-        $file = File::getByID($fID);
-
-        if ($file !== null && !$file->isError()) {
-            return $file;
-        }
-
-        return false;
     }
 
     public function getVideoFilters()

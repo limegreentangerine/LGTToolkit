@@ -1,4 +1,4 @@
-<?php defined('C5_EXECUTE') or die("Access Denied."); ?>
+<?php defined('C5_EXECUTE') or die('Access Denied.'); ?>
 
 <?php if (isset($c) && is_object($c) && $c->isEditMode()) { ?>
     <div class="ccm-edit-mode-disabled-item"><?php echo t('Spacer Block.'); ?></div>

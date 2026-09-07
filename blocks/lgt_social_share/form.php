@@ -6,8 +6,8 @@
     <div class="form-group">
         <?php
             echo $form->label('share_title', t('Title'));
-            echo $form->text('share_title', $title ?? null);
-        ?>
+echo $form->text('share_title', $title ?? null);
+?>
     </div>
 </fieldset>
 
@@ -18,7 +18,7 @@
         <div class="form-group">
             <?php foreach ($services as $handle => $name) {
                 $checked = ((isset($selected) && is_array($selected)) && in_array($handle, $selected)) ? 'checked' : '';
-            ?>
+                ?>
                 <div class="input-group">
                     <div class="checkbox">
                         <label for="<?php echo $handle; ?>" >

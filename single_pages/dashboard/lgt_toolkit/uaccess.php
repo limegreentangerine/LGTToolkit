@@ -8,21 +8,21 @@
             <div class="form-group">
                 <?php
                     echo $form->label('code', t('Code'));
-                    echo $form->textarea('code', (isset($pkg)) ? $pkg->getFileConfig()->get('lgt_toolkit.uaccess.code') : false, [ 'resize' => 'none', 'style' => 'height:200px;' ]);
-                ?>
+    echo $form->textarea('code', (isset($pkg)) ? $pkg->getFileConfig()->get('lgt_toolkit.uaccess.code') : false, [ 'resize' => 'none', 'style' => 'height:200px;' ]);
+    ?>
             </div>
 
             <div class="form-group">
                 <?php
-                    echo $form->label('placement', t('Placement'));
-                    echo (string) $form->select('placement', (isset($codePlacement) ? $codePlacement : []), (isset($pkg)) ? $pkg->getFileConfig()->get('lgt_toolkit.uaccess.placement') : false);
-                ?>
+        echo $form->label('placement', t('Placement'));
+    echo (string) $form->select('placement', (isset($codePlacement) ? $codePlacement : []), (isset($pkg)) ? $pkg->getFileConfig()->get('lgt_toolkit.uaccess.placement') : false);
+    ?>
             </div>
         </fieldset>
 
         <div class="ccm-dashboard-form-actions-wrapper">
             <div class="ccm-dashboard-form-actions">
-                <?php echo $form->submit('save', t('Save Settings'), array('class' => 'btn btn-primary float-end')); ?>
+                <?php echo $form->submit('save', t('Save Settings'), ['class' => 'btn btn-primary float-end']); ?>
             </div>
         </div>
     </form>

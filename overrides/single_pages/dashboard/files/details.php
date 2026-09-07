@@ -1,27 +1,27 @@
 <?php
 
-use Concrete\Core\Attribute\CustomNoValueTextAttributeInterface;
-use Concrete\Core\File\Set\Set as FileSet;
 use Concrete\Core\User\User;
+use Concrete\Core\File\Set\Set as FileSet;
+use Concrete\Core\Attribute\CustomNoValueTextAttributeInterface;
 
 defined('C5_EXECUTE') or die('Access Denied.');
 
 /**
- * @var Concrete\Core\Application\Service\Dashboard $dashboard
- * @var Concrete\Core\Form\Service\Form $form
- * @var Concrete\Core\Html\Service\Html $html
- * @var Concrete\Core\Application\Service\UserInterface $interface
- * @var Concrete\Core\Validation\CSRF\Token $token
- * @var Concrete\Controller\SinglePage\Dashboard\Files\Details $controller
- * @var Concrete\Core\Localization\Service\Date $date
- * @var Concrete\Core\Utility\Service\Number $number
- * @var Concrete\Core\Url\Resolver\Manager\ResolverManagerInterface $resolverManager
- * @var Concrete\Core\Entity\File\Version $fileVersion
- * @var Concrete\Core\Permission\Checker $filePermissions
- * @var string $thumbnail
- * @var Concrete\Core\Entity\Attribute\Key\FileKey[] $attributeKeys
+ * @var Concrete\Core\Application\Service\Dashboard                    $dashboard
+ * @var Concrete\Core\Form\Service\Form                                $form
+ * @var Concrete\Core\Html\Service\Html                                $html
+ * @var Concrete\Core\Application\Service\UserInterface                $interface
+ * @var Concrete\Core\Validation\CSRF\Token                            $token
+ * @var Concrete\Controller\SinglePage\Dashboard\Files\Details         $controller
+ * @var Concrete\Core\Localization\Service\Date                        $date
+ * @var Concrete\Core\Utility\Service\Number                           $number
+ * @var Concrete\Core\Url\Resolver\Manager\ResolverManagerInterface    $resolverManager
+ * @var Concrete\Core\Entity\File\Version                              $fileVersion
+ * @var Concrete\Core\Permission\Checker                               $filePermissions
+ * @var string                                                         $thumbnail
+ * @var Concrete\Core\Entity\Attribute\Key\FileKey[]                   $attributeKeys
  * @var Concrete\Core\Entity\Statistics\UsageTracker\FileUsageRecord[] $usageRecords
- * @var Concrete\Core\Entity\File\DownloadStatistics[] $recentDownloads
+ * @var Concrete\Core\Entity\File\DownloadStatistics[]                 $recentDownloads
  */
 
 $file = $fileVersion->getFile();
@@ -53,21 +53,21 @@ if (isset($view) && $view->controller->getAction() == 'preview_version') { ?>
 
                 <?php
                 if ($filePermissions->canEditFileProperties() || (
-                        $filePermissions->canEditFileContents() && (
-                            $genericType === \Concrete\Core\File\Type\Type::T_IMAGE ||
-                            $fileVersion->canEdit()
-                        )
+                    $filePermissions->canEditFileContents() && (
+                        $genericType === \Concrete\Core\File\Type\Type::T_IMAGE
+                        || $fileVersion->canEdit()
                     )
+                )
                 ) {
-                ?>
+                    ?>
                 <div class="dropdown float-end">
                     <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown">
                         <?=t('Edit')?>
                     </button>
                     <ul class="dropdown-menu">
                         <?php
-                        if ($filePermissions->canEditFileProperties()) {
-                            ?>
+                            if ($filePermissions->canEditFileProperties()) {
+                                ?>
                             <li>
                                     <a
                                             data-bs-placement="left"
@@ -79,22 +79,22 @@ if (isset($view) && $view->controller->getAction() == 'preview_version') { ?>
                                     ><?= t('Edit Attributes') ?></a>
                             </li>
                             <?php
-                        }
-                        if ($genericType === \Concrete\Core\File\Type\Type::T_IMAGE
-                            && $filePermissions->canEditFileContents()) {
-                            // If it's an SVG there will be not thumbnails to edit, so we don't show the thumbnails option. It would also make no sense given the nature of SVG as an image format.
-                            if ($fileVersion->getTypeObject()->isSVG()) {
-                                $dialogURL = '/ccm/system/file/view?fID=';
-                                $dialogLinkLabel = t('View');
-                                $dialogLinkTitle = t('View this SVG.');
-                                $dialogTitle = t('View');
-                            } else {
-                                $dialogURL = '/ccm/system/dialogs/file/thumbnails?fID=';
-                                $dialogLinkLabel = t('Thumbnails');
-                                $dialogLinkTitle = t('Adjust the thumbnails for this image.');
-                                $dialogTitle = t('Edit');
                             }
-                            ?>
+                    if ($genericType === \Concrete\Core\File\Type\Type::T_IMAGE
+                        && $filePermissions->canEditFileContents()) {
+                        // If it's an SVG there will be not thumbnails to edit, so we don't show the thumbnails option. It would also make no sense given the nature of SVG as an image format.
+                        if ($fileVersion->getTypeObject()->isSVG()) {
+                            $dialogURL = '/ccm/system/file/view?fID=';
+                            $dialogLinkLabel = t('View');
+                            $dialogLinkTitle = t('View this SVG.');
+                            $dialogTitle = t('View');
+                        } else {
+                            $dialogURL = '/ccm/system/dialogs/file/thumbnails?fID=';
+                            $dialogLinkLabel = t('Thumbnails');
+                            $dialogLinkTitle = t('Adjust the thumbnails for this image.');
+                            $dialogTitle = t('Edit');
+                        }
+                        ?>
                             <li><a
                                     data-bs-placement="left"
                                     class="dropdown-item launch-tooltip dialog-launch"
@@ -104,9 +104,9 @@ if (isset($view) && $view->controller->getAction() == 'preview_version') { ?>
                                     href="<?=URL::to($dialogURL . $file->getFileID())?>"
                             ><?= $dialogLinkLabel ?></a></li>
                             <?php
-                        }
-                        if ($fileVersion->canEdit() && $filePermissions->canEditFileContents()) {
-                            ?>
+                    }
+                    if ($fileVersion->canEdit() && $filePermissions->canEditFileContents()) {
+                        ?>
                             <li>
                                 <a
                                         data-bs-placement="left"
@@ -114,27 +114,27 @@ if (isset($view) && $view->controller->getAction() == 'preview_version') { ?>
                                         dialog-title="<?= t('Edit') ?>"
                                         dialog-width="90%" dialog-height="75%"
                                         <?php
-                                        if ($genericType === \Concrete\Core\File\Type\Type::T_IMAGE) { ?>
+                                    if ($genericType === \Concrete\Core\File\Type\Type::T_IMAGE) { ?>
                                             title="<?= t('Resize, crop or apply filters to this image.') ?>"
                                         <?php } else { ?>
                                             title="<?= t('Edit this file.') ?>"
                                             <?php
                                         }
-                                        ?>
+                        ?>
                                         href="<?=URL::to('/ccm/system/file/edit')?>?fID=<?=$file->getFileID()?>">
                                         <?php
-                                        if ($genericType === \Concrete\Core\File\Type\Type::T_IMAGE) { ?>
+                        if ($genericType === \Concrete\Core\File\Type\Type::T_IMAGE) { ?>
                                             <?= t('Open Image Editor') ?>
                                         <?php } else { ?>
                                             <?= t('Edit File Contents') ?>
                                             <?php
                                         }
-                                        ?>
+                        ?>
                                 </a>
                             </li>
                             <?php
-                        }
-                        ?>
+                    }
+                    ?>
                         <?php if ($pkg = \Package::getByHandle('lgt-toolkit') && $genericType === \Concrete\Core\File\Type\Type::T_IMAGE) { ?>
                             <li>
                                 <a
@@ -160,43 +160,43 @@ if (isset($view) && $view->controller->getAction() == 'preview_version') { ?>
             <dl class="ccm-file-manager-details-attributes">
                 <dt><?= t('Title') ?></dt>
                 <dd>
-                    <div><?= (string)$fileVersion->getTitle() === '' ? '<i>' . t('No title') . '</i>' : h($fileVersion->getTitle()) ?></div>
+                    <div><?= (string) $fileVersion->getTitle() === '' ? '<i>' . t('No title') . '</i>' : h($fileVersion->getTitle()) ?></div>
                 </dd>
                 <dt><?= t('Description') ?></dt>
                 <dd>
-                    <div><?= (string)$fileVersion->getDescription() === '' ? '<i>' . t('No description') . '</i>' : nl2br(h($fileVersion->getDescription())) ?></div>
+                    <div><?= (string) $fileVersion->getDescription() === '' ? '<i>' . t('No description') . '</i>' : nl2br(h($fileVersion->getDescription())) ?></div>
                 </dd>
                 <dt><?= t('Tags') ?></dt>
                 <dd>
                     <?php
-                    $tags = preg_split('/\s*\n\s*/', (string)$fileVersion->getTags(), -1, PREG_SPLIT_NO_EMPTY);
-                    if ($tags === []) {
-                        ?>
+                    $tags = preg_split('/\s*\n\s*/', (string) $fileVersion->getTags(), -1, PREG_SPLIT_NO_EMPTY);
+if ($tags === []) {
+    ?>
                         <i><?= t('No tags') ?></i>
                         <?php
-                    } else {
-                        ?>
+} else {
+    ?>
                         <span><?= h(implode(', ', $tags)) ?></span>
                         <?php
-                    }
-                    ?>
+}
+?>
                 </dd>
                 <dt><?= t('Size') ?></dt>
                 <dd>
                     <div>
                         <?php
-                        echo sprintf(
-                            '%s (%s)',
-                            $fileVersion->getSize(),
-                            t2(
-                            /*i18n: %s is a number */
-                                '%s byte',
-                                '%s bytes',
-                                $fileVersion->getFullSize(),
-                                $number->format($fileVersion->getFullSize())
-                            )
-                        );
-                        ?>
+    echo sprintf(
+        '%s (%s)',
+        $fileVersion->getSize(),
+        t2(
+            /*i18n: %s is a number */
+            '%s byte',
+            '%s bytes',
+            $fileVersion->getFullSize(),
+            $number->format($fileVersion->getFullSize()),
+        ),
+    );
+?>
                     </div>
                 </dd>
                 <?php
@@ -207,24 +207,24 @@ if (isset($view) && $view->controller->getAction() == 'preview_version') { ?>
                         <div>
                             <?php
                             $attributeValue = $fileVersion->getAttributeValueObject($attributeKey);
-                            if ($attributeValue === null) {
-                                $noValueDisplayHtml = '<i>' . t('None') . '</i>';
-                                if (method_exists($attributeKey, 'getController')) {
-                                    $attributeController = $attributeKey->getController();
-                                    if ($attributeController instanceof CustomNoValueTextAttributeInterface) {
-                                        $noValueDisplayHtml = (string)$attributeController->getNoneTextDisplayValue();
-                                    }
-                                }
-                                echo $noValueDisplayHtml;
-                            } else {
-                                echo (string)$attributeValue;
+                    if ($attributeValue === null) {
+                        $noValueDisplayHtml = '<i>' . t('None') . '</i>';
+                        if (method_exists($attributeKey, 'getController')) {
+                            $attributeController = $attributeKey->getController();
+                            if ($attributeController instanceof CustomNoValueTextAttributeInterface) {
+                                $noValueDisplayHtml = (string) $attributeController->getNoneTextDisplayValue();
                             }
-                            ?>
+                        }
+                        echo $noValueDisplayHtml;
+                    } else {
+                        echo (string) $attributeValue;
+                    }
+                    ?>
                         </div>
                     </dd>
                     <?php
                 }
-                ?>
+?>
             </dl>
         </div>
     </div>
@@ -250,7 +250,7 @@ if (isset($view) && $view->controller->getAction() == 'preview_version') { ?>
         <dt><?= t('Tracking URL') ?></dt>
         <dd>
             <input type="text" class="form-control" readonly onclick="this.select()" value="<?= h($fileVersion->getDownloadURL()) ?>">
-            <div class="text-muted mt-2"><i><?= t("By using this URL Concrete will still be able to manage permissions and track statistics on its use.") ?></i></div>
+            <div class="text-muted mt-2"><i><?= t('By using this URL Concrete will still be able to manage permissions and track statistics on its use.') ?></i></div>
         </dd>
     </dl>
 </section>
@@ -273,22 +273,22 @@ if (isset($view) && $view->controller->getAction() == 'preview_version') { ?>
         <dd>
             <?php
             $fileSets = $file->getFileSets();
-            if ($fileSets === []) {
-                ?>
+if ($fileSets === []) {
+    ?>
                 <i><?= t('No file set') ?></i>
                 <?php
-            } else {
-                $fileSetNames = array_map(
-                    function (FileSet $fileSet) {
-                        return $fileSet->getFileSetDisplayName();
-                    },
-                    $fileSets
-                );
-                ?>
+} else {
+    $fileSetNames = array_map(
+        function (FileSet $fileSet) {
+            return $fileSet->getFileSetDisplayName();
+        },
+        $fileSets,
+    );
+    ?>
                 <span><?= implode(', ', $fileSetNames) ?></span>
                 <?php
-            }
-            ?>
+}
+?>
             <div class="text-muted mt-2">
                 <i><?= t('You can add this file to many sets. Lots of image sliders/galleries use sets to determine what to display.') ?></i>
             </div>
@@ -310,37 +310,37 @@ if (isset($view) && $view->controller->getAction() == 'preview_version') { ?>
         <dt><?= t('Most Recent Downloads') ?></dt>
         <dd>
             <?php
-            if ($recentDownloads === []) {
-                ?><i><?= t('No downloads') ?></i><?php
-            } else {
-                ?>
+if ($recentDownloads === []) {
+    ?><i><?= t('No downloads') ?></i><?php
+} else {
+    ?>
                 <table class="table table-bordered">
                     <tbody>
                     <?php
-                    foreach ($recentDownloads as $recentDownload) {
-                        ?>
+        foreach ($recentDownloads as $recentDownload) {
+            ?>
                         <tr>
                             <td>
                                 <?php
-                                if ($recentDownload->getDownloaderID() === null) {
-                                    ?><i><?= t('Guest') ?></i><?php
-                                } else {
-                                    $downloader = User::getByUserID($recentDownload->getDownloaderID());
-                                    if ($downloader && $downloader->isRegistered()) {
-                                        echo h($downloader->getUserName());
-                                    } else {
-                                        ?>
+                    if ($recentDownload->getDownloaderID() === null) {
+                        ?><i><?= t('Guest') ?></i><?php
+                    } else {
+                        $downloader = User::getByUserID($recentDownload->getDownloaderID());
+                        if ($downloader && $downloader->isRegistered()) {
+                            echo h($downloader->getUserName());
+                        } else {
+                            ?>
                                         <i><?= t('Deleted user (ID: %s)', $recentDownload->getDownloaderID()) ?></i><?php
-                                    }
-                                }
-                                ?>
+                        }
+                    }
+            ?>
                             </td>
                             <td><?= h($date->formatPrettyDateTime($recentDownload->getDownloadDateTime(), true)) ?></td>
                             <td><?= t('Version %s', $recentDownload->getFileVersion()) ?></td>
                         </tr>
                         <?php
-                    }
-                    ?>
+        }
+    ?>
                     </tbody>
                 </table>
                 <a
@@ -350,20 +350,20 @@ if (isset($view) && $view->controller->getAction() == 'preview_version') { ?>
                         href="<?= h($resolverManager->resolve(['/ccm/system/dialogs/file/statistics', $file->getFileID()])) ?>"
                 ><?= t('More') ?></a>
                 <?php
-            }
-            ?>
+}
+?>
             <div class="text-muted mt-2">
                 <i><?= t('If this file is downloaded through the File Block we track it here.') ?></i></div>
         </dd>
         <dt><?= t('File Usage') ?></dt>
         <dd>
             <?php
-            if ($usageRecords === []) {
-                ?>
+if ($usageRecords === []) {
+    ?>
                 <i><?= t("It seems that this file isn't used anywhere.") ?></i>
                 <?php
-            } else {
-                ?>
+} else {
+    ?>
                 <table class="table table-bordered">
                     <thead>
                     <tr>
@@ -375,39 +375,39 @@ if (isset($view) && $view->controller->getAction() == 'preview_version') { ?>
                     </thead>
                     <tbody>
                     <?php
-                    foreach ($usageRecords as $usageRecord) {
-                        $page = \Page::getByID($usageRecord->getCollectionId(), $usageRecord->getCollectionVersionId());
-                        if (!$page || $page->isError()) {
-                            $page = null;
-                        }
-                        ?>
+        foreach ($usageRecords as $usageRecord) {
+            $page = \Page::getByID($usageRecord->getCollectionId(), $usageRecord->getCollectionVersionId());
+            if (!$page || $page->isError()) {
+                $page = null;
+            }
+            ?>
                         <tr>
                             <td><?= $usageRecord->getCollectionId() ?></td>
                             <td><?= $usageRecord->getCollectionVersionId() ?></strong></td>
                             <td><?= $page === null ? '<i>' . t('n/a') . '</i>' : '<strong>' . h($page->getCollectionHandle()) . '</strong>' ?></td>
                             <td>
                                 <?php
-                                if ($page === null) {
-                                    ?>
+                    if ($page === null) {
+                        ?>
                                     <i><?= t('n/a') ?></i>
                                     <?php
-                                } else {
-                                    $pagePath = '/' . ltrim((string)$page->getCollectionPath(), '/');
-                                    ?>
+                    } else {
+                        $pagePath = '/' . ltrim((string) $page->getCollectionPath(), '/');
+                        ?>
                                     <a href="<?= $resolverManager->resolve([$page]) ?>"><strong><?= h($pagePath) ?></strong></a>
                                     <?php
-                                }
-                                ?>
+                    }
+            ?>
                             </td>
                         </tr>
                         <?php
-                    }
-                    ?>
+        }
+    ?>
                     </tbody>
                 </table>
                 <?php
-            }
-            ?>
+}
+?>
         </dd>
     </dl>
 </section>

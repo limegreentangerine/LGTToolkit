@@ -1,4 +1,5 @@
 <?php
+
 namespace Concrete\Package\LgtToolkit\Block\LgtContentSideTitle;
 
 defined('C5_EXECUTE') or die('Access Denied.');
@@ -31,36 +32,36 @@ class Controller extends BlockController
     public function getColumnSpacingOptions(): array
     {
         return [
-            'justify-content-start'     => t('Left'),
-            'justify-content-end'       => t('Right'),
-            'justify-content-center'    => t('Center'),
-            'justify-content-around'    => t('Space Around'),
-            'justify-content-between'   => t('Space Between'),
+            'justify-content-start' => t('Left'),
+            'justify-content-end' => t('Right'),
+            'justify-content-center' => t('Center'),
+            'justify-content-around' => t('Space Around'),
+            'justify-content-between' => t('Space Between'),
         ];
     }
 
     public function getColumnArrangementOptions(): array
     {
         return [
-            'flex-row'          => t('Title > Content'),
-            'flex-row-reverse'  => t('Content > Title')
+            'flex-row' => t('Title > Content'),
+            'flex-row-reverse' => t('Content > Title'),
         ];
     }
 
     public function getColumnAlignmentOptions(): array
     {
         return [
-            'align-items-center'    => t('Centre'),
-            'align-items-start'     => t('Top'),
-            'align-items-end'       => t('Bottom'),
-            'align-items-stretch'   => t('Full Height'),
+            'align-items-center' => t('Centre'),
+            'align-items-start' => t('Top'),
+            'align-items-end' => t('Bottom'),
+            'align-items-stretch' => t('Full Height'),
         ];
     }
 
     public function getColumnGutterSizeOptions(): array
     {
         $gutterSizes = [
-            ''  => t('Default')
+            '' => t('Default'),
         ];
 
         for ($i = 0; $i <= 5; $i++) {
@@ -117,7 +118,7 @@ class Controller extends BlockController
 
     public function save($args)
     {
-        $args['link_cID']   = $args['link_cID'] != '' ? $args['link_cID'] : 0;
+        $args['link_cID'] = $args['link_cID'] != '' ? $args['link_cID'] : 0;
         $args['content'] = LinkAbstractor::translateTo($args['content']);
 
         parent::save($args);

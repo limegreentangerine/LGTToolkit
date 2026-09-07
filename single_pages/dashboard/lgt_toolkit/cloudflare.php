@@ -83,7 +83,8 @@
             </div>
         </fieldset>
 
-        <?php if (isset($pkg) && $pkg->getFileConfig()->get('lgt_toolkit.cloudflare.activate') == true) { $this->controller->getCloudflareDevelopmentMode(); ?>
+        <?php if (isset($pkg) && $pkg->getFileConfig()->get('lgt_toolkit.cloudflare.activate') == true) {
+            $this->controller->getCloudflareDevelopmentMode(); ?>
             <fieldset>
                 <legend><?php echo t('Development Mode Status'); ?></legend>
 
@@ -96,7 +97,7 @@
 
         <div class="ccm-dashboard-form-actions-wrapper">
             <div class="ccm-dashboard-form-actions">
-                <?php echo $form->submit('save', t('Save Settings'), array('class' => 'btn btn-primary float-end')); ?>
+                <?php echo $form->submit('save', t('Save Settings'), ['class' => 'btn btn-primary float-end']); ?>
             </div>
         </div>
     </form>

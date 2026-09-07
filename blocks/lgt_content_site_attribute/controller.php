@@ -1,4 +1,5 @@
 <?php
+
 namespace Concrete\Package\LgtToolkit\Block\LgtContentSiteAttribute;
 
 defined('C5_EXECUTE') or die('Access Denied.');
@@ -14,6 +15,26 @@ class Controller extends BlockController
     protected $btInterfaceWidth = 800;
     protected $btInterfaceHeight = 600;
     protected string $content;
+
+    protected function addressFormatter(object $address)
+    {
+        $valueData = [
+            'address1' => $address->address1,
+            'address2' => $address->address2,
+            'city' => $address->city,
+            'state_province' => $address->state_province,
+            'postal_code' => $address->postal_code,
+            'country' => $address->getFullCountry(),
+        ];
+
+        foreach ($valueData as $key => $value) {
+            if ($value == '') {
+                unset($valueData[$key]);
+            }
+        }
+
+        return implode(', ', $valueData);
+    }
 
     public function getBlockTypeName()
     {
@@ -34,23 +55,23 @@ class Controller extends BlockController
             $attrHandle = $ak->getAttributeType()->getAttributeTypeHandle();
 
 
-            switch($attrHandle) {
+            switch ($attrHandle) {
                 case 'address':
-                    $search[]   = '{' . $ak->getAttributeKeyHandle() . '}';
-                    $replace[]   = $this->addressFormatter($sh->getAttribute($ak->getAttributeKeyHandle()));
+                    $search[] = '{' . $ak->getAttributeKeyHandle() . '}';
+                    $replace[] = $this->addressFormatter($sh->getAttribute($ak->getAttributeKeyHandle()));
                     break;
                 case 'image_file':
-                    $search[]   = '{' . $ak->getAttributeKeyHandle() . '}';
+                    $search[] = '{' . $ak->getAttributeKeyHandle() . '}';
                     $fileAttr = $sh->getAttribute($ak->getAttributeKeyHandle());
                     if ($fileAttr !== null) {
-                        $replace[]  = $fileAttr->getRelativePath();
+                        $replace[] = $fileAttr->getRelativePath();
                     } else {
-                        $replace[]  = $sh->getAttribute($ak->getAttributeKeyHandle());
+                        $replace[] = $sh->getAttribute($ak->getAttributeKeyHandle());
                     }
                     break;
                 default:
-                    $search[]   = '{' . $ak->getAttributeKeyHandle() . '}';
-                    $replace[]  = $sh->getAttribute($ak->getAttributeKeyHandle());
+                    $search[] = '{' . $ak->getAttributeKeyHandle() . '}';
+                    $replace[] = $sh->getAttribute($ak->getAttributeKeyHandle());
                     break;
             }
         }
@@ -60,24 +81,6 @@ class Controller extends BlockController
         $content = LinkAbstractor::translateFrom($content);
 
         return $content;
-    }
-
-    protected function addressFormatter(object $address)
-    {
-        $valueData = [
-            'address1' => $address->address1,
-            'address2' => $address->address2,
-            'city' => $address->city,
-            'state_province' => $address->state_province,
-            'postal_code' => $address->postal_code,
-            'country' => $address->getFullCountry()
-        ];
-
-        foreach ($valueData as $key => $value) {
-            if ($value == '') unset($valueData[$key]);
-        }
-
-        return implode(', ', $valueData);
     }
 
     public function add()
@@ -98,15 +101,15 @@ class Controller extends BlockController
         $token = $this->app->make('token');
 
 
-        $content_options = array(
-            'cookie'        => 'Cookie Policy',
-            'privacy'       => 'Privacy Policy',
-            'accessibility' => 'Accessibility Statement'
-        );
+        $content_options = [
+            'cookie' => 'Cookie Policy',
+            'privacy' => 'Privacy Policy',
+            'accessibility' => 'Accessibility Statement',
+        ];
 
-        $form_data = array(
-            'content_options' => $content_options
-        );
+        $form_data = [
+            'content_options' => $content_options,
+        ];
 
         $this->set('as', $as);
         $this->set('token', $token);

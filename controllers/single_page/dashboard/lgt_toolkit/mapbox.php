@@ -1,4 +1,5 @@
 <?php
+
 namespace Concrete\Package\LgtToolkit\Controller\SinglePage\Dashboard\LgtToolkit;
 
 use Concrete\Core\Entity\Package;
@@ -8,7 +9,7 @@ class Mapbox extends DashboardPageController
 {
     protected Package $pkg;
     protected $helpers = [
-        'form'
+        'form',
     ];
 
     public function on_start()
@@ -24,8 +25,8 @@ class Mapbox extends DashboardPageController
         if ($this->request->isPost()) {
             // TODO: build mapbox token save function
             die('save');
-        } else {
-            return $this->buildRedirect('/dashboard/lgt_toolkit/mapbox');
         }
+        return $this->buildRedirect('/dashboard/lgt_toolkit/mapbox');
+
     }
 }

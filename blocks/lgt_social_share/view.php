@@ -1,5 +1,5 @@
-<?php defined('C5_EXECUTE') or die("Access Denied.");
-    //TODO: change this to use navigator share on mobile
+<?php defined('C5_EXECUTE') or die('Access Denied.');
+//TODO: change this to use navigator share on mobile
 ?>
 
 <?php if (empty($shareLinks) && (isset($c) && is_object($c) && $c->isEditMode())) { ?>
@@ -19,7 +19,7 @@
                 <ul class="block__lgt-social-share--list">
                     <?php foreach ($shareLinks as $link) {
                         $service = $link->getSocialNetwork();
-                    ?>
+                        ?>
                         <?php if ($service) { ?>
                             <li class="block__lgt-social-share--item">
                                 <a href="<?php echo $service->getSharerLink($c->getCollectionLink(), $c->getCollectionName()); ?>" class="block__lgt-social-share--link" target="_blank">

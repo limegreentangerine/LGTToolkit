@@ -4,7 +4,7 @@
     <legend><?php echo t('Display'); ?></legend>
 
     <div class="form-group">
-        <?php $color->output('hex_background', $hex_background ?? null, array('preferredFormat' => 'hex')); ?>
+        <?php $color->output('hex_background', $hex_background ?? null, ['preferredFormat' => 'hex']); ?>
         <?php echo $form->label('hex_background', t('Background Colour')); ?>
     </div>
 
@@ -17,8 +17,8 @@
         <?php echo $form->label('content', t('Content:'));?>
         <?php
             $editor = $this->app->make('editor');
-            echo $editor->outputBlockEditModeEditor('content', $content ?? null);
-        ?>
+echo $editor->outputBlockEditModeEditor('content', $content ?? null);
+?>
     </div>
 
 </fieldset>
@@ -29,17 +29,17 @@
     <?php if (isset($ps)) { ?>
         <div class="form-group">
             <?php
-                echo $form->label('link_cID', t('Page'));
-                echo $ps->selectPage('link_cID', $link_cID ?? null);
-            ?>
+        echo $form->label('link_cID', t('Page'));
+        echo $ps->selectPage('link_cID', $link_cID ?? null);
+        ?>
         </div>
     <?php } ?>
 
     <div class="form-group">
         <?php
-            echo $form->label('buttonText', t('Button Text'));
-            echo $form->text('buttonText', $buttonText ?? null);
-        ?>
+        echo $form->label('buttonText', t('Button Text'));
+echo $form->text('buttonText', $buttonText ?? null);
+?>
     </div>
 </fieldset>
 
@@ -50,19 +50,19 @@
         <label class="control-label"><?php echo t('Title Column Size') ?></label>
         <select name="size_title" class="form-control">
             <?php
-            for ($i = 1; $i < 13; $i++) {
-                $selected = '';
-                if (isset($size_title)) {
-                    if ($size_title == $i) {
-                        $selected = ' selected="selected"';
-                    }
-                } elseif ($i == 4) {
-                    $selected = ' selected="selected"';
-                }
-
-                echo '<option value="' . $i . '"' . $selected . '>' . $i . '</option>';
+    for ($i = 1; $i < 13; $i++) {
+        $selected = '';
+        if (isset($size_title)) {
+            if ($size_title == $i) {
+                $selected = ' selected="selected"';
             }
-            ?>
+        } elseif ($i == 4) {
+            $selected = ' selected="selected"';
+        }
+
+        echo '<option value="' . $i . '"' . $selected . '>' . $i . '</option>';
+    }
+?>
         </select>
     </div>
 
@@ -70,48 +70,48 @@
         <label class="control-label"><?php echo t('Content Column Size') ?></label>
         <select name="size_content" class="form-control">
             <?php
-            for ($i = 1; $i < 13; $i++) {
-                $selected = '';
-                if (isset($size_content)) {
-                    if ($size_content == $i) {
-                        $selected = ' selected="selected"';
-                    }
-                } elseif ($i == 8) {
-                    $selected = ' selected="selected"';
-                }
+for ($i = 1; $i < 13; $i++) {
+    $selected = '';
+    if (isset($size_content)) {
+        if ($size_content == $i) {
+            $selected = ' selected="selected"';
+        }
+    } elseif ($i == 8) {
+        $selected = ' selected="selected"';
+    }
 
-                echo '<option value="' . $i . '"' . $selected . '>' . $i . '</option>';
-            }
-            ?>
+    echo '<option value="' . $i . '"' . $selected . '>' . $i . '</option>';
+}
+?>
         </select>
     </div>
 
     <div class="form-group">
         <?php
-            echo $form->label('content_spacing', t('Column Spacing'));
-            echo (string) $form->select('content_spacing', $this->controller->getColumnSpacingOptions(), $content_spacing ?? null);
-        ?>
+echo $form->label('content_spacing', t('Column Spacing'));
+echo (string) $form->select('content_spacing', $this->controller->getColumnSpacingOptions(), $content_spacing ?? null);
+?>
     </div>
 
     <div class="form-group">
         <?php
-            echo $form->label('content_arrangement', t('Column Arrangement'));
-            echo (string) $form->select('content_arrangement', $this->controller->getColumnArrangementOptions(), $content_arrangement ?? null);
-        ?>
+    echo $form->label('content_arrangement', t('Column Arrangement'));
+echo (string) $form->select('content_arrangement', $this->controller->getColumnArrangementOptions(), $content_arrangement ?? null);
+?>
     </div>
 
     <div class="form-group">
         <?php
-            echo $form->label('content_alignment', t('Column Alignment'));
-            echo (string) $form->select('content_alignment', $this->controller->getColumnAlignmentOptions(), $content_alignment ?? null);
-        ?>
+    echo $form->label('content_alignment', t('Column Alignment'));
+echo (string) $form->select('content_alignment', $this->controller->getColumnAlignmentOptions(), $content_alignment ?? null);
+?>
     </div>
 
     <div class="form-group">
         <?php
-            echo $form->label('gutter_size', t('Gutter Size'));
-            echo (string) $form->select('gutter_size', $this->controller->getColumnGutterSizeOptions(), $gutter_size ?? null);
-        ?>
+    echo $form->label('gutter_size', t('Gutter Size'));
+echo (string) $form->select('gutter_size', $this->controller->getColumnGutterSizeOptions(), $gutter_size ?? null);
+?>
     </div>
 
 </fieldset>

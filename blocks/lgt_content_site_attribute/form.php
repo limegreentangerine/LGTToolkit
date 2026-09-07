@@ -9,7 +9,7 @@
             foreach ($as->getAttributeKeys() as $ak) {
                 echo '<li>' . $ak->getAttributeKeyName() . ' - <code>{' . $ak->getAttributeKeyHandle() . '}</code></li>';
             }
-            ?>
+    ?>
         </ul>
 
         <div class="form-group">
@@ -17,19 +17,19 @@
             <p class="help-block"><?php echo t('This will replace the all the content in this block.'); ?></p>
             <div class="btn-group-sm">
                 <?php
-                foreach ($form_data['content_options'] as $k => $v) {
-                    echo '<button class="content-option btn btn btn-link" type="button" data-content="' . $k . '">' . $v . '</button>';
-                }
-                ?>
+        foreach ($form_data['content_options'] as $k => $v) {
+            echo '<button class="content-option btn btn btn-link" type="button" data-content="' . $k . '">' . $v . '</button>';
+        }
+    ?>
             </div>
         </div>
 
         <div class="form-group substitution-content-editor">
             <?php echo $form->label('content', t('Content:'));?>
             <?php
-                $editor = $this->app->make('editor');
-                echo $editor->outputBlockEditModeEditor('content', $content ?? null);
-            ?>
+    $editor = $this->app->make('editor');
+    echo $editor->outputBlockEditModeEditor('content', $content ?? null);
+    ?>
         </div>
     </fieldset>
 
@@ -39,7 +39,7 @@
                 e.preventDefault();
                 var $this = $(this);
                 $.ajax({
-                    url: '<?php echo URL::to('/ajax/lgt_toolkit/blocks/content_site_attribute/get_dummy_text'); ?>',
+                    url: '<?php echo URL::to('/ajax/lgt-toolkit/blocks/content_site_attribute/get_dummy_text'); ?>',
                     cache: false,
                     data: {
                         'dummy': $this.data('content'),

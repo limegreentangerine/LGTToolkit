@@ -1,18 +1,19 @@
 <?php
+
 namespace Concrete\Package\LgtToolkit\Block\LgtManualNav;
 
 defined('C5_EXECUTE') or die('Access Denied.');
 
-use Concrete\Core\Block\BlockController;
-use Concrete\Core\Legacy\BlockRecord;
-use Doctrine\Common\Collections\ArrayCollection;
-use LgtToolkit\ManualLink\Link as NavLink;
 use Page;
+use Concrete\Core\Legacy\BlockRecord;
+use Concrete\Core\Block\BlockController;
+use LgtToolkit\ManualLink\Link as NavLink;
+use Doctrine\Common\Collections\ArrayCollection;
 
 class Controller extends BlockController
 {
     protected $btTable = 'btLgtManualNav';
-    protected $btExportTables = array('btLgtManualNav', 'btLgtManualNavLinks');
+    protected $btExportTables = ['btLgtManualNav', 'btLgtManualNavLinks'];
     protected $btDefaultSet = 'navigation';
     protected $btInterfaceWidth = 800;
     protected $btInterfaceHeight = 600;
@@ -61,7 +62,7 @@ class Controller extends BlockController
                     $row['is_external'],
                     $row['external_url'],
                     $row['sort_order'],
-                ]
+                ],
             );
         }
         parent::duplicate($newBlockID);
@@ -92,12 +93,12 @@ class Controller extends BlockController
 
         // Clear old data for individual links
         $q = 'DELETE FROM `btLgtManualNavLinks` WHERE `bID` = ?';
-        $v = array($this->bID);
+        $v = [$this->bID];
 
         $db->executeQuery($q, $v);
 
         // Save main block information
-        parent::save(array('title' => $args['nav_title']));
+        parent::save(['title' => $args['nav_title']]);
 
         if (array_key_exists('sort_order', $args)) {
             foreach ($args['sort_order'] as $k => $v) {
@@ -141,14 +142,14 @@ class Controller extends BlockController
                     }
                 }
 
-                $temp_args = array(
+                $temp_args = [
                     $this->bID,
                     $title,
                     $page_cID,
                     $args['is_external'][$k],
                     $external_url,
                     $args['sort_order'][$k],
-                );
+                ];
 
                 $q = 'INSERT INTO `btLgtManualNavLinks` (`bID`, `title`, `page_cID`, `is_external`, `external_url`, `sort_order`) VALUES (?, ?, ?, ?, ?, ?)';
                 $db->executeQuery($q, $temp_args);
@@ -161,7 +162,7 @@ class Controller extends BlockController
         $db = $this->app->make('database')->connection();
 
         $q = 'SELECT * FROM `btLgtManualNavLinks` WHERE `bID` = ? ORDER BY `sort_order` ASC';
-        $v = array($this->bID);
+        $v = [$this->bID];
 
         $rows = $db->fetchAll($q, $v);
 

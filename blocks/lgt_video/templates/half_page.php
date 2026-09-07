@@ -1,5 +1,5 @@
 <?php defined('C5_EXECUTE') or die('Access Denied.');
-    $c = Page::getCurrentPage();
+$c = Page::getCurrentPage();
 ?>
 
 <?php if ($video) { ?>
