@@ -8,6 +8,7 @@ use Page;
 use View;
 use FileSet;
 use FileList;
+use Exception;
 use FilesystemIterator;
 use Concrete\Core\Block\Block;
 use Concrete\Core\Tree\Node\Node;
@@ -15,7 +16,6 @@ use Concrete\Core\Tree\Node\Type\Topic;
 use Concrete\Core\Attribute\Key\FileKey;
 use Concrete\Core\Block\BlockController;
 use Concrete\Core\Localization\Localization;
-use Concrete\Core\Error\UserMessageException;
 use Symfony\Component\HttpFoundation\Response;
 use Concrete\Core\Tree\Type\Topic as TopicTree;
 use Concrete\Core\File\Set\SetList as FileSetList;
@@ -150,14 +150,14 @@ class Controller extends BlockController
 
         $bt = Block::getByID($bID);
         if (!is_object($bt)) {
-            throw new UserMessageException('Block ID ' . $bID . ': Not found', 404);
+            throw new Exception('Block ID ' . $bID . ': Not found', 404);
         }
 
         $instance = $bt->getController();
 
         $fs = FileSet::getByID($instance->get('fsID'));
         if (!is_object($fs)) {
-            throw new UserMessageException('File Set ID ' . $instance->get('fsID') . ': Not found', 404);
+            throw new Exception('File Set ID ' . $instance->get('fsID') . ': Not found', 404);
         }
 
         $fl = new FileList();

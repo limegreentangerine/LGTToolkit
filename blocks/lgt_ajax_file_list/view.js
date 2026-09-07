@@ -1,97 +1,89 @@
-const loadButton = $('.ajax-file-list__load-more');
+class ComponentAjaxFileList extends HTMLElement {
+	constructor() {
+		super();
 
-function debounce(func, timeout = 300) {
-	let timer;
-	return (...args) => {
-		clearTimeout(timer);
-		timer = setTimeout(() => {
-			func.apply(this, args);
-		}, timeout);
-	};
-}
+		this.container = this.querySelector('.lgt__ajax-file-list');
+		if (!this.container) return;
 
-function generateData(loadButton, filterButton) {
-	let data = {};
+		this.list = this.container.querySelector('.lgt__ajax-file-list--items');
+		this.button = this.container.querySelector('.lgt__ajax-file-list--load-more');
+		if (!this.list || !this.button) return;
 
-	$.each(loadButton.data(), function (k, v) {
-		data[k] = v;
-	});
+		this.page = this.button.dataset.page;
+		this.loading = false;
 
-	if (filterButton !== false) {
-		$.each(filterButton.data(), function (k, v) {
-			if (v > 0) {
-				data[k] = parseInt(v);
-			}
-		});
+		this.button.addEventListener('click', this.loadPage.bind(this));
+
+		this.filters = this.container.querySelector('.lgt__ajax-file-list--filters');
+		this.topic = null;
+
+		if (this.filters) {
+			this.filters.addEventListener('click', this.filterPage.bind(this));
+		}
 	}
 
-	return data;
+	async loadPage() {
+		if (this.loading) return;
+
+		const currentText = this.button.innerHTML;
+		const data = this.button.dataset;
+
+		this.button.classList.remove('d-none');
+		this.button.innerHTML = this.loader();
+		this.loading = true;
+
+		if (this.topic !== null) {
+			data.topicId = this.topic;
+		}
+
+		try {
+			const response = await fetch('/ajax/lgt/file-list', {
+				method: 'post',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(data)
+			});
+
+			if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+
+			const res = await response.json();
+
+			if (res.files.length > 0 && res.html) {
+				this.list.insertAdjacentHTML('beforeend', res.html);
+			}
+
+			this.button.dataset.page = res.page;
+			if (!res.hasNextPage) this.button.classList.add('d-none');
+		} catch (error) {
+			console.error('Failed to load files:', error);
+		}
+
+		this.button.innerHTML = currentText;
+		this.loading = false;
+	}
+
+	async filterPage(event) {
+		event.preventDefault();
+
+		const button = event.target.closest(`button[data-topic-id=*]`);
+		if (!button) return;
+
+		const topicId = button.dataset.topicId;
+		if (!topicId) return;
+
+		this.topic = topicId > 0 ? topicId : null;
+		this.button.dataset.page = 1;
+		this.list.innerHTML = '';
+
+		await this.loadPage();
+	}
+
+	loader() {
+		return '<div class="spinner-border" role="status"><span class="sr-only">Loading...</span></div>';
+	}
 }
 
-$(function () {
-	loadButton.on(
-		'click',
-		debounce(function (e) {
-			e.preventDefault();
-			const $this = $(e.currentTarget);
-			const data = generateData($this, false);
-			getNextPage(data, false);
-		}, 500)
-	);
-
-	$('.resource-filters button').on(
-		'click',
-		debounce(function (e) {
-			e.preventDefault();
-			const $this = $(e.currentTarget);
-			const button = $('#ajax-file-list__load-more--' + $this.data('bid'));
-			const data = generateData(button, $this);
-			$('.resource-filters button').removeClass('active');
-			$this.addClass('active');
-			getNextPage(data, true);
-		}, 500)
-	);
-});
-
-$(window).on('load', function () {
-	loadButton[0].click();
-});
-
-function getNextPage(data, clearHtml) {
-	const button = $('#ajax-file-list__load-more--' + data.bid);
-	const currentText = button.text();
-	const loaderHtml =
-		'<div class="spinner-border text-primary" role="status"><span class="sr-only">Loading...</span></div>';
-	const destination = $(data.target);
-
-	$.ajax({
-		url: '/ajax/file_list',
-		dataType: 'json',
-		data: data,
-		beforeSend: function () {
-			if (clearHtml) {
-				destination.html('');
-			}
-			button.show();
-			button.html(loaderHtml);
-		},
-		success: function (response) {
-			if (response.files.length > 0) {
-				destination.append(response.html);
-			}
-
-			if (response.hasNextPage) {
-				var nextPage = parseInt(response.nextPage);
-				button.data('page', nextPage);
-			} else {
-				button.hide();
-			}
-		},
-		error: function (error) {
-			console.error(error);
-		},
-		complete: function () {
-			button.html(currentText);
-		}
-	});
+if (!customElements.get('component-ajax-file-list')) {
+	customElements.define('component-ajax-file-list', ComponentAjaxFileList);
 }
