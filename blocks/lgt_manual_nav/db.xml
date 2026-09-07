@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.concrete5.org/doctrine-xml/0.5"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.concrete5.org/doctrine-xml/0.5 https://concretecms.github.io/doctrine-xml/doctrine-xml-0.5.xsd">
+
+    <table name="btLgtManualNav">
+        <field name="bID" type="integer">
+            <unsigned/>
+            <key/>
+        </field>
+        <field name="title" type="string" size="255">
+            <default value=""/>
+        </field>
+    </table>
+
+    <table name="btLgtManualNavLinks">
+        <field name="id" type="integer">
+            <unsigned/>
+            <autoincrement/>
+            <key/>
+        </field>
+        <field name="bID" type="integer">
+            <unsigned/>
+        </field>
+        <field name="title" type="string" size="255">
+            <default value=""/>
+        </field>
+        <field name="page_cID" type="integer">
+            <unsigned/>
+            <default value="0"/>
+        </field>
+        <field name="is_external" type="boolean">
+            <default value="0"/>
+            <notnull/>
+        </field>
+        <field name="external_url" type="text">
+            <default value=""/>
+        </field>
+        <field name="sort_order" type="integer">
+            <unsigned/>
+            <default value="0"/>
+        </field>
+    </table>
+</schema>

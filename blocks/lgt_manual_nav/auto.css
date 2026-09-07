@@ -1,0 +1,100 @@
+.ccm-lgt-manual-nav-entries {
+	padding-bottom: 30px;
+	position: relative;
+}
+
+.ccm-lgt-manual-nav-entries .well {
+	min-height: 20px;
+	padding: 10px;
+	margin-bottom: 10px;
+	background-color: #f5f5f5;
+	border: 1px solid #e3e3e3;
+	border-radius: 4px;
+	-moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.05);
+}
+
+.ccm-lgt-manual-nav-entry {
+	position: relative;
+}
+
+.ccm-lgt-manual-nav-entry .form-group {
+	margin-left: 0px !important;
+	margin-right: 0px !important;
+	padding-left: 0px !important;
+	padding-right: 0px !important;
+	border-bottom: none !important;
+}
+
+.ccm-lgt-manual-nav-entry.link-closed .form-group {
+	display: none;
+}
+
+.ccm-lgt-manual-nav-entry.link-closed .form-group:first-of-type {
+	display: block;
+	margin-bottom: 0px;
+}
+
+.ccm-lgt-manual-nav-entry.link-closed .form-group:first-of-type label,
+.ccm-lgt-manual-nav-entry.link-closed .form-group:first-of-type input {
+	display: none;
+}
+
+.ccm-lgt-manual-nav-entry .form-group:first-of-type input {
+	width: 60%;
+}
+
+.ccm-lgt-manual-nav-entry.link-closed .form-group:first-of-type span {
+	display: block;
+}
+
+.ccm-lgt-manual-nav-entry .form-group:first-of-type span {
+	display: none;
+	height: 35px;
+	line-height: 35px;
+}
+
+.link-type {
+	display: none;
+}
+
+.link-type.link-type-show {
+	display: block;
+}
+
+.btn.ccm-edit-link {
+	position: absolute;
+	top: 10px;
+	right: 124px;
+}
+
+.btn.ccm-delete-lgt-manual-nav-entry {
+	position: absolute;
+	top: 10px;
+	right: 38px;
+}
+
+.ccm-lgt-manual-nav-block-container i:hover {
+	color: #428bca;
+}
+
+.ccm-lgt-manual-nav-block-container i.fa-arrows {
+	position: absolute;
+	top: 12px;
+	right: 5px;
+	cursor: move;
+	font-size: 20px;
+	padding: 5px;
+}
+
+.ccm-lgt-manual-nav-block-container .ui-state-highlight {
+	height: 94px;
+	margin-bottom: 15px;
+}
+
+.ccm-lgt-manual-nav-entries .ui-sortable-helper {
+	-webkit-box-shadow: 0px 10px 18px 2px rgba(54, 55, 66, 0.27);
+	-moz-box-shadow: 0px 10px 18px 2px rgba(54, 55, 66, 0.27);
+	box-shadow: 0px 10px 18px 2px rgba(54, 55, 66, 0.27);
+}
