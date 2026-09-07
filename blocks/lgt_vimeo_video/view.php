@@ -5,7 +5,7 @@
 <?php } else if (isset($vimeoVid)) { ?>
 	<section id="<?php echo $bID; ?>" class="block__lgt-vimeo-video">
 		<div class="block__lgt-vimeo-video--wrapper">
-			<div class="block__lgt-vimeo-video--responsive">
+			<div class="block__lgt-vimeo-video--responsive <?php echo $this->controller->portrait() ? 'portrait' : ''; ?>">
 				<iframe src="//player.vimeo.com/video/<?php echo $vimeoVid ?>?autoplay=<?php echo $this->controller->autoplay(); ?>&loop=<?php echo $this->controller->loop(); ?>&title=<?php echo $this->controller->showIntroTitle(); ?>&byline=<?php echo $this->controller->showByline(); ?>&portrait=<?php echo $this->controller->portrait(); ?><?php echo (isset($vimeoColor)) ? '&color=' . $vimeoColor . '' : ''; ?>"
 					width="<?php echo $vvWidth ?? 500; ?>"
 					height="<?php echo $vvHeight ?? 200; ?>"
