@@ -146,6 +146,12 @@ class Controller extends Package
          * Get Mapbox API Key from Settings
          */
         Route::register('/mapbox/init', '\LgtToolkit\Ajax\Mapbox::getApiKey');
+
+        /**
+         * Block Ajax Routes
+         */
+        Route::register('/ajax/lgt/file-list', 'Concrete\Package\LgtToolkit\Block\LgtAjaxFileList\Controller::getFiles');
+        Route::register('/ajax/lgt/page-list', 'Concrete\Package\LgtToolkit\Block\LgtAjaxPageList\Controller::getNextPage');
     }
 
     /**

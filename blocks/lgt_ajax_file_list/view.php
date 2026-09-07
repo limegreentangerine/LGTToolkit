@@ -23,17 +23,17 @@
         <?php } ?>
 
         <div class="container">
-            <div class="row lgt__ajax-file-list--items"></div>
+            <div class="row align-items-stretch row-cols-1 row-cols-lg-3 row-cols-hd-4 lgt__ajax-file-list--items"></div>
 
-            <div class="row">
-                <div class="col-12 text-center">
-                    <button
-                        class="btn btn-outline-primary mt-5 lgt__ajax-file-list--load-more"
-                        data-page="1"
-                    >
-                        <?php echo t('Load more'); ?>
-                    </button>
-                </div>
+            <div class="d-flex justify-content-center mt-3">
+                <button
+                    class="btn btn-primary lgt__ajax-file-list--load-more"
+                    data-page="1"
+                    data-bid="<?php echo $bID ?? null; ?>"
+                    data-cid="<?php echo (isset($c) ? $c->getCollectionID() : \Page::getHomePageID()); ?>"
+                >
+                    <?php echo t('Load more'); ?>
+                </button>
             </div>
         </div>
     </section>
