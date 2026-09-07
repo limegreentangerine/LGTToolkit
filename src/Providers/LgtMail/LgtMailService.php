@@ -1,6 +1,6 @@
 <?php
 
-namespace LgtTookit\Providers\LgtMail;
+namespace LgtToolkit\Providers\LgtMail;
 
 use Core;
 use Package;

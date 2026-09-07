@@ -7,18 +7,15 @@ use Events;
 use LgtToolkit\Package\PageTrait;
 use Concrete\Core\Package\Package;
 use LgtToolkit\Package\BlockTrait;
-use Concrete\Core\Production\Modes;
 use LgtToolkit\Events\File as FileEvent;
 use LgtToolkit\Events\Page as PageEvent;
 use LgtToolkit\Events\Cache as CacheEvent;
-use LgtToolkit\ConcreteDebugbar\DebugBarTrait;
 use Concrete\Core\Command\Task\Manager as TaskManager;
 
 class Controller extends Package
 {
     use BlockTrait;
     use PageTrait;
-    use DebugBarTrait;
 
     /**
      * The packages handle.
@@ -34,7 +31,7 @@ class Controller extends Package
      *
      * @var string
      */
-    protected $pkgVersion = '1.0.0-beta.1';
+    protected $pkgVersion = '1.0.0-beta.4';
 
     /**
      * The minimum Concrete version compatible with the package.
@@ -195,7 +192,7 @@ class Controller extends Package
         $this->autoInstallBlocks($pkg);
 
         // Install Jobs/Tasks
-        $this->installContentFile('tasks.xml');
+        // $this->installContentFile('tasks.xml');
 
         // Install Interface Overrides to /application
         $this->installApplicationOverrides();
@@ -265,13 +262,6 @@ class Controller extends Package
         $this->registerRoutes();
         $this->registerEvents();
         $this->registerTasks();
-
-        if (
-            $config->get('lgt_toolkit.debug') === true
-            && Core::make('config')->get('concrete.security.production.mode') === Modes::MODE_DEVELOPMENT
-        ) {
-            $this->showDebugBar();
-        }
     }
 
     /**

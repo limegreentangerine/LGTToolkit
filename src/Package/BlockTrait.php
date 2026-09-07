@@ -11,9 +11,9 @@ trait BlockTrait
     /**
      * Add Block Type
      *
-     * @param  string                                          $handle Block Handle
-     * @param  \Concrete\Core\Entity\Package                   $pkg    Package Object
-     * @return \Concrete\Core\Entity\Block\BlockType\BlockType Block Type Object
+     * @param  string                                          $handle
+     * @param  \Concrete\Core\Entity\Package                   $pkg
+     * @return \Concrete\Core\Entity\Block\BlockType\BlockType
      */
     protected function addBlockType(string $handle, \Concrete\Core\Entity\Package $pkg): \Concrete\Core\Entity\Block\BlockType\BlockType
     {
@@ -28,7 +28,7 @@ trait BlockTrait
      * Searches package block directory for block types, installs them
      * and also adds a BlockTypeSet using the package details
      *
-     * @param \Concrete\Core\Entity\Package $pkg Package
+     * @param \Concrete\Core\Entity\Package $pkg
      */
     protected function autoInstallBlocks(\Concrete\Core\Entity\Package $pkg)
     {
@@ -55,7 +55,7 @@ trait BlockTrait
      * installs Blocks from an array of handles,
      * and also adds a BlockTypeSet using the package details
      *
-     * @param \Concrete\Core\Entity\Package $pkg Package
+     * @param \Concrete\Core\Entity\Package $pkg
      */
     protected function installBlockFromArray(array $blocks, \Concrete\Core\Entity\Package $pkg)
     {
@@ -97,10 +97,10 @@ trait BlockTrait
     /**
      * Add Block Type Set
      *
-     * @param  string                        $handle Block Set Handle
-     * @param  string                        $name   Block Set Name
-     * @param  \Concrete\Core\Entity\Package $pkg    Package Object
-     * @return BlockTypeSet                  Block Type Set Object
+     * @param  string                        $handle
+     * @param  string                        $name
+     * @param  \Concrete\Core\Entity\Package $pkg
+     * @return BlockTypeSet
      */
     protected function addBlockTypeSet(string $handle, string $name, \Concrete\Core\Entity\Package $pkg): BlockTypeSet
     {

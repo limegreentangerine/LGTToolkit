@@ -13,14 +13,14 @@ trait PageTrait
     /**
      * Add a Specific Page
      *
-     * @param string|int        $pathOrCID   Page Path OR CID
-     * @param string            $name        Page Name
-     * @param string            $description Page Description
-     * @param string            $type        Page Type Handle
-     * @param string            $template    Page Template Handle
-     * @param string|int|object $parent      Parent Page (can be handle, ID, or object)
-     * @param object            $pkg         Package Object
-     * @param string            $handle      Optional slugified handle
+     * @param string|int        $pathOrCID
+     * @param string            $name
+     * @param string            $description
+     * @param string            $type
+     * @param string            $template
+     * @param string|int|object $parent
+     * @param object            $pkg
+     * @param string            $handle
      *
      * @return object Page Object
      */
@@ -74,10 +74,10 @@ trait PageTrait
      *
      * @param string $typeHandle            Page Type Handle
      * @param string $typeName              Page Type Name
-     * @param string $defaultTemplateHandle Default Page Template Handle
+     * @param string $defaultTemplateHandle
      * @param string $allowedTemplates      (A|C|X) A for all, C for selected only, X for non-selected only
      * @param array  $templateArray         Array or Iterator of selected templates, see `$allowedTemplates`
-     * @param object $pkg                   Package Object
+     * @param object $pkg
      * @param int    $startingPointCID      CID of optional starting point below which page can be added
      * @param int    $selectorFormFactor    Form factor of page selector
      *
@@ -107,11 +107,11 @@ trait PageTrait
      *
      * @param string $typeHandle            Page Type Handle
      * @param string $typeName              Page Type Name
-     * @param string $defaultTemplateHandle Default Page Template Handle
+     * @param string $defaultTemplateHandle
      * @param string $allowedTemplates      (A|C|X) A for all, C for selected only, X for non-selected only
      * @param array  $templateArray         Array or Iterator of selected templates, see `$allowedTemplates`
      * @param int    $parentPageTypeID      ID of parent Page Type
-     * @param object $pkg                   Package Object
+     * @param object $pkg
      * @param int    $startingPointCID      CID of optional starting point below which page can be added
      * @param int    $selectorFormFactor    Form factor of page selector
      *
@@ -142,11 +142,11 @@ trait PageTrait
      *
      * @param string $typeHandle            Page Type Handle
      * @param string $typeName              Page Type Name
-     * @param string $defaultTemplateHandle Default Page Template Handle
+     * @param string $defaultTemplateHandle
      * @param string $allowedTemplates      (A|C|X) A for all, C for selected only, X for non-selected only
      * @param array  $templateArray         Array or Iterator of selected templates, see `$allowedTemplates`
      * @param int    $parentPageCID         Parent Page CID
-     * @param object $pkg                   Package Object
+     * @param object $pkg
      *
      * @return object PageType Object
      */
@@ -173,7 +173,7 @@ trait PageTrait
      *
      * @param string $typeHandle            New Type Handle
      * @param string $typeName              New Type Name
-     * @param string $defaultTemplateHandle Default Page Template Handle
+     * @param string $defaultTemplateHandle
      * @param string $allowedTemplates      (A|C|X) A for all, C for selected only, X for non-selected only
      * @param array  $templateArray         Array or Iterator of selected templates, see `$allowedTemplates`
      * @param object $pkg
@@ -296,7 +296,7 @@ trait PageTrait
      * Add Single Page
      *
      * @param string $path        Page Path
-     * @param object $pkg         Package Object
+     * @param object $pkg
      * @param string $name        Single Page Name
      * @param string $description Single Page Description
      *
@@ -328,12 +328,12 @@ trait PageTrait
     /**
      * Add a Page Template
      *
-     * @param string                        $handle Page Template Handle
-     * @param string                        $name   Page Template Name
-     * @param \Concrete\Core\Entity\Package $pkg    Package Object
-     * @param string                        $icon   Page Template Icon (defaults to "landing.png")
+     * @param string                        $handle
+     * @param string                        $name
+     * @param \Concrete\Core\Entity\Package $pkg
+     * @param string                        $icon
      *
-     * @return \Concrete\Core\Entity\Page\Template Page Template Object
+     * @return \Concrete\Core\Entity\Page\Template
      */
     protected function addPageTemplate(string $handle, string $name, \Concrete\Core\Entity\Package $pkg, string $icon = 'landing.png'): \Concrete\Core\Entity\Page\Template
     {

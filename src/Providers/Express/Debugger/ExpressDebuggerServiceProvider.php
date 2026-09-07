@@ -1,6 +1,6 @@
 <?php
 
-namespace LgtToolkit\Express\Debugger;
+namespace LgtToolkit\Providers\Express\Debugger;
 
 use Concrete\Core\Foundation\Service\Provider;
 
