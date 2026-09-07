@@ -9,9 +9,7 @@ class ComponentAjaxFileList extends HTMLElement {
 		this.button = this.container.querySelector('.lgt__ajax-file-list--load-more');
 		if (!this.list || !this.button) return;
 
-		this.page = this.button.dataset.page;
 		this.loading = false;
-
 		this.button.addEventListener('click', this.loadPage.bind(this));
 
 		this.filters = this.container.querySelector('.lgt__ajax-file-list--filters');
