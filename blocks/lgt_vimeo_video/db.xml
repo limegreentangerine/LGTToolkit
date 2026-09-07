@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<schema xmlns="http://www.concrete5.org/doctrine-xml/0.5"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.concrete5.org/doctrine-xml/0.5 https://concretecms.github.io/doctrine-xml/doctrine-xml-0.5.xsd">
+
+	<table name="btVimeoVid">
+		<field name="bID" type="integer">
+			<unsigned />
+			<key />
+		</field>
+		<field name="vimeoVid" type="text" />
+		<field name="vvTitle" type="text" />
+		<field name="vvUser" type="text" />
+		<field name="vvHeight" type="integer" size="32">
+			<default value="280" />
+		</field>
+		<field name="vvWidth" type="integer" size="32">
+			<default value="500" />
+		</field>
+		<field name="vvColor" type="string" size="100" />
+		<field name="introTitle" type="integer" size="1">
+			<unsigned />
+			<default value="1" />
+		</field>
+		<field name="portrait" type="integer" size="1">
+			<unsigned />
+			<default value="1" />
+		</field>
+		<field name="byline" type="integer" size="1">
+			<unsigned />
+			<default value="1" />
+		</field>
+		<field name="autoplay" type="integer" size="1">
+			<unsigned />
+			<default value="0" />
+		</field>
+		<field name="vvloop" type="integer" size="1">
+			<unsigned />
+			<default value="0" />
+		</field>
+		<field name="showlink" type="integer" size="1">
+			<unsigned />
+			<default value="1" />
+		</field>
+	</table>
+
+</schema>

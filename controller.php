@@ -141,6 +141,11 @@ class Controller extends Package
          * Duplicate Express Objects Routes
          */
         Route::register('/duplicate/express', 'LgtToolkit\Express\DuplicateExpressObjects::convert');
+
+        /**
+         * Get Mapbox API Key from Settings
+         */
+        Route::register('/mapbox/init', '\LgtToolkit\Ajax\Mapbox::getApiKey');
     }
 
     /**
