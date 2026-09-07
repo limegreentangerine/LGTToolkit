@@ -2,17 +2,19 @@
 namespace Concrete\Package\LgtToolkit\Controller\SinglePage\Dashboard;
 
 use Page;
-use Package;
 use PageList;
+use Concrete\Core\Entity\Package;
 use Concrete\Core\Page\Controller\DashboardPageController;
 
 class LgtToolkit extends DashboardPageController
 {
+    protected Package $pkg;
+
     public function on_start()
     {
         parent::on_start();
 
-        $this->pkg = Package::getByHandle('lgt-toolkit');
+        $this->pkg = $this->app->make('Concrete\Core\Package\PackageService')->getByHandle('lgt-toolkit');
     }
 
     public function view()
@@ -27,7 +29,7 @@ class LgtToolkit extends DashboardPageController
         $this->set('checked', false);
     }
 
-    public function getPageThumbnail($handle)
+    public function getPageThumbnail(string $handle)
     {
         return sprintf('%s/images/thumbnails/%s.png', $this->pkg->getRelativePath(), $handle);
     }

@@ -1,7 +1,7 @@
 <?php
 namespace Concrete\Package\LgtToolkit\Controller\SinglePage\Dashboard\LgtToolkit;
 
-use Package;
+use Concrete\Core\Entity\Package;
 use Concrete\Core\Cache\Page\PageCache;
 use Concrete\Core\Page\Controller\DashboardPageController;
 
@@ -15,13 +15,13 @@ class Uaccess extends DashboardPageController
         'header'    => 'Header',
         'footer'    => 'Footer'
     ];
-    protected $pkg;
+    protected Package $pkg;
 
     public function on_start()
     {
         parent::on_start();
 
-        $this->pkg = Package::getByHandle('lgt-toolkit');
+        $this->pkg = $this->app->make('Concrete\Core\Package\PackageService')->getByHandle('lgt-toolkit');
         $this->set('pkg', $this->pkg);
         $this->set('codePlacement', $this->codePlacement);
     }

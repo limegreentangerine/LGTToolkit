@@ -20,7 +20,7 @@ class DuplicateExpress extends DashboardPageController
 
     public function getLocales()
     {
-        $site = Core::make('site')->getActiveSiteForEditing();
+        $site = $this->app->make('site')->getActiveSiteForEditing();
         return $site->getLocales();
     }
 

@@ -1,12 +1,12 @@
 <?php
 namespace Concrete\Package\LgtToolkit\Controller\SinglePage\Dashboard\LgtToolkit;
 
-use Package;
+use Concrete\Core\Entity\Package;
 use Concrete\Core\Page\Controller\DashboardPageController;
 
 class Mapbox extends DashboardPageController
 {
-    protected $pkg;
+    protected Package $pkg;
     protected $helpers = [
         'form'
     ];
@@ -15,16 +15,17 @@ class Mapbox extends DashboardPageController
     {
         parent::on_start();
 
-        $this->pkg = Package::getByHandle('lgt-toolkit');
+        $this->pkg = $this->app->make('Concrete\Core\Package\PackageService')->getByHandle('lgt-toolkit');
         $this->set('pkg', $this->pkg);
     }
 
     public function save()
     {
         if ($this->request->isPost()) {
+            // TODO: build mapbox token save function
             die('save');
         } else {
-            return $this->redirect('/dashboard/lgt_toolkit/mapbox');
+            return $this->buildRedirect('/dashboard/lgt_toolkit/mapbox');
         }
     }
 }

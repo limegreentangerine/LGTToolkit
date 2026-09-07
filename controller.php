@@ -3,6 +3,7 @@
 namespace Concrete\Package\LgtToolkit;
 
 use Core;
+use Route;
 use Events;
 use LgtToolkit\Package\PageTrait;
 use Concrete\Core\Package\Package;
@@ -31,7 +32,7 @@ class Controller extends Package
      *
      * @var string
      */
-    protected $pkgVersion = '1.0.0-beta.4';
+    protected $pkgVersion = '1.0.0-beta.5';
 
     /**
      * The minimum Concrete version compatible with the package.
@@ -134,7 +135,13 @@ class Controller extends Package
     /**
      * Register URL Routes
      */
-    private function registerRoutes() {}
+    private function registerRoutes()
+    {
+        /**
+         * Duplicate Express Objects Routes
+         */
+        Route::register('/duplicate/express', 'LgtToolkit\Express\DuplicateExpressObjects::convert');
+    }
 
     /**
      * Register Events
@@ -190,9 +197,6 @@ class Controller extends Package
 
         // Install Blocks
         $this->autoInstallBlocks($pkg);
-
-        // Install Jobs/Tasks
-        // $this->installContentFile('tasks.xml');
 
         // Install Interface Overrides to /application
         $this->installApplicationOverrides();

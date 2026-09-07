@@ -1,14 +1,15 @@
 <?php
 namespace Concrete\Package\LgtToolkit\Controller\SinglePage\Dashboard\LgtToolkit;
 
-use Package;
-use LgtToolkit\Cloudflare\Api as CloudflareApi;
+use Concrete\Core\Entity\Package;
+use Concrete\Core\Error\UserMessageException;
 use Concrete\Core\Http\ResponseFactoryInterface;
 use Concrete\Core\Page\Controller\DashboardPageController;
+use LgtToolkit\Cloudflare\Api as CloudflareApi;
 
 class Cloudflare extends DashboardPageController
 {
-    protected $pkg;
+    protected Package $pkg;
     protected $helpers = [
         'form'
     ];
@@ -17,7 +18,7 @@ class Cloudflare extends DashboardPageController
     {
         parent::on_start();
 
-        $this->pkg = Package::getByHandle('lgt-toolkit');
+        $this->pkg = $this->app->make('Concrete\Core\Package\PackageService')->getByHandle('lgt-toolkit');
         $this->set('pkg', $this->pkg);
     }
 
@@ -29,7 +30,7 @@ class Cloudflare extends DashboardPageController
             }
 
             if (!is_object($this->pkg)) {
-                throw new UserMessageException(t('LGT Toolkit Package not found'));
+                return new UserMessageException(t('LGT Toolkit Package not found'));
             } else {
                 $config = $this->pkg->getFileConfig();
             }

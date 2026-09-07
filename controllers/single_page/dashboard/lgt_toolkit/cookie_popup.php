@@ -1,7 +1,9 @@
 <?php
 namespace Concrete\Package\LgtToolkit\Controller\SinglePage\Dashboard\LgtToolkit;
 
-use Package;
+use Concrete\Core\Entity\Package;
+use Doctrine\ORM\PersistentCollection;
+use Concrete\Core\Error\ErrorList\ErrorList;
 use Concrete\Core\Page\Controller\DashboardPageController;
 
 class CookiePopup extends DashboardPageController
@@ -11,16 +13,16 @@ class CookiePopup extends DashboardPageController
         'concrete/ui',
         'form/page_selector'
     ];
-    protected $pkg;
-    protected $locales;
-    protected $formContent;
-    protected $errors;
+    protected Package $pkg;
+    protected PersistentCollection $locales;
+    protected mixed $formContent;
+    protected ErrorList|null $errors;
 
     public function on_start()
     {
         parent::on_start();
 
-        $this->pkg = Package::getByHandle('lgt-toolkit');
+        $this->pkg = $this->app->make('Concrete\Core\Package\PackageService')->getByHandle('lgt-toolkit');
         $this->set('pkg', $this->pkg);
 
         $site = $this->app->make('site')->getActiveSiteForEditing();
@@ -77,7 +79,7 @@ class CookiePopup extends DashboardPageController
         $this->set('token', $this->token);
     }
 
-    protected function validateSubmit($args)
+    protected function validateSubmit(array $args)
     {
         $vstrings = $this->app->make('helper/validation/strings');
         $vnumbers = $this->app->make('helper/validation/numbers');
@@ -99,7 +101,7 @@ class CookiePopup extends DashboardPageController
         }
     }
 
-    public function getColourOptions()
+    public function getColourOptions(): array
     {
         return [
             '' => t('Choose a colour...'),
