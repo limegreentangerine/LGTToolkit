@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.concrete5.org/doctrine-xml/0.5"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.concrete5.org/doctrine-xml/0.5 https://concretecms.github.io/doctrine-xml/doctrine-xml-0.5.xsd">
+
+    <table name="btLgtButton">
+        <field name="bID" type="integer">
+            <unsigned/>
+            <key/>
+        </field>
+        <field name="button_text" type="string" size="255">
+            <default value=""/>
+        </field>
+        <field name="style" type="string" size="255"/>
+        <field name="full_width" type="boolean">
+            <default value="0"/>
+            <notnull/>
+        </field>
+        <field name="button_size" type="string" size="255"/>
+        <field name="page_cID" type="integer">
+            <unsigned/>
+            <default value="0"/>
+        </field>
+        <field name="is_external" type="boolean">
+            <default value="0"/>
+            <notnull/>
+        </field>
+        <field name="external_url" type="text">
+            <default value=""/>
+        </field>
+        <field name="new_window" type="boolean">
+            <default value="0"/>
+            <notnull/>
+        </field>
+
+        <field name="link_type" type="string" size="255" />
+        <field name="anchor" type="string" size="255" />
+        <field name="fID" type="integer">
+            <unsigned/>
+            <default value="0"/>
+        </field>
+    </table>
+
+</schema>
