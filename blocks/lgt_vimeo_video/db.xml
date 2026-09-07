@@ -18,29 +18,29 @@
 			<default value="500" />
 		</field>
 		<field name="vvColor" type="string" size="100" />
-		<field name="introTitle" type="integer" size="1">
-			<unsigned />
-			<default value="1" />
+		<field name="introTitle" type="boolean">
+			<default value="0"/>
+            <notnull/>
 		</field>
-		<field name="portrait" type="integer" size="1">
-			<unsigned />
-			<default value="1" />
+		<field name="portrait" type="boolean">
+			<default value="0"/>
+            <notnull/>
 		</field>
-		<field name="byline" type="integer" size="1">
-			<unsigned />
-			<default value="1" />
+		<field name="byline" type="boolean">
+			<default value="0"/>
+            <notnull/>
 		</field>
-		<field name="autoplay" type="integer" size="1">
-			<unsigned />
-			<default value="0" />
+		<field name="autoplay" type="boolean">
+            <default value="0"/>
+            <notnull/>
+        </field>
+		<field name="vvloop" type="boolean">
+			<default value="0"/>
+            <notnull/>
 		</field>
-		<field name="vvloop" type="integer" size="1">
-			<unsigned />
-			<default value="0" />
-		</field>
-		<field name="showlink" type="integer" size="1">
-			<unsigned />
-			<default value="1" />
+		<field name="showlink" type="boolean">
+			<default value="0"/>
+            <notnull/>
 		</field>
 	</table>
 

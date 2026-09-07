@@ -7,12 +7,17 @@ use Concrete\Core\Block\BlockController;
 
 class Controller extends BlockController
 {
-	var $pobj;
-
 	protected $btTable = 'btVimeoVid';
     protected $btDefaultSet = 'multimedia';
     protected $btInterfaceWidth = 800;
     protected $btInterfaceHeight = 600;
+	protected string $vvColor;
+	protected bool $autoplay;
+	protected bool $vvloop;
+	protected bool $byline;
+	protected bool $portrait;
+	protected bool $introTitle;
+	protected bool $showlink;
 
 	public function getBlockTypeName()
 	{
@@ -38,6 +43,36 @@ class Controller extends BlockController
 	{
 		$this->set('c', Page::getCurrentPage());
 		$this->set('vimeoColor', ltrim($this->vvColor, '#'));
+	}
+
+	public function autoplay()
+	{
+		return $this->autoplay;
+	}
+
+	public function loop()
+	{
+		return $this->vvloop;
+	}
+
+	public function showIntroTitle()
+	{
+		return $this->introTitle;
+	}
+
+	public function showByline()
+	{
+		return $this->byline;
+	}
+
+	public function portrait()
+	{
+		return $this->portrait;
+	}
+
+	public function showLink()
+	{
+		return $this->showlink;
 	}
 
 	function save($data)

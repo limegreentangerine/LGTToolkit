@@ -8,7 +8,7 @@ class ComponentMapbox extends HTMLElement {
 		this.mapCenter = null;
 
 		this.instanceId = ++ComponentMapbox.instanceCount;
-        this.buildingsLayerId = `3d-buildings-${this.instanceId}`;
+		this.buildingsLayerId = `3d-buildings-${this.instanceId}`;
 	}
 
 	connectedCallback() {
