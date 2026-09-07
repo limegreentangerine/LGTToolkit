@@ -30,7 +30,7 @@
                     class="btn btn-primary lgt__ajax-file-list--load-more"
                     data-page="1"
                     data-bid="<?php echo $bID ?? null; ?>"
-                    data-cid="<?php echo (isset($c) ? $c->getCollectionID() : \Page::getHomePageID()); ?>"
+                    data-cid="<?php echo isset($c) ? $c->getCollectionID() : \Page::getHomePageID(); ?>"
                 >
                     <?php echo t('Load more'); ?>
                 </button>
