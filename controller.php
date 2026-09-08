@@ -32,7 +32,7 @@ class Controller extends Package
      *
      * @var string
      */
-    protected $pkgVersion = '1.0.0-beta.5';
+    protected $pkgVersion = '1.0.0-beta.9';
 
     /**
      * The minimum Concrete version compatible with the package.
@@ -217,6 +217,67 @@ class Controller extends Package
 
         // Install Interface Overrides to /application
         $this->installApplicationOverrides();
+
+        // Set Core configs
+        $this->setCoreConfigSettings();
+    }
+
+    protected function setCoreConfigSettings(): void
+    {
+        $config = $this->app->make('config');
+
+        // disabled adding of marketplace blocks and themes
+        $config->save('concrete.marketplace.enabled', false);
+
+        // not sure what these are but we have them set in old builds
+        $config->save('concrete.external.intelligent_search_help', true);
+        $config->save('concrete.external.news_overlay', false);
+        $config->save('concrete.external.news', false);
+
+        // accessibility
+        $config->save('concrete.accessibility.toolbar_titles', true);
+
+        // white labelling
+        $config->save('concrete.white_label.name', 'limegreentangerine');
+        $config->save('concrete.white_label.logo', false);
+        $config->save('concrete.white_label.background_image', 'none');
+
+        // session handlers
+        $config->save('concrete.session.name', 'LGTCMSSESSION');
+        $config->save('concrete.session.handler', 'database');
+
+        // seo defaults
+        $config->save('concrete.seo.url_rewriting', true);
+        $config->save('concrete.seo.url_rewriting_all', true);
+        $config->save('concrete.seo.trailing_slash', true);
+        $config->save('concrete.seo.title_format', '%1$s | %2$s');
+        $config->save('concrete.seo.title_segment_separator', ' | ');
+
+        // design
+        $config->save('concrete.design.enable_custom', false);
+        $config->save('concrete.design.enable_layouts', false);
+
+        // security
+        $config->save('concrete.security.session.invalidate_on_ip_mismatch', true);
+
+        //social media
+        $config->save('concrete.social.additional_services', [
+            ['facebook', 'Facebook', 'fab fa-facebook', '<i class="bi bi-facebook"></i>'],
+            ['twitter', 'Twitter/X', 'fab fa-twitter', '<i class="bi bi-twitter-x"></i>'],
+            ['instagram', 'Instagram', 'fab fa-instagram', '<i class="bi bi-instagram"></i>'],
+            ['github', 'Github', 'fab fa-github-square', '<i class="bi bi-github"></i>'],
+            ['dribbble', 'Dribbble', 'fab fa-dribbble', '<i class="bi bi-dribbble"></i>'],
+            ['youtube', 'Youtube', 'fab fa-youtube', '<i class="bi bi-youtube"></i>'],
+            ['linkedin', 'LinkedIn', 'fab fa-linkedin', '<i class="bi bi-linkedin"></i>'],
+            ['reddit', 'Reddit', 'fab fa-reddit', '<i class="bi bi-reddit"></i>'],
+            ['steam', 'Steam', 'fab fa-steam', '<i class="bi bi-steam"></i>'],
+            ['twitch', 'Twitch', 'fab fa-twitch', '<i class="bi bi-twitch"></i>'],
+            ['skype', 'Skype', 'fab fa-skype', '<i class="bi bi-skype"></i>'],
+            ['personal_website', 'Personal Website', 'fa fa-external-link-alt', '<i class="bi bi-link-45deg"></i>'],
+            ['email', 'Email', 'fa fa-envelope', '<i class="bi bi-envelope-at"></i>'],
+            ['phone', 'Phone', 'fa fa-phone-square', '<i class="bi bi-telephone"></i>'],
+            ['tiktok', 'TikTok', 'fa fa-tiktok', '<i class="bi bi-tiktok"></i>'],
+        ]);
     }
 
     protected function registerBindings(): void
