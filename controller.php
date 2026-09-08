@@ -32,7 +32,7 @@ class Controller extends Package
      *
      * @var string
      */
-    protected $pkgVersion = '1.0.0-beta.9';
+    protected $pkgVersion = '1.0.0-beta.10';
 
     /**
      * The minimum Concrete version compatible with the package.
@@ -129,7 +129,7 @@ class Controller extends Package
      * @var array
      */
     protected $applicationOverrides = [
-        '/single_pages/dashboard/files/details.php',
+        'single_pages/dashboard/files/details.php',
     ];
 
     /**
@@ -158,6 +158,20 @@ class Controller extends Package
          */
         Route::register('/lgt-toolkit/focal_point', '\Concrete\Package\LgtToolkit\Controller\Dialog\FocalPoint::view');
         Route::register('/lgt-toolkit/focal_point/submit', '\Concrete\Package\LgtToolkit\Controller\Dialog\FocalPoint::submit');
+
+        /**
+         * Placeholders
+         *
+         * @deprecated
+         */
+        Route::register('/ajax/lgt_toolkit/blocks/content_site_attribute/get_dummy_text', '\LgtToolkit\Ajax\PlaceholderText::getDummyText');
+
+        /**
+         * Cookie Routes
+         */
+        Route::register('/ajax/allow-cookies', '\LgtToolkit\Ajax\Cookies::allowCookies');
+        Route::register('/ajax/disallow-cookies', '\LgtToolkit\Ajax\Cookies::disallowCookies');
+        Route::register('/ajax/check-cookies', '\LgtToolkit\Ajax\Cookies::checkCookies');
     }
 
     /**
@@ -297,8 +311,8 @@ class Controller extends Package
     protected function installApplicationOverrides(bool $overwrite = false): void
     {
         foreach ($this->applicationOverrides as $path) {
-            $source = DIR_PACKAGES . '/' . $this->pkgHandle . '/overrides' . $path;
-            $destination = DIR_APPLICATION . $path;
+            $source = sprintf('%s/%s/overrides/%s', DIR_PACKAGES, $this->pkgHandle, $path);
+            $destination = sprintf('%s/%s', DIR_APPLICATION, $path);
 
             if (!file_exists($source)) {
                 throw new \RuntimeException(sprintf(
@@ -336,8 +350,8 @@ class Controller extends Package
 
     public function on_start()
     {
-        $pkg = Core::make('Concrete\Core\Package\PackageService')->getByHandle($this->pkgHandle);
-        $config = $pkg->getFileConfig();
+        // $pkg = Core::make('Concrete\Core\Package\PackageService')->getByHandle($this->pkgHandle);
+        // $config = $pkg->getFileConfig();
 
         $this->registerServiceProviders();
         $this->registerBindings();

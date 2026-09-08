@@ -105,7 +105,7 @@ class Page
     public static function processCookiePolicy(): void
     {
         $page = ConcretePage::getCurrentPage();
-        $pkg = Package::getByHandle('lgt-toolkit');
+        $pkg = Core::make('Concrete\Core\Package\PackageService')->getByHandle('lgt-toolkit');
 
         if (is_object($page) && is_object($pkg) && !$page->isAdminArea() && $page->getCollectionHandle() !== 'login') {
             $config = $pkg->getFileConfig();
@@ -136,7 +136,7 @@ class Page
                 $html = Core::make('helper/html');
                 $controller = $page->getPageController();
                 $controller->addHeaderItem($html->css('cookie-popup.css', 'lgt-toolkit'));
-                $controller->addFooterItem('<script type="text/x-template" id="cookie-popup-code">' . $policy . '</script>');
+                $controller->addFooterItem($policy);
                 $controller->addFooterItem($html->javascript('cookie-popup.js', 'lgt-toolkit'));
 
                 if (!isset($session) || $session == null) {
