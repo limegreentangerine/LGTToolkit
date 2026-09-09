@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace LgtToolkit\Tests\Unit;
 
+use PHPUnit\Framework\TestCase;
 use LgtToolkit\Mail\SendEmailRequest;
 use LgtToolkit\Page\AjaxPage\AjaxPageConfig;
 use LgtToolkit\Page\AjaxPage\AjaxPageRequest;
-use LgtToolkit\Page\AjaxPage\AjaxPageResponse;
 use LgtToolkit\Page\AjaxPage\Enums\SortOrder;
-use PHPUnit\Framework\TestCase;
+use LgtToolkit\Page\AjaxPage\AjaxPageResponse;
 
 final class AjaxPageValueObjectsTest extends TestCase
 {

@@ -39,8 +39,8 @@ class LgtMailService
     /**
      * Reads an email template from disk.
      *
-     * @param FileService $fh The file helper service.
-     * @param string $templateName The template file name.
+     * @param FileService $fh           The file helper service.
+     * @param string      $templateName The template file name.
      *
      * @return string The template contents.
      */
@@ -58,9 +58,9 @@ class LgtMailService
     /**
      * Replaces loop placeholders in the email content.
      *
-     * @param FileService $fh The file helper service.
-     * @param SendEmailRequest $request The email request payload.
-     * @param string $emailContent The current email content.
+     * @param FileService      $fh           The file helper service.
+     * @param SendEmailRequest $request      The email request payload.
+     * @param string           $emailContent The current email content.
      *
      * @return string The processed email content.
      */
@@ -98,7 +98,7 @@ class LgtMailService
     /**
      * Builds the final email body using the configured templates.
      *
-     * @param FileService $fh The file helper service.
+     * @param FileService      $fh      The file helper service.
      * @param SendEmailRequest $request The current email request.
      *
      * @return string The rendered email body.
@@ -130,8 +130,8 @@ class LgtMailService
     /**
      * Replaces template variables with the supplied replacements.
      *
-     * @param string $body The body text to transform.
-     * @param array $replacements The replacement values keyed by token name.
+     * @param string $body         The body text to transform.
+     * @param array  $replacements The replacement values keyed by token name.
      *
      * @return string The processed body text.
      */

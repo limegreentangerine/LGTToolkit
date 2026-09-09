@@ -23,25 +23,20 @@ namespace {
 }
 
 namespace Concrete\Core\Entity\Express\Association {
-    class ExampleAssociation
-    {
-    }
+    class ExampleAssociation {}
 }
 
 namespace LgtToolkit\Tests\Unit {
-    use Concrete\Core\Entity\Express\Association\ExampleAssociation;
-    use Concrete\Core\Error\ErrorList\ErrorList;
-    use Concrete\Core\File\Service\File as FileService;
     use LgtToolkit\Area\GlobalArea;
-    use LgtToolkit\Entity\File\ImageFocalPoint;
-    use LgtToolkit\Express\DuplicateExpressObjects;
-    use LgtToolkit\Mail\SendEmailRequest;
-    use LgtToolkit\Providers\AutoCache\AutoCacheService;
-    use LgtToolkit\Providers\LgtMail\LgtMailService;
-    use Localization;
     use PHPUnit\Framework\TestCase;
-    use Punic\Data;
-    use Punic\Language;
+    use LgtToolkit\Mail\SendEmailRequest;
+    use LgtToolkit\Entity\File\ImageFocalPoint;
+    use Concrete\Core\Error\ErrorList\ErrorList;
+    use LgtToolkit\Express\DuplicateExpressObjects;
+    use LgtToolkit\Providers\LgtMail\LgtMailService;
+    use Concrete\Core\File\Service\File as FileService;
+    use LgtToolkit\Providers\AutoCache\AutoCacheService;
+    use Concrete\Core\Entity\Express\Association\ExampleAssociation;
 
     class ExposedLgtMailService extends LgtMailService
     {
@@ -71,9 +66,7 @@ namespace LgtToolkit\Tests\Unit {
 
     class ExposedDuplicateExpressObjects extends DuplicateExpressObjects
     {
-        public function __construct()
-        {
-        }
+        public function __construct() {}
 
         public function exposeAssociationFunctionName(object $object): string
         {

@@ -42,7 +42,7 @@ class Service extends SocialService
     /**
      * Builds a share URL for the current social network.
      *
-     * @param string $url The target URL to share.
+     * @param string $url  The target URL to share.
      * @param string $text The text to accompany the share.
      *
      * @return string Share URL for the configured social network.

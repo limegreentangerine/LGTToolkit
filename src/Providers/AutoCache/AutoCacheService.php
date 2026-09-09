@@ -11,7 +11,7 @@ class AutoCacheService
      * Produces a versioned asset URL for a file within a package theme.
      *
      * @param string $themePath The base theme path.
-     * @param string $filePath The asset file path.
+     * @param string $filePath  The asset file path.
      *
      * @return string A cache-busting URL for the asset.
      */

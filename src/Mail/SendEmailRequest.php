@@ -12,12 +12,12 @@ final readonly class SendEmailRequest
     /**
      * Create a new email request payload.
      *
-     * @param string $template The template name to render.
-     * @param array $args The replacement variables used in the email template.
-     * @param string|null $body_template The base body template name.
-     * @param string|null $template_loop The optional loop template name.
-     * @param Package|null $pkg The package providing the email templates.
-     * @param bool|null $testing Whether the email should be sent in test mode.
+     * @param string       $template      The template name to render.
+     * @param array        $args          The replacement variables used in the email template.
+     * @param string|null  $body_template The base body template name.
+     * @param string|null  $template_loop The optional loop template name.
+     * @param Package|null $pkg           The package providing the email templates.
+     * @param bool|null    $testing       Whether the email should be sent in test mode.
      */
     public function __construct(
         public string $template,

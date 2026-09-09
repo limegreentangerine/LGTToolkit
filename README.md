@@ -41,17 +41,17 @@ The package sets a wide range of default Concrete configuration values to match 
 The package creates a set of reusable attributes for site and page content:
 
 - Site attributes
-  - Company name
-  - Company phone
-  - Company email
-  - Company address
-  - Default sharing image
+    - Company name
+    - Company phone
+    - Company email
+    - Company address
+    - Default sharing image
 - Page / collection attributes
-  - Page banner
-  - SEO header
-  - Page redirector
+    - Page banner
+    - SEO header
+    - Page redirector
 - File attributes
-  - File categories
+    - File categories
 
 It also installs custom attribute types:
 
@@ -123,7 +123,7 @@ It also registers routes for:
 
 1. Add the package to your Concrete project with Composer:
 
-   `composer require limegreentangerine/lgt-toolkit`
+    `composer require limegreentangerine/lgt-toolkit`
 
 2. Install the package in the Concrete CMS dashboard or via the package manager workflow.
 
