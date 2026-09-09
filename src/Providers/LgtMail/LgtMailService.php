@@ -75,7 +75,7 @@ class LgtMailService
         $this->templateBasePath = $this->getTemplateBasePath($request);
 
         $emailTemplate = $this->readTemplate($fh, $request->body_template ?? 'email_template');
-        $emailContent = $this->readTemplate($fh, $request->template);
+        $emailContent = $this->readTemplate($fh, $request->template ?? 'default');
         $emailContent = $this->applyTemplateLoop($fh, $request, $emailContent);
 
         $body = str_replace('{{email_content}}', $emailContent, $emailTemplate);
