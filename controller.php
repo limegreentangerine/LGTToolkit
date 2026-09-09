@@ -403,18 +403,18 @@ class Controller extends Package
         $config = $pkg->getFileConfig();
 
         //TODO: maybe improve this uaccess invocation (move to event??)
-        if (
-            strlen($config->get('lgt_toolkit.uaccess.code')) > 0
-            && !User::isLoggedIn()
-            && Core::make('config')->get('concrete.security.production.mode') !== Modes::MODE_DEVELOPMENT
-        ) {
-            $v = View::getInstance();
-            if ($config->get('lgt_toolkit.uaccess.placement') == 'header') {
-                $v->addHeaderItem($config->get('lgt_toolkit.uaccess.code'));
-            } elseif ($config->get('lgt_toolkit.uaccess.placement') == 'footer') {
-                $v->addFooterItem($config->get('lgt_toolkit.uaccess.code'));
-            }
-        }
+        // if (
+        //     strlen($config->get('lgt_toolkit.uaccess.code')) > 0
+        //     && !User::isLoggedIn()
+        //     && Core::make('config')->get('concrete.security.production.mode') !== Modes::MODE_DEVELOPMENT
+        // ) {
+        //     $v = View::getInstance();
+        //     if ($config->get('lgt_toolkit.uaccess.placement') == 'header') {
+        //         $v->addHeaderItem($config->get('lgt_toolkit.uaccess.code'));
+        //     } elseif ($config->get('lgt_toolkit.uaccess.placement') == 'footer') {
+        //         $v->addFooterItem($config->get('lgt_toolkit.uaccess.code'));
+        //     }
+        // }
 
         //TODO: investigate debug bar problems
         // if (
