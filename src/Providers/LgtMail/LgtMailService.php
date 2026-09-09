@@ -92,8 +92,6 @@ class LgtMailService
             $loopReplace .= $tempLoop;
         }
 
-        unset($request->args['replace']['loop']);
-
         return str_replace('{{loop_replace}}', $loopReplace, $emailContent);
     }
 
@@ -113,11 +111,16 @@ class LgtMailService
         $emailContent = $this->readTemplate($fh, $request->template ?? 'default');
         $emailContent = $this->applyTemplateLoop($fh, $request, $emailContent);
 
+        $replacements = $request->args['replace'] ?? [];
+        if (isset($replacements['loop'])) {
+            unset($replacements['loop']);
+        }
+
         $body = str_replace('{{email_content}}', $emailContent, $emailTemplate);
-        $body = $this->applyReplacements($body, $request->args['replace'] ?? []);
+        $body = $this->applyReplacements($body, $replacements);
         $body = str_replace('{{base_url}}', $this->getBaseUrl(), $body);
 
-        if (!array_key_exists('footer', $request->args['replace'] ?? [])) {
+        if (!array_key_exists('footer', $replacements)) {
             $body = str_replace('{{footer}}', '', $body);
         }
 
