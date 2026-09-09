@@ -70,6 +70,25 @@ class LgtMailService
         return str_replace('{{loop_replace}}', $loopReplace, $emailContent);
     }
 
+    protected function renderBody(FileService $fh, SendEmailRequest $request): string
+    {
+        $this->templateBasePath = $this->getTemplateBasePath($request);
+
+        $emailTemplate = $this->readTemplate($fh, $request->body_template ?? 'email_template');
+        $emailContent = $this->readTemplate($fh, $request->template);
+        $emailContent = $this->applyTemplateLoop($fh, $request, $emailContent);
+
+        $body = str_replace('{{email_content}}', $emailContent, $emailTemplate);
+        $body = $this->applyReplacements($body, $request->args['replace'] ?? []);
+        $body = str_replace('{{base_url}}', $this->getBaseUrl(), $body);
+
+        if (!array_key_exists('footer', $request->args['replace'] ?? [])) {
+            $body = str_replace('{{footer}}', '', $body);
+        }
+
+        return $body;
+    }
+
     protected function applyReplacements(string $body, array $replacements): string
     {
         foreach ($replacements as $handle => $value) {
@@ -109,20 +128,9 @@ class LgtMailService
         $mh = Core::make('mail');
         $fh = Core::make('helper/file');
         $config = Core::make('config');
-        $this->templateBasePath = $this->getTemplateBasePath($request);
 
         try {
-            $emailTemplate = $this->readTemplate($fh, $request->body_template ?? 'email_template');
-            $emailContent = $this->readTemplate($fh, $request->template);
-            $emailContent = $this->applyTemplateLoop($fh, $request, $emailContent);
-
-            $body = str_replace('{{email_content}}', $emailContent, $emailTemplate);
-            $body = $this->applyReplacements($body, $request->args['replace'] ?? []);
-            $body = str_replace('{{base_url}}', $this->getBaseUrl(), $body);
-
-            if (!array_key_exists('footer', $request->args['replace'] ?? [])) {
-                $body = str_replace('{{footer}}', '', $body);
-            }
+            $body = $this->renderBody($fh, $request);
 
             // Set TO
             if (is_array($request->args['to'])) {
