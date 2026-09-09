@@ -1,7 +1,7 @@
 <?php defined('C5_EXECUTE') or die('Access Denied.');
 $app = \Concrete\Core\Support\Facade\Application::getFacadeApplication();
 
-if (is_object($f) && $f->getFileID()) {
+if (isset($f) && (is_object($f) && $f->getFileID())) {
     $imageWidth = 0;
     $imageHeight = 0;
     $imageAltText = '';
@@ -18,34 +18,38 @@ if (is_object($f) && $f->getFileID()) {
         $classes[] = 'ccm-svg';
     }
 
-    if ($maxWidth > 0) {
+    if (isset($maxWidth) && $maxWidth > 0) {
         $imageWidth = $maxWidth;
     }
 
-    if ($maxHeight > 0) {
+    if (isset($maxHeight) && $maxHeight > 0) {
         $imageHeight = $maxHeight;
     }
 
-    if ($altText) {
+    if (isset($altText) && $altText) {
         $imageAltText = h($altText);
     } else {
         $imageAltText = $f->getTitle();
     }
 
-    if ($title) {
+    if (isset($title) && $title) {
         $imageTitle = h($title);
     } else {
         $imageTitle = $f->getTitle();
     }
 
-    if (is_object($foS) && !$f->getTypeObject()->isSVG() && !$foS->getTypeObject()->isSVG()) {
+    if (isset($foS) && (is_object($foS) && !$f->getTypeObject()->isSVG() && !$foS->getTypeObject()->isSVG())) {
+        if (!isset($imgPaths)) {
+            $imgPaths = [];
+        }
+
         $classes[] = 'ccm-image-block-hover';
         $defaultSrc = $imgPaths['default'];
         $hoverSrc = $imgPaths['hover'];
     }
 
-    if ($linkURL) {
-        echo '<a href="' . $linkURL . '" ' . ($openLinkInNewWindow ? 'target="_blank" rel="noopener noreferrer"' : '') . '>';
+    if (isset($linkURL) && $linkURL) {
+        echo '<a href="' . $linkURL . '" ' . ((isset($openLinkInNewWindow) && $openLinkInNewWindow) ? 'target="_blank" rel="noopener noreferrer"' : '') . '>';
     }
 
     if ($f->getTypeObject()->isSVG()) {
@@ -74,14 +78,14 @@ if (is_object($f) && $f->getFileID()) {
             'title' => $imageTitle,
             'defaultSrc' => $defaultSrc,
             'hoverSrc' => $hoverSrc,
-            'cropImage' => $cropImage,
+            'cropImage' => $cropImage ?? false,
         ]);
     }
 
-    if ($linkURL) {
+    if (isset($linkURL) && $linkURL) {
         echo '</a>';
     }
 
-} elseif ($c->isEditMode()) {
+} elseif (isset($c) && is_object($c) && $c->isEditMode()) {
     echo '<div class="ccm-edit-mode-disabled-item">' . t('Empty Image Block.') . '</div>';
 }
