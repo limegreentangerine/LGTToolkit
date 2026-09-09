@@ -12,6 +12,15 @@ class Mapbox extends DashboardPageController
     ];
     protected Package $pkg;
 
+    protected function validateSubmit(array $args)
+    {
+        $vstrings = $this->app->make('helper/validation/strings');
+
+        if (!$vstrings->notempty($args['apiKey'])) {
+            $this->error->add(t('An API Key is required'), 'apiKey');
+        }
+    }
+
     public function on_start()
     {
         parent::on_start();
@@ -33,21 +42,12 @@ class Mapbox extends DashboardPageController
                 $config = $this->pkg->getFileConfig();
                 $config->save('lgt_toolkit.mapbox.apiKey', $this->post('apiKey'));
                 return $this->buildRedirect('/dashboard/lgt_toolkit/mapbox');
-            } else {
-                $this->set('errors', $this->error);
-                $this->set('formContent', $this->post());
             }
+            $this->set('errors', $this->error);
+            $this->set('formContent', $this->post());
+
         } else {
             return $this->buildRedirect('/dashboard/lgt_toolkit/mapbox');
-        }
-    }
-
-    protected function validateSubmit(array $args)
-    {
-        $vstrings = $this->app->make('helper/validation/strings');
-
-        if (!$vstrings->notempty($args['apiKey'])) {
-            $this->error->add(t('An API Key is required'), 'apiKey');
         }
     }
 }

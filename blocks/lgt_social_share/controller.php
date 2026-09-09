@@ -4,12 +4,12 @@ namespace Concrete\Package\LgtToolkit\Block\LgtSocialShare;
 
 defined('C5_EXECUTE') or die('Access Denied.');
 
-use Concrete\Core\Block\BlockController;
-use Concrete\Core\Legacy\BlockRecord;
-use Concrete\Core\Sharing\SocialNetwork\ServiceList;
-use Doctrine\Common\Collections\ArrayCollection;
-use LgtToolkit\Block\SocialShare\ShareLink;
 use Page;
+use Concrete\Core\Legacy\BlockRecord;
+use Concrete\Core\Block\BlockController;
+use LgtToolkit\Block\SocialShare\ShareLink;
+use Doctrine\Common\Collections\ArrayCollection;
+use Concrete\Core\Sharing\SocialNetwork\ServiceList;
 
 class Controller extends BlockController
 {

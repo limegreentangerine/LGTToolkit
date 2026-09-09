@@ -1,4 +1,5 @@
 <?php
+
 namespace LgtToolkit\Block\SocialShare;
 
 use Core;
@@ -7,7 +8,6 @@ use Concrete\Core\Sharing\SocialNetwork\Service as SocialService;
 
 class Service extends SocialService
 {
-
     public function __construct(SocialService $service)
     {
         parent::__construct($service->getHandle(), $service->getName(), $service->getIcon());
@@ -28,7 +28,7 @@ class Service extends SocialService
     {
         $link = '';
 
-        switch($this->getHandle()) {
+        switch ($this->getHandle()) {
             case 'facebook':
                 $link = 'https://www.facebook.com/share.php?u=' . urlencode($url) . '&quote=' . urlencode($text);
                 break;
@@ -40,7 +40,7 @@ class Service extends SocialService
                 break;
             default:
                 $link = '';
-            break;
+                break;
         }
 
         return $link;

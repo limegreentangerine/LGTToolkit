@@ -1,0 +1,24 @@
+<?php
+
+namespace LgtToolkit\Page\AjaxPage;
+
+final readonly class AjaxPageResponse
+{
+    public function __construct(
+        /**
+         * @var array<int, Page>
+         */
+        public ?array $pages,
+        public ?int $nextPageNum,
+        public ?bool $hasNextPage,
+    ) {}
+
+    public function toArray(): array
+    {
+        return [
+            'pages' => $this->pages,
+            'nextPageNum' => $this->nextPageNum,
+            'hasNextPage' => $this->hasNextPage,
+        ];
+    }
+}

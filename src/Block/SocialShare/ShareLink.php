@@ -22,7 +22,7 @@ class ShareLink
     /**
      * Set the value of id
      *
-     * @return  self
+     * @return self
      */
     public function setID(int $id): self
     {
@@ -42,7 +42,7 @@ class ShareLink
     /**
      * Set the value of bID
      *
-     * @return  self
+     * @return self
      */
     public function setBID(int $bID): self
     {
@@ -62,7 +62,7 @@ class ShareLink
     /**
      * Set the value of serviceHandle
      *
-     * @return  self
+     * @return self
      */
     public function setServiceHandle(string $serviceHandle): self
     {
