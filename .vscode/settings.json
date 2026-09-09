@@ -1,9 +1,4 @@
 {
 	"intelephense.environment.phpVersion": "8.4",
-	"intelephense.files.exclude": [
-        "**/node_modules/**",
-        "**/vendor/**",
-        "**/public/concrete/**",
-        "**/packages/**/vendor/**"
-    ]
+	"intelephense.files.exclude": ["**/node_modules/**"]
 }
