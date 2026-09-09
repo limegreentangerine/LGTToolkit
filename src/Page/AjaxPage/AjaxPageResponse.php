@@ -8,7 +8,8 @@ final readonly class AjaxPageResponse
         /**
          * @var array<int, Page>
          */
-        public ?array $pages,
+        public array $pages,
+        public string $html,
         public ?int $nextPageNum,
         public ?bool $hasNextPage,
     ) {}
@@ -17,6 +18,7 @@ final readonly class AjaxPageResponse
     {
         return [
             'pages' => $this->pages,
+            'html' => $this->html,
             'nextPageNum' => $this->nextPageNum,
             'hasNextPage' => $this->hasNextPage,
         ];

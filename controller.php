@@ -3,14 +3,11 @@
 namespace Concrete\Package\LgtToolkit;
 
 use Core;
-use User;
-use View;
 use Route;
 use Events;
 use LgtToolkit\Package\PageTrait;
 use Concrete\Core\Package\Package;
 use LgtToolkit\Package\BlockTrait;
-use Concrete\Core\Production\Modes;
 use LgtToolkit\Package\AttributeTrait;
 use Concrete\Core\Attribute\Key\FileKey;
 use Concrete\Core\Attribute\Key\SiteKey;
@@ -40,7 +37,7 @@ class Controller extends Package
      *
      * @var string
      */
-    protected $pkgVersion = '1.0.0-beta.17';
+    protected $pkgVersion = '1.0.0-beta.20';
 
     /**
      * The minimum Concrete version compatible with the package.
@@ -137,7 +134,9 @@ class Controller extends Package
      * @var array
      */
     protected $applicationOverrides = [
+        'blocks/image/view.php',
         'single_pages/dashboard/files/details.php',
+        'elements/picture.php',
     ];
 
     /**

@@ -3,13 +3,19 @@
 namespace LgtToolkit\Page\AjaxPage;
 
 use Page;
+use View;
+use Package;
 use PageList;
+use LgtToolkit\Page\TranslationAdaptorTrait;
 use LgtToolkit\Page\AjaxPage\Enums\SortOrder;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Concrete\Core\Localization\Translator\Adapter\Laminas\TranslatorAdapter;
 
 abstract class AjaxPage
 {
+    use TranslationAdaptorTrait;
+
     protected AjaxPageResponse $response;
     protected PageList $pl;
     protected ?Page $parent;
@@ -19,6 +25,9 @@ abstract class AjaxPage
     protected bool $includeExclusions;
     protected string $noResultsMessage;
     protected bool $debug;
+    protected string $cardPath;
+    protected ?Package $pkg;
+    protected ?TranslatorAdapter $ta;
 
     public function __construct(AjaxPageConfig $options)
     {
@@ -27,9 +36,12 @@ abstract class AjaxPage
         $this->currentPage = $options->startPage;
         $this->perPage = $options->perPage;
         $this->sortOrder = $options->sortOrder;
+        $this->cardPath = $options->cardPath ?? '/cards/article';
         $this->includeExclusions = $options->includeExclusions ?? false;
         $this->debug = $options->debug ?? false;
         $this->noResultsMessage = t($options->noResultsMessage) ?? t('No articles found');
+
+        $this->ta = $this->getTranslationAdaptor($options->parent ?? Page::getCurrentPage());
 
         $this->build();
     }
@@ -84,6 +96,22 @@ abstract class AjaxPage
         }
     }
 
+    protected function buildView(array $pages): string
+    {
+        $view = new View();
+        ob_start();
+        foreach ($pages as $page) {
+            $view->element($this->cardPath, [
+                'page' => $page,
+                'ta' => $this->ta,
+            ], ($this->pkg) ? $this->pkg->getPackageHandle() : 'lgt-toolkit');
+        }
+        $html = ob_get_contents();
+        ob_end_clean();
+
+        return $html;
+    }
+
     public function getPageList(): PageList
     {
         return $this->pl;
@@ -109,8 +137,11 @@ abstract class AjaxPage
         $pagination->setCurrentPage($this->currentPage);
         $pages = $pagination->getCurrentPageResults();
 
+        $html = $this->buildView($pages);
+
         $this->response = new AjaxPageResponse(
             pages: $pages,
+            html: $html,
             nextPageNum: ($pagination->hasNextPage()) ? ($this->currentPage + 1) : 0,
             hasNextPage: $pagination->hasNextPage(),
         );
