@@ -3,18 +3,26 @@
 namespace Concrete\Package\LgtToolkit;
 
 use Core;
+use User;
+use View;
 use Route;
 use Events;
 use LgtToolkit\Package\PageTrait;
 use Concrete\Core\Package\Package;
 use LgtToolkit\Package\BlockTrait;
+use Concrete\Core\Production\Modes;
+use LgtToolkit\Package\AttributeTrait;
+use Concrete\Core\Attribute\Key\FileKey;
+use Concrete\Core\Attribute\Key\SiteKey;
 use LgtToolkit\Events\File as FileEvent;
 use LgtToolkit\Events\Page as PageEvent;
 use LgtToolkit\Events\Cache as CacheEvent;
+use Concrete\Core\Attribute\Key\CollectionKey;
 use Concrete\Core\Command\Task\Manager as TaskManager;
 
 class Controller extends Package
 {
+    use AttributeTrait;
     use BlockTrait;
     use PageTrait;
 
@@ -32,7 +40,7 @@ class Controller extends Package
      *
      * @var string
      */
-    protected $pkgVersion = '1.0.0-beta.10';
+    protected $pkgVersion = '1.0.0-beta.14';
 
     /**
      * The minimum Concrete version compatible with the package.
@@ -226,6 +234,9 @@ class Controller extends Package
         $this->addSinglePage('/dashboard/lgt_toolkit/uaccess', $pkg, t('UAccess'), t('UAccess Code.'));
         $this->addSinglePage('/dashboard/lgt_toolkit/duplicate_express', $pkg, t('Duplicate Express Objects'), t('Duplicate Express Objects'));
 
+        // Attribute Setup
+        $this->setupAttributes($pkg);
+
         // Install Blocks
         $this->autoInstallBlocks($pkg);
 
@@ -234,6 +245,31 @@ class Controller extends Package
 
         // Set Core configs
         $this->setCoreConfigSettings();
+    }
+
+    protected function setupAttributes(\Concrete\Core\Entity\Package $pkg): void
+    {
+        // Add/Create Attribute Types
+        $this->addAttributeType('country', t('Country'), $pkg);
+        $this->addAttributeType('lgt_colour_picker', t('Colour Picker'), $pkg);
+        $this->addAttributeType('lgt_file_set', t('File Set'), $pkg);
+        $this->addAttributeType('lgt_page_redirector', t('Page Redirector'), $pkg);
+
+        // Add/Get attribute sets
+        $siteAttrSet = $this->addAttributeSet('site', 'site_attributes', t('Site Attributes'), $pkg);
+        $seoAttrSet = $this->addAttributeSet('collection', 'seo', t('SEO'), $pkg);
+        $navAttrSet = $this->addAttributeSet('collection', 'navigation', t('Navigation and Indexing'), $pkg);
+
+        // Add Attributes
+        $this->addAttribute('page_banner', t('Page Banner'), 'image_file', CollectionKey::class, null, $pkg);
+        $this->addAttribute('seo_header', t('SEO Header'), 'text', CollectionKey::class, $seoAttrSet, $pkg);
+        $this->addAttribute('page_redirector', t('Page Redirector'), 'lgt_page_redirector', CollectionKey::class, $navAttrSet, $pkg);
+        $this->addAttribute('file_categories', t('File Categories'), 'topics', FileKey::class, null, $pkg);
+        $this->addAttribute('site_company_name', t('Company Name'), 'text', SiteKey::class, $siteAttrSet, $pkg);
+        $this->addAttribute('site_company_phone', t('Company Phone Number'), 'text', SiteKey::class, $siteAttrSet, $pkg);
+        $this->addAttribute('site_company_email', t('Company Email'), 'email', SiteKey::class, $siteAttrSet, $pkg);
+        $this->addAttribute('site_company_address', t('Company Address'), 'address', SiteKey::class, $siteAttrSet, $pkg);
+        $this->addAttribute('opengraph_default_image', t('Default Sharing Image'), 'image_file', SiteKey::class, $siteAttrSet, $pkg);
     }
 
     protected function setCoreConfigSettings(): void
@@ -350,14 +386,36 @@ class Controller extends Package
 
     public function on_start()
     {
-        // $pkg = Core::make('Concrete\Core\Package\PackageService')->getByHandle($this->pkgHandle);
-        // $config = $pkg->getFileConfig();
-
         $this->registerServiceProviders();
         $this->registerBindings();
         $this->registerRoutes();
         $this->registerEvents();
         $this->registerTasks();
+
+        $pkg = Core::make('Concrete\Core\Package\PackageService')->getByHandle($this->pkgHandle);
+        $config = $pkg->getFileConfig();
+
+        //TODO: maybe improve this uaccess invocation (move to event??)
+        if (
+            strlen($config->get('lgt_toolkit.uaccess.code')) > 0
+            && !User::isLoggedIn()
+            && Core::make('config')->get('concrete.security.production.mode') !== Modes::MODE_DEVELOPMENT
+        ) {
+            $v = View::getInstance();
+            if ($config->get('lgt_toolkit.uaccess.placement') == 'header') {
+                $v->addHeaderItem($config->get('lgt_toolkit.uaccess.code'));
+            } elseif ($config->get('lgt_toolkit.uaccess.placement') == 'footer') {
+                $v->addFooterItem($config->get('lgt_toolkit.uaccess.code'));
+            }
+        }
+
+        //TODO: investigate debug bar problems
+        // if (
+        //     $config->get('lgt_toolkit.debug') === true &&
+        //     Core::make('config')->get('concrete.security.production.mode') === Modes::MODE_DEVELOPMENT
+        // ) {
+        //     $this->showDebugBar();
+        // }
     }
 
     /**

@@ -107,7 +107,7 @@
             $app = \Concrete\Core\Support\Facade\Application::getFacadeApplication();
     $editorJavascript = $app->make('editor')->outputStandardEditorInitJSFunction();
     ?>
-        var launchEditor = <?=$editorJavascript?>;
+        var launchEditor = <?php echo $editorJavascript?>;
         $(function() {
             var container           = $('.ccm-lgt-mapbox-block-container');
             var lgtMapboxMarkers    = $('.ccm-lgt-mapbox-markers-<?php echo $bID ?? 0; ?>');
