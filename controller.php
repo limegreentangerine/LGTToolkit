@@ -40,7 +40,7 @@ class Controller extends Package
      *
      * @var string
      */
-    protected $pkgVersion = '1.0.0-beta.14';
+    protected $pkgVersion = '1.0.0-beta.16';
 
     /**
      * The minimum Concrete version compatible with the package.
@@ -125,10 +125,11 @@ class Controller extends Package
      *
      * @var array
      */
-    protected $bindings = [
-        \Concrete\Core\Area\GlobalArea::class => \LgtToolkit\Area\GlobalArea::class,
-        \Concrete\Core\Page\PageList::class => \LgtToolkit\Page\PageList::class,
-        \Concrete\Core\Page\Theme\Theme::class => \LgtToolkit\Page\Theme\Theme::class,
+    protected $aliases = [
+        'GlobalArea' => \LgtToolkit\Area\GlobalArea::class,
+        'Page' => \LgtToolkit\Page\Page::class,
+        'PageList' => \LgtToolkit\Page\PageList::class,
+        'Theme' => \LgtToolkit\Page\Theme\Theme::class,
     ];
 
     /**
@@ -328,13 +329,20 @@ class Controller extends Package
             ['phone', 'Phone', 'fa fa-phone-square', '<i class="bi bi-telephone"></i>'],
             ['tiktok', 'TikTok', 'fa fa-tiktok', '<i class="bi bi-tiktok"></i>'],
         ]);
+
+        $this->registerAliases($config);
     }
 
-    protected function registerBindings(): void
+    protected function registerAliases(mixed $config): void
     {
-        foreach ($this->bindings as $core => $override) {
-            $this->app->bind($core, $override);
+        $aliases = $config->get('app.aliases');
+        if ($aliases !== null) {
+            foreach ($this->aliases as $key => $value) {
+                $aliases[$key] = $value;
+            }
         }
+
+        $config->save('app.aliases', $aliases);
     }
 
     protected function registerServiceProviders(): void
@@ -387,7 +395,6 @@ class Controller extends Package
     public function on_start()
     {
         $this->registerServiceProviders();
-        $this->registerBindings();
         $this->registerRoutes();
         $this->registerEvents();
         $this->registerTasks();

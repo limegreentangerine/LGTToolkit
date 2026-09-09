@@ -69,6 +69,26 @@ class Controller extends DefaultController
         return $set ?? null;
     }
 
+    public function getName(): ?string
+    {
+        $displayValue = $this->getDisplayValue();
+        if ($displayValue) {
+            return $displayValue->getFileSetName();
+        }
+
+        return null;
+    }
+
+    public function getFiles(): array
+    {
+        $displayValue = $this->getDisplayValue();
+        if ($displayValue) {
+            return $displayValue->getFiles();
+        }
+
+        return [];
+    }
+
     public function getIconFormatter()
     {
         return new FontAwesomeIconFormatter('folder-open');

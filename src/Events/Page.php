@@ -4,8 +4,8 @@ namespace LgtToolkit\Events;
 
 use Core;
 use View;
+use Page as ConcretePage;
 use Concrete\Core\Localization\Localization;
-use Concrete\Core\Page\Page as ConcretePage;
 use Concrete\Core\Attribute\Key\CollectionKey;
 use Concrete\Package\LgtToolkit\Entity\Attribute\Value\Value\RedirectValue;
 
