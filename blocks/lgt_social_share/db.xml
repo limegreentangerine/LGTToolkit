@@ -9,6 +9,10 @@
             <key/>
         </field>
         <field name="title" type="string" size="255" />
+        <field name="mobileOnlySharesheet" type="boolean">
+            <default value="0"/>
+            <notnull/>
+        </field>
     </table>
 
     <table name="btLgtSocialShareNetworks">

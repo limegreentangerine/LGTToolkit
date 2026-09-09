@@ -4,11 +4,12 @@ namespace Concrete\Package\LgtToolkit\Block\LgtSocialShare;
 
 defined('C5_EXECUTE') or die('Access Denied.');
 
-use Page;
 use Concrete\Core\Block\BlockController;
-use LgtToolkit\ShareLink\Link as ShareLink;
-use Doctrine\Common\Collections\ArrayCollection;
+use Concrete\Core\Legacy\BlockRecord;
 use Concrete\Core\Sharing\SocialNetwork\ServiceList;
+use Doctrine\Common\Collections\ArrayCollection;
+use LgtToolkit\Block\SocialShare\ShareLink;
+use Page;
 
 class Controller extends BlockController
 {
@@ -26,6 +27,8 @@ class Controller extends BlockController
 
     protected function getSocialNetworks()
     {
+        $services = [];
+
         $list = ServiceList::get();
         foreach ($list as $service) {
             if (in_array($service->getHandle(), $this->shareableNetworks)) {
@@ -98,7 +101,14 @@ class Controller extends BlockController
         $this->set('c', Page::getCurrentPage());
     }
 
-    public function duplicate($newBID)
+    /**
+     * Automatically run when a block is duplicated. This most likely happens when a block is edited: a block is first duplicated, and then presented to the user to make changes.
+     *
+     * @param int $newBlockID
+     *
+     * @return BlockRecord | null $newInstance
+     */
+    public function duplicate($newBlockID)
     {
         $db = $this->app->make('database')->connection();
         $v = [$this->bID];
@@ -108,7 +118,7 @@ class Controller extends BlockController
             $db->executeQuery(
                 'INSERT INTO `btLgtSocialShareNetworks` (`bID`, `serviceHandle`) VALUES (?, ?)',
                 [
-                    $newBID,
+                    $newBlockID,
                     $row['serviceHandle'],
                 ],
             );

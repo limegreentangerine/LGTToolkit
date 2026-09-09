@@ -40,7 +40,7 @@ class Controller extends Package
      *
      * @var string
      */
-    protected $pkgVersion = '1.0.0-beta.16';
+    protected $pkgVersion = '1.0.0-beta.17';
 
     /**
      * The minimum Concrete version compatible with the package.
@@ -127,7 +127,6 @@ class Controller extends Package
      */
     protected $aliases = [
         'GlobalArea' => \LgtToolkit\Area\GlobalArea::class,
-        'Page' => \LgtToolkit\Page\Page::class,
         'PageList' => \LgtToolkit\Page\PageList::class,
         'Theme' => \LgtToolkit\Page\Theme\Theme::class,
     ];
