@@ -9,8 +9,14 @@ use Concrete\Core\Localization\Localization;
 use Concrete\Core\Attribute\Key\CollectionKey;
 use Concrete\Package\LgtToolkit\Entity\Attribute\Value\Value\RedirectValue;
 
+/**
+ * Handles page-level event hooks for redirect and cookie policy processing.
+ */
 class Page
 {
+    /**
+     * Redirects the current request when a page-level redirect attribute is configured.
+     */
     public static function redirector(): void
     {
         $page = ConcretePage::getCurrentPage();
@@ -48,6 +54,9 @@ class Page
         }
     }
 
+    /**
+     * Adds the site cookie policy output to the current page when enabled.
+     */
     public static function processCookiePolicy(): void
     {
         $page = ConcretePage::getCurrentPage();

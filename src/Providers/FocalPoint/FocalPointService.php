@@ -7,8 +7,19 @@ use Concrete\Core\Entity\File\File;
 use Concrete\Core\Entity\File\Version;
 use LgtToolkit\Entity\File\ImageFocalPoint;
 
+/**
+ * Provides file focal-point lookup helpers.
+ */
 class FocalPointService
 {
+    /**
+     * Retrieves the focal point for a file or file version.
+     *
+     * @param File|Version $file The file or file version to inspect.
+     * @param bool $asObject Whether to return the focal-point entity instead of its coordinates.
+     *
+     * @return mixed The focal point value or false when no focal point exists.
+     */
     public function getFocalPoint(File|Version $file, $asObject = false)
     {
         $fID = false;

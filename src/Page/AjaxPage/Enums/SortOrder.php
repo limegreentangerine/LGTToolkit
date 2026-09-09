@@ -2,6 +2,9 @@
 
 namespace LgtToolkit\Page\AjaxPage\Enums;
 
+/**
+ * Defines the available sort orders for AJAX page results.
+ */
 enum SortOrder: string
 {
     case SitemapAsc = 'sitemap_asc';

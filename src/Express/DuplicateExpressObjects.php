@@ -10,6 +10,9 @@ use Concrete\Core\Express\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Concrete\Core\Application\Application;
 
+/**
+ * Duplicates public Express entities and their metadata across multiple locales.
+ */
 class DuplicateExpressObjects
 {
     protected Application $app;
@@ -17,6 +20,9 @@ class DuplicateExpressObjects
     protected EntityManagerInterface $entityManager;
     protected ObjectManager $objectManager;
 
+    /**
+     * Create a new Express duplication service.
+     */
     public function __construct()
     {
         $this->app = Core::make('app');
@@ -25,12 +31,22 @@ class DuplicateExpressObjects
         $this->objectManager = new ObjectManager($this->app, $this->entityManager);
     }
 
+    /**
+     * Retrieves the available locales for the active site.
+     *
+     * @return iterable The list of locales that can be used for duplication.
+     */
     protected function getLocales()
     {
         $site = Core::make('site')->getActiveSiteForEditing();
         return $site->getLocales();
     }
 
+    /**
+     * Returns the public Express entities the current user can view.
+     *
+     * @return array|false The entities to duplicate or false when none are available.
+     */
     protected function getEntities()
     {
         $r = $this->entityManager->getRepository('\Concrete\Core\Entity\Express\Entity');
@@ -45,6 +61,13 @@ class DuplicateExpressObjects
         return (count($entities) > 0) ? $entities : false;
     }
 
+    /**
+     * Builds the association method name needed to clone an association target.
+     *
+     * @param object $object The association object to inspect.
+     *
+     * @return string The generated method name used by the builder.
+     */
     protected function getAssociationFunctionName(object $object)
     {
         $assocRemove = [
@@ -62,6 +85,9 @@ class DuplicateExpressObjects
         return $className;
     }
 
+    /**
+     * Converts all public Express entities for the active locale set.
+     */
     public function convert()
     {
         $locales = $this->getLocales();

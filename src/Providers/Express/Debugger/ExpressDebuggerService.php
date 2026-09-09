@@ -7,8 +7,16 @@ use Concrete\Core\Entity\Express\Entry;
 use Concrete\Core\Support\Facade\Application;
 use DebugBar\DataCollector\MessagesCollector;
 
+/**
+ * Adds Express entity metadata to the application debug tools.
+ */
 class ExpressDebuggerService
 {
+    /**
+     * Adds a debug collector entry for an Express entity.
+     *
+     * @param Entry $entry The Express entry to inspect.
+     */
     public function debug(Entry $entry)
     {
         $express = $entry->getEntity();

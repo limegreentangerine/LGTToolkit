@@ -12,6 +12,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Concrete\Core\Localization\Translator\Adapter\Laminas\TranslatorAdapter;
 
+/**
+ * Base class for paginated AJAX page responses.
+ */
 abstract class AjaxPage
 {
     use TranslationAdaptorTrait;
@@ -29,6 +32,11 @@ abstract class AjaxPage
     protected ?Package $pkg;
     protected ?TranslatorAdapter $ta;
 
+    /**
+     * Create a paginated AJAX page instance.
+     *
+     * @param AjaxPageConfig $options The configuration supplied to the page builder.
+     */
     public function __construct(AjaxPageConfig $options)
     {
         $this->pl = $options->pl ?? new PageList();
@@ -46,6 +54,9 @@ abstract class AjaxPage
         $this->build();
     }
 
+    /**
+     * Build the page list configuration used by the AJAX response.
+     */
     protected function build(): void
     {
         if ($this->debug === true) {
@@ -62,6 +73,9 @@ abstract class AjaxPage
         $this->setSortOrder();
     }
 
+    /**
+     * Applies the configured sort order to the underlying page list.
+     */
     protected function setSortOrder()
     {
         switch ($this->sortOrder) {
@@ -96,6 +110,13 @@ abstract class AjaxPage
         }
     }
 
+    /**
+     * Renders the HTML for an array of page records.
+     *
+     * @param array $pages The page records to render.
+     *
+     * @return string The rendered page-card markup.
+     */
     protected function buildView(array $pages): string
     {
         $view = new View();
@@ -112,11 +133,21 @@ abstract class AjaxPage
         return $html;
     }
 
+    /**
+     * Gets the underlying page list used by the AJAX page.
+     *
+     * @return PageList The configured page list.
+     */
     public function getPageList(): PageList
     {
         return $this->pl;
     }
 
+    /**
+     * Returns the next paginated batch of results as a JSON response.
+     *
+     * @return Response The AJAX response payload.
+     */
     public function getNextPage(): Response
     {
         $request = AjaxPageRequest::fromArray($_GET);
