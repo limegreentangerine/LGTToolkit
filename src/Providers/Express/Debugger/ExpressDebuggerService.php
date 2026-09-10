@@ -21,7 +21,7 @@ class ExpressDebuggerService
     {
         $express = $entry->getEntity();
         $app = Application::getFacadeApplication();
-        $pkg = Package::getByHandle('lgt-toolkit');
+        $pkg = Package::getByHandle('lgt_toolkit');
         $config = $pkg->getFileConfig();
 
         if ($config->get('lgt_toolkit.debug') === true && \Core::make('config')->get('concrete.security.production.mode') === \Concrete\Core\Production\Modes::MODE_DEVELOPMENT) {

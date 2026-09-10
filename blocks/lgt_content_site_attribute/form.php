@@ -39,7 +39,7 @@
                 e.preventDefault();
                 var $this = $(this);
                 $.ajax({
-                    url: '<?php echo URL::to('/ajax/lgt-toolkit/blocks/content_site_attribute/get_dummy_text'); ?>',
+                    url: '<?php echo URL::to('/ajax/lgt_toolkit/blocks/content_site_attribute/get_dummy_text'); ?>',
                     cache: false,
                     data: {
                         'dummy': $this.data('content'),

@@ -30,7 +30,7 @@ class Controller extends Package
      *
      * @var string
      */
-    protected $pkgHandle = 'lgt-toolkit';
+    protected $pkgHandle = 'lgt_toolkit';
 
     /**
      * The packages version.
@@ -163,8 +163,8 @@ class Controller extends Package
         /**
          * Image Focal Point Routes
          */
-        Route::register('/lgt-toolkit/focal_point', '\Concrete\Package\LgtToolkit\Controller\Dialog\FocalPoint::view');
-        Route::register('/lgt-toolkit/focal_point/submit', '\Concrete\Package\LgtToolkit\Controller\Dialog\FocalPoint::submit');
+        Route::register('/lgt_toolkit/focal_point', '\Concrete\Package\LgtToolkit\Controller\Dialog\FocalPoint::view');
+        Route::register('/lgt_toolkit/focal_point/submit', '\Concrete\Package\LgtToolkit\Controller\Dialog\FocalPoint::submit');
 
         /**
          * Placeholders

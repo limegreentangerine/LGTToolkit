@@ -21,7 +21,7 @@ class PlaceholderText
     {
         $token = Core::make('token');
         $fh = Core::make('helper/file');
-        $pkg = Core::make('Concrete\Core\Package\PackageService')->getByHandle('lgt-toolkit');
+        $pkg = Core::make('Concrete\Core\Package\PackageService')->getByHandle('lgt_toolkit');
 
         $code = 200;
         $response = [

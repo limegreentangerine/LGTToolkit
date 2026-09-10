@@ -125,7 +125,7 @@ abstract class AjaxPage
             $view->element($this->cardPath, [
                 'page' => $page,
                 'ta' => $this->ta,
-            ], ($this->pkg) ? $this->pkg->getPackageHandle() : 'lgt-toolkit');
+            ], ($this->pkg) ? $this->pkg->getPackageHandle() : 'lgt_toolkit');
         }
         $html = ob_get_contents();
         ob_end_clean();

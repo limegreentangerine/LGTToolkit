@@ -18,7 +18,7 @@ class Mapbox
      */
     public function getApiKey(): Response
     {
-        $pkg = Core::make('Concrete\Core\Package\PackageService')->getByHandle('lgt-toolkit');
+        $pkg = Core::make('Concrete\Core\Package\PackageService')->getByHandle('lgt_toolkit');
         $config = $pkg->getFileConfig();
         return new JsonResponse([
             'apiKey' => $config->get('lgt_toolkit.mapbox.apiKey'),

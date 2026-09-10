@@ -1,6 +1,6 @@
 # LGT Toolkit
 
-[![Tests](https://github.com/limegreentangerine/lgt-toolkit/actions/workflows/Tests.yml/badge.svg)](https://github.com/limegreentangerine/lgt-toolkit/actions/workflows/Tests.yml)
+[![Tests](https://github.com/limegreentangerine/lgt_toolkit/actions/workflows/Tests.yml/badge.svg)](https://github.com/limegreentangerine/lgt_toolkit/actions/workflows/Tests.yml)
 
 LGT Toolkit is a Concrete CMS package designed to provide a standard set of site defaults, blocks, attributes, and admin utilities for Lime Green Tangerine builds. It is built as a `concrete5-package` and installs a consistent toolkit for content editors, developers, and designers working inside Concrete CMS.
 
@@ -12,7 +12,7 @@ LGT Toolkit is a Concrete CMS package designed to provide a standard set of site
 
 ## Package overview
 
-The package defines a package handle of `lgt-toolkit` and is installed as a standard Concrete package. On install and upgrade it:
+The package defines a package handle of `lgt_toolkit` and is installed as a standard Concrete package. On install and upgrade it:
 
 - registers package service providers
 - creates dashboard single pages
@@ -123,7 +123,7 @@ It also registers routes for:
 
 1. Add the package to your Concrete project with Composer:
 
-    `composer require limegreentangerine/lgt-toolkit`
+    `composer require limegreentangerine/lgt_toolkit`
 
 2. Install the package in the Concrete CMS dashboard or via the package manager workflow.
 

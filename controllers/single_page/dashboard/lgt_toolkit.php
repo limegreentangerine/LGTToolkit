@@ -15,7 +15,7 @@ class LgtToolkit extends DashboardPageController
     {
         parent::on_start();
 
-        $this->pkg = $this->app->make('Concrete\Core\Package\PackageService')->getByHandle('lgt-toolkit');
+        $this->pkg = $this->app->make('Concrete\Core\Package\PackageService')->getByHandle('lgt_toolkit');
     }
 
     public function view()

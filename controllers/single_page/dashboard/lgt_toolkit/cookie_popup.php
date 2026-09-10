@@ -45,7 +45,7 @@ class CookiePopup extends DashboardPageController
     {
         parent::on_start();
 
-        $this->pkg = $this->app->make('Concrete\Core\Package\PackageService')->getByHandle('lgt-toolkit');
+        $this->pkg = $this->app->make('Concrete\Core\Package\PackageService')->getByHandle('lgt_toolkit');
         $this->set('pkg', $this->pkg);
 
         $site = $this->app->make('site')->getActiveSiteForEditing();

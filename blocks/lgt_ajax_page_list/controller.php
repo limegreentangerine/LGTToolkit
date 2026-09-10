@@ -39,7 +39,7 @@ class Controller extends BlockController
 
     protected function getAjaxTemplateHandles(): array
     {
-        $pkg = $this->app->make('Concrete\Core\Package\PackageService')->getByHandle('lgt-toolkit');
+        $pkg = $this->app->make('Concrete\Core\Package\PackageService')->getByHandle('lgt_toolkit');
         $path = $pkg->getPackagePath() . DIRECTORY_SEPARATOR . 'elements' . DIRECTORY_SEPARATOR . $this->btHandle;
         $paths = new FilesystemIterator($path, FilesystemIterator::SKIP_DOTS);
 
@@ -177,7 +177,7 @@ class Controller extends BlockController
             $view->element($templatePath, [
                 'page' => $p,
                 'adapter' => $adaptor,
-            ], 'lgt-toolkit');
+            ], 'lgt_toolkit');
         }
         $html = ob_get_contents();
         ob_end_clean();

@@ -15,7 +15,7 @@ class Controller extends AttributeController
 
     protected function addAssets(): void
     {
-        $pkg = $this->app->make('Concrete\Core\Package\PackageService')->getByHandle('lgt-toolkit');
+        $pkg = $this->app->make('Concrete\Core\Package\PackageService')->getByHandle('lgt_toolkit');
         $this->addFooterItem(
             $this->app->make('helper/html')->javascript(
                 $pkg->getRelativePath() . '/attributes/lgt_page_redirector/js/form.js',

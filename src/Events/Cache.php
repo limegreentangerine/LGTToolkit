@@ -13,7 +13,7 @@ class Cache
      */
     public static function getConfig()
     {
-        $pkg = Package::getByHandle('lgt-toolkit');
+        $pkg = Package::getByHandle('lgt_toolkit');
         if (is_object($pkg)) {
             return $pkg->getFileConfig();
         }

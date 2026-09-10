@@ -135,7 +135,7 @@ if (isset($view) && $view->controller->getAction() == 'preview_version') { ?>
                             <?php
                     }
                     ?>
-                        <?php if ($pkg = \Package::getByHandle('lgt-toolkit') && $genericType === \Concrete\Core\File\Type\Type::T_IMAGE) { ?>
+                        <?php if ($pkg = \Package::getByHandle('lgt_toolkit') && $genericType === \Concrete\Core\File\Type\Type::T_IMAGE) { ?>
                             <li>
                                 <a
                                     data-bs-placement="left"
@@ -143,7 +143,7 @@ if (isset($view) && $view->controller->getAction() == 'preview_version') { ?>
                                     dialog-title="<?php echo t('Focal Point') ?>"
                                     dialog-width="90%" dialog-height="75%"
                                     title="<?php echo t('Set the focal point of this image.') ?>"
-                                    href="<?php echo URL::to('/lgt-toolkit/focal_point')?>?fID=<?php echo $file->getFileID()?>"
+                                    href="<?php echo URL::to('/lgt_toolkit/focal_point')?>?fID=<?php echo $file->getFileID()?>"
                                 >
                                         <?php echo t('Set Focal Point') ?>
                                 </a>

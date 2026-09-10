@@ -23,7 +23,7 @@ class FocalPoint extends BackendInterfaceFileController
         $this->view = new DialogView($this->viewPath);
         /** @var \Concrete\Core\View\View $view */
         $view = $this->view;
-        $view->setPackageHandle('lgt-toolkit');
+        $view->setPackageHandle('lgt_toolkit');
         $view->setController($this);
         $this->request = Request::getInstance();
     }
@@ -39,7 +39,7 @@ class FocalPoint extends BackendInterfaceFileController
         parent::on_start();
 
         $html = $this->app->make('helper/html');
-        $this->addHeaderItem($html->css('focal_point.css', 'lgt-toolkit'));
+        $this->addHeaderItem($html->css('focal_point.css', 'lgt_toolkit'));
     }
 
     public function view()
