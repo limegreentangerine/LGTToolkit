@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f8a17e0e54ea5cfb423e5e362160e0d6",
+    "content-hash": "0d5c1156f22766e800be5ae8b3b0670a",
     "packages": [
         {
             "name": "maximebf/debugbar",
@@ -400,16 +400,16 @@
     "packages-dev": [
         {
             "name": "carbonphp/carbon-doctrine-types",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/CarbonPHP/carbon-doctrine-types.git",
-                "reference": "3c430083d0b41ceed84ecccf9dac613241d7305d"
+                "reference": "a30627d36d9daba598cd52341324e7a9794081f1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/CarbonPHP/carbon-doctrine-types/zipball/3c430083d0b41ceed84ecccf9dac613241d7305d",
-                "reference": "3c430083d0b41ceed84ecccf9dac613241d7305d",
+                "url": "https://api.github.com/repos/CarbonPHP/carbon-doctrine-types/zipball/a30627d36d9daba598cd52341324e7a9794081f1",
+                "reference": "a30627d36d9daba598cd52341324e7a9794081f1",
                 "shasum": ""
             },
             "require": {
@@ -449,7 +449,7 @@
             ],
             "support": {
                 "issues": "https://github.com/CarbonPHP/carbon-doctrine-types/issues",
-                "source": "https://github.com/CarbonPHP/carbon-doctrine-types/tree/1.0.0"
+                "source": "https://github.com/CarbonPHP/carbon-doctrine-types/tree/1.0.1"
             },
             "funding": [
                 {
@@ -465,7 +465,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-10-01T12:35:29+00:00"
+            "time": "2026-09-06T14:10:59+00:00"
         },
         {
             "name": "clue/ndjson-react",
@@ -1098,16 +1098,16 @@
         },
         {
             "name": "concretecms/dependency-patches",
-            "version": "1.8.1",
+            "version": "1.8.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/concretecms/dependency-patches.git",
-                "reference": "dc000eab49f6b15b950ecb96fca2b9328a3f0f27"
+                "reference": "421bf35141ee220479ca726ef3f7f3b79555990e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/concretecms/dependency-patches/zipball/dc000eab49f6b15b950ecb96fca2b9328a3f0f27",
-                "reference": "dc000eab49f6b15b950ecb96fca2b9328a3f0f27",
+                "url": "https://api.github.com/repos/concretecms/dependency-patches/zipball/421bf35141ee220479ca726ef3f7f3b79555990e",
+                "reference": "421bf35141ee220479ca726ef3f7f3b79555990e",
                 "shasum": ""
             },
             "require": {
@@ -1117,7 +1117,8 @@
             "extra": {
                 "patches": {
                     "league/url:3.3.5": {
-                        "Add PHP 8.1 compatibility": "league/url/php8.1-compatibility.patch"
+                        "Add PHP 8.1 compatibility": "league/url/php8.1-compatibility.patch",
+                        "Fix the PHPDoc of the setters of Url and UrlImmutable": "league/url/setters-phpdoc.patch"
                     },
                     "twig/twig:3.11.3": {
                         "Escape profiler HTML output names (CVE-2026-47730)": "twig/twig/cve-2026-47730-profiler-html-escaping.patch",
@@ -1190,7 +1191,8 @@
                     },
                     "sunra/php-simple-html-dom-parser:1.5.2": {
                         "Add PHP 8.1 compatibility": "sunra/php-simple-html-dom-parser/php8.1-compatibility.patch",
-                        "Fix minus in regular expressions": "sunra/php-simple-html-dom-parser/minus-in-regular-expressions.patch"
+                        "Fix minus in regular expressions": "sunra/php-simple-html-dom-parser/minus-in-regular-expressions.patch",
+                        "Fix the return types of HtmlDomParser::file_get_html() and str_get_html()": "sunra/php-simple-html-dom-parser/return-types.patch"
                     }
                 }
             },
@@ -1210,9 +1212,9 @@
             "homepage": "https://github.com/concretecms/dependency-patches",
             "support": {
                 "issues": "https://github.com/concretecms/dependency-patches/issues",
-                "source": "https://github.com/concretecms/dependency-patches/tree/1.8.1"
+                "source": "https://github.com/concretecms/dependency-patches/tree/1.8.4"
             },
-            "time": "2026-08-21T07:53:10+00:00"
+            "time": "2026-09-08T10:20:34+00:00"
         },
         {
             "name": "concretecms/doctrine-xml",
@@ -2917,16 +2919,16 @@
         },
         {
             "name": "friendsofphp/php-cs-fixer",
-            "version": "v3.95.24",
+            "version": "v3.95.25",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer.git",
-                "reference": "9a4b8050f8768646bf3693ee7416978ceeca6206"
+                "reference": "2cdfc1f3daf173d83a1ebb6177949b58c95de6ff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-CS-Fixer/PHP-CS-Fixer/zipball/9a4b8050f8768646bf3693ee7416978ceeca6206",
-                "reference": "9a4b8050f8768646bf3693ee7416978ceeca6206",
+                "url": "https://api.github.com/repos/PHP-CS-Fixer/PHP-CS-Fixer/zipball/2cdfc1f3daf173d83a1ebb6177949b58c95de6ff",
+                "reference": "2cdfc1f3daf173d83a1ebb6177949b58c95de6ff",
                 "shasum": ""
             },
             "require": {
@@ -3009,7 +3011,7 @@
             ],
             "support": {
                 "issues": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/issues",
-                "source": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/tree/v3.95.24"
+                "source": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/tree/v3.95.25"
             },
             "funding": [
                 {
@@ -3017,7 +3019,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-08-31T15:31:12+00:00"
+            "time": "2026-09-08T11:11:37+00:00"
         },
         {
             "name": "friendsofphp/proxy-manager-lts",
@@ -8277,16 +8279,16 @@
         },
         {
             "name": "punic/punic",
-            "version": "3.8.1",
+            "version": "3.8.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/punic/punic.git",
-                "reference": "142707201a246a9c2ea909605cd56177af87f961"
+                "reference": "523858c590fc9c02607c8138241c464e1fdb36a5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/punic/punic/zipball/142707201a246a9c2ea909605cd56177af87f961",
-                "reference": "142707201a246a9c2ea909605cd56177af87f961",
+                "url": "https://api.github.com/repos/punic/punic/zipball/523858c590fc9c02607c8138241c464e1fdb36a5",
+                "reference": "523858c590fc9c02607c8138241c464e1fdb36a5",
                 "shasum": ""
             },
             "require": {
@@ -8348,7 +8350,7 @@
             ],
             "support": {
                 "issues": "https://github.com/punic/punic/issues",
-                "source": "https://github.com/punic/punic/tree/3.8.1"
+                "source": "https://github.com/punic/punic/tree/3.8.2"
             },
             "funding": [
                 {
@@ -8360,7 +8362,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-03-29T06:56:57+00:00"
+            "time": "2026-09-10T07:35:23+00:00"
         },
         {
             "name": "ralouphie/getallheaders",
