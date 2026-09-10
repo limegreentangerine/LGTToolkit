@@ -25,10 +25,10 @@
 		}
 	],
 	"require": {
-		"php": "^8.4",
 		"maximebf/debugbar": "^3.8"
 	},
 	"require-dev": {
+		"php": "^8.4",
 		"phpunit/phpunit": "^11",
 		"concrete5/core": "^9.2",
 		"friendsofphp/php-cs-fixer": "^3.95"
