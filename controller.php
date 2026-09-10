@@ -294,6 +294,7 @@ class Controller extends Package
         // session handlers
         $config->save('concrete.session.name', 'LGTCMSSESSION');
         $config->save('concrete.session.handler', 'database');
+        $config->save('concrete.session.cookie.cookie_secure', true);
 
         // seo defaults
         $config->save('concrete.seo.url_rewriting', true);
