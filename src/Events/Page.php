@@ -2,8 +2,10 @@
 
 namespace LgtToolkit\Events;
 
+use URL;
 use Core;
 use View;
+use DebugBar\DebugBar;
 use Page as ConcretePage;
 use Concrete\Core\Localization\Localization;
 use Concrete\Core\Attribute\Key\CollectionKey;
@@ -104,5 +106,24 @@ class Page
                 }
             }
         }
+    }
+
+    public static function startDebugBar(?DebugBar $debugbar)
+    {
+        if (!$debugbar) {
+            return;
+        }
+
+        $page = ConcretePage::getCurrentPage();
+        if (!is_object($page) || $page->isError() || $page->isAdminArea()) {
+            return;
+        }
+
+        $debugbarRenderer = $debugbar->getJavascriptRenderer();
+        $debugbarRenderer->setAssetHandlerUrl(
+            URL::to('/debugbar/assets'),
+        );
+        $page->getPageController()->addHeaderItem($debugbarRenderer->renderHead());
+        $page->getPageController()->addFooterItem($debugbarRenderer->render());
     }
 }

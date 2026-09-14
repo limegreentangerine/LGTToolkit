@@ -2,26 +2,42 @@
 
 namespace Concrete\Package\LgtToolkit;
 
-use Core;
-use Route;
-use Events;
-use LgtToolkit\Package\PageTrait;
-use Concrete\Core\Package\Package;
-use LgtToolkit\Package\BlockTrait;
-use LgtToolkit\Package\AttributeTrait;
+use Concrete\Core\Attribute\Key\CollectionKey;
 use Concrete\Core\Attribute\Key\FileKey;
 use Concrete\Core\Attribute\Key\SiteKey;
+use Concrete\Core\Command\Task\Manager as TaskManager;
+use Concrete\Core\Database\Connection\Connection;
+use Concrete\Core\Http\Request;
+use Concrete\Core\Package\Package;
+use Concrete\Core\Production\Modes;
+use Core;
+use DebugBar\AssetHandler;
+use DebugBar\DataCollector\TimeDataCollector;
+use DebugBar\DebugBar;
+use DebugBar\StandardDebugBar;
+use Doctrine\DBAL\Logging\DebugStack;
+use Events;
+use LgtToolkit\DebugBar\DataCollector\DoctrineCollector;
+use LgtToolkit\DebugBar\DataCollector\EnvironmentDataCollector;
+use LgtToolkit\DebugBar\DataCollector\LogDataCollector;
+use LgtToolkit\DebugBar\DataCollector\RequestDataCollector;
+use LgtToolkit\DebugBar\DataCollector\SessionDataCollector;
+use LgtToolkit\DebugBar\Directors;
+use LgtToolkit\Events\Cache as CacheEvent;
 use LgtToolkit\Events\File as FileEvent;
 use LgtToolkit\Events\Page as PageEvent;
-use LgtToolkit\Events\Cache as CacheEvent;
-use Concrete\Core\Attribute\Key\CollectionKey;
-use Concrete\Core\Command\Task\Manager as TaskManager;
+use LgtToolkit\Package\AttributeTrait;
+use LgtToolkit\Package\BlockTrait;
+use LgtToolkit\Package\PageTrait;
+use Route;
 
 class Controller extends Package
 {
     use AttributeTrait;
     use BlockTrait;
     use PageTrait;
+
+    protected ?DebugBar $debugbar = null;
 
     /**
      * The packages handle.
@@ -179,6 +195,18 @@ class Controller extends Package
         Route::register('/ajax/allow-cookies', '\LgtToolkit\Ajax\Cookies::allowCookies');
         Route::register('/ajax/disallow-cookies', '\LgtToolkit\Ajax\Cookies::disallowCookies');
         Route::register('/ajax/check-cookies', '\LgtToolkit\Ajax\Cookies::checkCookies');
+
+        /**
+         * Debug Bar
+         */
+        Route::register('/debugbar/assets', function () {
+            if (!$this->debugbar) {
+                exit;
+            }
+            $handler = new AssetHandler($this->debugbar);
+            $handler->handle($_GET);
+            exit;
+        });
     }
 
     /**
@@ -186,9 +214,10 @@ class Controller extends Package
      */
     private function registerEvents()
     {
-        Events::addListener('on_before_render', function ($event) {
+        Events::addListener('on_before_render', function () {
             PageEvent::redirector();
             PageEvent::processCookiePolicy();
+            PageEvent::startDebugBar($this->debugbar);
         });
 
         Events::addListener('on_user_logout', function () {
@@ -381,6 +410,51 @@ class Controller extends Package
         }
     }
 
+    protected function initDebugBar()
+    {
+        $app = $this->getApplication();
+        if (!is_object($app)) {
+            return;
+        }
+
+        // $request = $app->make(Request::class);
+        // if ($request->isXmlHttpRequest() || \Illuminate\Support\Str::contains($request->headers->get('Accept', ''), 'application/json')) {
+        //     return;
+        // }
+
+
+        $pkg = Core::make('Concrete\Core\Package\PackageService')->getByHandle('lgt_toolkit');
+        if (!$pkg) {
+            return;
+        }
+
+        $pkgConfig = $pkg->getFileConfig();
+        $useDebug = $pkgConfig->get('lgt_toolkit.debug') === true;
+
+        $siteConfig = Core::make('config');
+        $inDev = $siteConfig->get('concrete.security.production.mode') === Modes::MODE_DEVELOPMENT;
+
+        // if (!$useDebug || !$inDev) return;
+
+        $this->debugbar = new StandardDebugBar();
+
+        // Custom Collectors
+        $this->debugbar->addCollector(new EnvironmentDataCollector());
+        $this->debugbar->addCollector(new LogDataCollector());
+        $this->debugbar->addCollector(new RequestDataCollector());
+        $this->debugbar->addCollector(new SessionDataCollector());
+
+        // Database Collector
+        $doctrineDebugStack = new DebugStack();
+        $connection = $this->getApplication()->make(Connection::class);
+        $connection->getConfiguration()->setSQLLogger($doctrineDebugStack);
+        $this->debugbar->addCollector(new DoctrineCollector($doctrineDebugStack));
+
+        // Other Data for Core Collectors
+        $directors = new Directors($app, $this->debugbar);
+        $directors->renderer();
+    }
+
     public function getPackageName()
     {
         return t('LGT Toolkit');
@@ -397,6 +471,7 @@ class Controller extends Package
         $this->registerRoutes();
         $this->registerEvents();
         $this->registerTasks();
+        $this->initDebugBar();
 
         $pkg = Core::make('Concrete\Core\Package\PackageService')->getByHandle($this->pkgHandle);
         $config = $pkg->getFileConfig();
@@ -413,14 +488,6 @@ class Controller extends Package
         //     } elseif ($config->get('lgt_toolkit.uaccess.placement') == 'footer') {
         //         $v->addFooterItem($config->get('lgt_toolkit.uaccess.code'));
         //     }
-        // }
-
-        //TODO: investigate debug bar problems
-        // if (
-        //     $config->get('lgt_toolkit.debug') === true &&
-        //     Core::make('config')->get('concrete.security.production.mode') === Modes::MODE_DEVELOPMENT
-        // ) {
-        //     $this->showDebugBar();
         // }
     }
 
@@ -442,5 +509,13 @@ class Controller extends Package
         $pkg = Core::make('Concrete\Core\Package\PackageService')->getByHandle($this->pkgHandle);
         parent::upgrade();
         $this->installOrUpgrade($pkg);
+    }
+
+    /**
+     * Get the value of debugbar
+     */
+    public function getDebugbar()
+    {
+        return $this->debugbar;
     }
 }
