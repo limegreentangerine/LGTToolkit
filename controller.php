@@ -410,17 +410,17 @@ class Controller extends Package
         }
     }
 
-    protected function initDebugBar()
+    protected function registerDebugBar()
     {
         $app = $this->getApplication();
         if (!is_object($app)) {
             return;
         }
 
-        // $request = $app->make(Request::class);
-        // if ($request->isXmlHttpRequest() || \Illuminate\Support\Str::contains($request->headers->get('Accept', ''), 'application/json')) {
-        //     return;
-        // }
+        $request = $app->make(Request::class);
+        if ($request->isXmlHttpRequest() || \Illuminate\Support\Str::contains($request->headers->get('Accept', ''), 'application/json')) {
+            return;
+        }
 
 
         $pkg = Core::make('Concrete\Core\Package\PackageService')->getByHandle('lgt_toolkit');
@@ -471,24 +471,7 @@ class Controller extends Package
         $this->registerRoutes();
         $this->registerEvents();
         $this->registerTasks();
-        $this->initDebugBar();
-
-        $pkg = Core::make('Concrete\Core\Package\PackageService')->getByHandle($this->pkgHandle);
-        $config = $pkg->getFileConfig();
-
-        //TODO: maybe improve this uaccess invocation (move to event??)
-        // if (
-        //     strlen($config->get('lgt_toolkit.uaccess.code')) > 0
-        //     && !User::isLoggedIn()
-        //     && Core::make('config')->get('concrete.security.production.mode') !== Modes::MODE_DEVELOPMENT
-        // ) {
-        //     $v = View::getInstance();
-        //     if ($config->get('lgt_toolkit.uaccess.placement') == 'header') {
-        //         $v->addHeaderItem($config->get('lgt_toolkit.uaccess.code'));
-        //     } elseif ($config->get('lgt_toolkit.uaccess.placement') == 'footer') {
-        //         $v->addFooterItem($config->get('lgt_toolkit.uaccess.code'));
-        //     }
-        // }
+        $this->registerDebugBar();
     }
 
     /**
