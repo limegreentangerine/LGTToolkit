@@ -14,11 +14,11 @@ use DebugBar\DataCollector\ExceptionsCollector;
 use DebugBar\DataCollector\RequestDataCollector;
 use Concrete\Core\Database\Connection\Connection;
 use Symfony\Component\EventDispatcher\EventDispatcher;
-use LgtToolkit\DebugBar\DataCollector\LogDataCollector as ConcreteLogDataCollector;
 use LgtToolkit\DebugBar\DataCollector\DoctrineCollector;
+use LgtToolkit\DebugBar\DataCollector\LogDataCollector as ConcreteLogDataCollector;
+use LgtToolkit\DebugBar\DataCollector\RequestDataCollector as ConcreteRequestDataCollector;
 use LgtToolkit\DebugBar\DataCollector\SessionDataCollector as ConcreteSessionDataCollector;
 use LgtToolkit\DebugBar\DataCollector\EnvironmentDataCollector as ConcreteEnvironmentDataCollector;
-use LgtToolkit\DebugBar\DataCollector\RequestDataCollector as ConcreteRequestDataCollector;
 
 class Directors
 {

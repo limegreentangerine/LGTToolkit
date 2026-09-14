@@ -8,6 +8,14 @@ use Concrete\Core\Support\Facade\Application;
 
 class EnvironmentDataCollector extends DataCollector implements Renderable
 {
+    private function formatVarCollapsed(mixed $value): string
+    {
+        return str_replace(
+            'sf-dump-expanded',
+            'sf-dump-compact',
+            $this->getDataFormatter()->formatVar($value),
+        );
+    }
     public function collect(): array
     {
         $app = Application::getFacadeApplication();
@@ -17,18 +25,9 @@ class EnvironmentDataCollector extends DataCollector implements Renderable
             'variables' => $this->formatVarCollapsed(get_defined_vars()),
             'server' => $this->formatVarCollapsed($_SERVER),
             'classes' => $this->formatVarCollapsed(get_declared_classes()),
-            'functions' =>$this->formatVarCollapsed(get_defined_functions()),
+            'functions' => $this->formatVarCollapsed(get_defined_functions()),
             'constants' => $this->formatVarCollapsed(get_defined_constants()),
         ];
-    }
-
-    private function formatVarCollapsed(mixed $value): string
-    {
-        return str_replace(
-            'sf-dump-expanded',
-            'sf-dump-compact',
-            $this->getDataFormatter()->formatVar($value)
-        );
     }
 
     public function getName(): string

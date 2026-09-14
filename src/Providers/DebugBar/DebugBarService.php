@@ -3,6 +3,7 @@
 namespace LgtToolkit\Providers\DebugBar;
 
 use Core;
+use Exception;
 use DebugBar\DebugBar;
 use Concrete\Core\Entity\Package;
 use LgtToolkit\DebugBar\Directors;
@@ -58,6 +59,11 @@ class DebugBarService
     public function addStandardCollectors()
     {
         $this->getDirector()->addStandardCollectors();
+    }
+
+    public function getCollector(string $name): DataCollector
+    {
+        return $this->debugbar->getCollector($name) ?? throw new Exception(t('Data Collector with name %s not found', $name));
     }
 
     public function addCollector(DataCollector $collector)
