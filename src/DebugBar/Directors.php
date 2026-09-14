@@ -2,12 +2,23 @@
 
 namespace LgtToolkit\DebugBar;
 
-use Concrete\Core\Application\Application;
+use DebugBar\DebugBar;
+use Doctrine\DBAL\Logging\DebugStack;
 use Concrete\Core\Entity\Express\Entity;
+use Concrete\Core\Application\Application;
+use DebugBar\DataCollector\MemoryCollector;
+use DebugBar\DataCollector\PhpInfoCollector;
 use DebugBar\DataCollector\MessagesCollector;
 use DebugBar\DataCollector\TimeDataCollector;
-use DebugBar\DebugBar;
+use DebugBar\DataCollector\ExceptionsCollector;
+use DebugBar\DataCollector\RequestDataCollector;
+use Concrete\Core\Database\Connection\Connection;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use LgtToolkit\DebugBar\DataCollector\LogDataCollector as ConcreteLogDataCollector;
+use LgtToolkit\DebugBar\DataCollector\DoctrineCollector;
+use LgtToolkit\DebugBar\DataCollector\SessionDataCollector as ConcreteSessionDataCollector;
+use LgtToolkit\DebugBar\DataCollector\EnvironmentDataCollector as ConcreteEnvironmentDataCollector;
+use LgtToolkit\DebugBar\DataCollector\RequestDataCollector as ConcreteRequestDataCollector;
 
 class Directors
 {
@@ -18,6 +29,60 @@ class Directors
     {
         $this->application = $app;
         $this->debugbar = $debugbar;
+    }
+
+    public function addStandardCollectors()
+    {
+        if (!$this->debugbar->hasCollector('memory')) {
+            $this->debugbar->addCollector(new MemoryCollector());
+        }
+
+        if (!$this->debugbar->hasCollector('messages')) {
+            $this->debugbar->addCollector(new MessagesCollector());
+        }
+
+        if (!$this->debugbar->hasCollector('php')) {
+            $this->debugbar->addCollector(new PhpInfoCollector());
+        }
+
+        if (!$this->debugbar->hasCollector('request')) {
+            $this->debugbar->addCollector(new RequestDataCollector());
+        }
+
+        if (!$this->debugbar->hasCollector('time')) {
+            $this->debugbar->addCollector(new TimeDataCollector());
+        }
+
+        if (!$this->debugbar->hasCollector('exceptions')) {
+            $this->debugbar->addCollector(new ExceptionsCollector());
+        }
+    }
+
+    public function addConcreteCollectors()
+    {
+        if (!$this->debugbar->hasCollector('concrete_environment')) {
+            $this->debugbar->addCollector(new ConcreteEnvironmentDataCollector());
+        }
+
+        if (!$this->debugbar->hasCollector('concrete_log')) {
+            $this->debugbar->addCollector(new ConcreteLogDataCollector());
+        }
+
+        if (!$this->debugbar->hasCollector('concrete_request')) {
+            $this->debugbar->addCollector(new ConcreteRequestDataCollector());
+        }
+
+        if (!$this->debugbar->hasCollector('concrete_session')) {
+            $this->debugbar->addCollector(new ConcreteSessionDataCollector());
+        }
+    }
+
+    public function addDoctineCollectors()
+    {
+        $doctrineDebugStack = new DebugStack();
+        $connection = $this->application->make(Connection::class);
+        $connection->getConfiguration()->setSQLLogger($doctrineDebugStack);
+        $this->debugbar->addCollector(new DoctrineCollector($doctrineDebugStack));
     }
 
     public function renderer()

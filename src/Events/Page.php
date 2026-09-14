@@ -7,6 +7,8 @@ use Core;
 use View;
 use DebugBar\DebugBar;
 use Page as ConcretePage;
+use Illuminate\Support\Str;
+use Concrete\Core\Http\Request;
 use Concrete\Core\Localization\Localization;
 use Concrete\Core\Attribute\Key\CollectionKey;
 use Concrete\Package\LgtToolkit\Entity\Attribute\Value\Value\RedirectValue;
@@ -110,6 +112,11 @@ class Page
 
     public static function startDebugBar(?DebugBar $debugbar)
     {
+        $request = Core::make(Request::class);
+        if ($request->isXmlHttpRequest() || Str::contains($request->headers->get('Accept', ''), 'application/json')) {
+            return;
+        }
+
         if (!$debugbar) {
             return;
         }

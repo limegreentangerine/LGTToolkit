@@ -3,10 +3,10 @@
 namespace LgtToolkit\Providers\Express\Debugger;
 
 use Core;
-use Concrete\Core\Entity\Express\Entry;
-use Concrete\Core\Production\Modes;
-use Concrete\Core\Support\Facade\Application;
 use LgtToolkit\DebugBar\Directors;
+use Concrete\Core\Production\Modes;
+use Concrete\Core\Entity\Express\Entry;
+use Concrete\Core\Support\Facade\Application;
 
 /**
  * Adds Express entity metadata to the application debug tools.
@@ -24,7 +24,9 @@ class ExpressDebuggerService
         $app = Application::getFacadeApplication();
         $pkg = Core::make('Concrete\Core\Package\PackageService')->getByHandle('lgt_toolkit');
 
-        if (!$express || !$app || !$pkg) return;
+        if (!$express || !$app || !$pkg) {
+            return;
+        }
 
         $config = $pkg->getFileConfig();
         $useDebug = $config->get('lgt_toolkit.debug') === true;
@@ -32,11 +34,11 @@ class ExpressDebuggerService
         $siteConfig = Core::make('config');
         $inDev = $siteConfig->get('concrete.security.production.mode') === Modes::MODE_DEVELOPMENT;
 
-        $debugbar = $pkg->getDebugbar();
+        $debugbar = $pkg->getDebugBar();
         if ($useDebug && $inDev) {
             $director = new Directors($app, $debugbar);
             $director->expressDebugging($express);
-        } else if ($inDev) {
+        } elseif ($inDev) {
             ob_start();
             echo '<script>';
             echo 'console.group(\'%c' . t('Available Attributes on Entity: %s', $express->getName()) . '\', \'color:red;font-size:14px\');';

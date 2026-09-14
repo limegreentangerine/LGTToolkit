@@ -11,14 +11,24 @@ class EnvironmentDataCollector extends DataCollector implements Renderable
     public function collect(): array
     {
         $app = Application::getFacadeApplication();
-        $data['environment'] = $this->getDataFormatter()->formatVar($app->environment());
-        $data['variables'] = $this->getDataFormatter()->formatVar(get_defined_vars());
-        $data['server'] = $this->getDataFormatter()->formatVar($_SERVER);
-        $data['classes'] = $this->getDataFormatter()->formatVar(get_declared_classes());
-        $data['functions'] = $this->getDataFormatter()->formatVar(get_defined_functions());
-        $data['constants'] = $this->getDataFormatter()->formatVar(get_defined_constants());
 
-        return $data;
+        return [
+            'environment' => $app->environment(),
+            'variables' => $this->formatVarCollapsed(get_defined_vars()),
+            'server' => $this->formatVarCollapsed($_SERVER),
+            'classes' => $this->formatVarCollapsed(get_declared_classes()),
+            'functions' =>$this->formatVarCollapsed(get_defined_functions()),
+            'constants' => $this->formatVarCollapsed(get_defined_constants()),
+        ];
+    }
+
+    private function formatVarCollapsed(mixed $value): string
+    {
+        return str_replace(
+            'sf-dump-expanded',
+            'sf-dump-compact',
+            $this->getDataFormatter()->formatVar($value)
+        );
     }
 
     public function getName(): string
@@ -31,7 +41,7 @@ class EnvironmentDataCollector extends DataCollector implements Renderable
         return [
             'environment' => [
                 'icon' => 'fas fa-server',
-                'widget' => 'PhpDebugBar.Widgets.VariableListWidget',
+                'widget' => 'PhpDebugBar.Widgets.HtmlVariableListWidget',
                 'map' => 'concrete_environment',
                 'default' => '{}',
             ],

@@ -2,34 +2,25 @@
 
 namespace Concrete\Package\LgtToolkit;
 
-use Concrete\Core\Attribute\Key\CollectionKey;
+use Core;
+use Route;
+use Events;
+use Request;
+use DebugBar\DebugBar;
+use DebugBar\AssetHandler;
+use LgtToolkit\Package\PageTrait;
+use Concrete\Core\Package\Package;
+use LgtToolkit\DebugBar\Directors;
+use LgtToolkit\Package\BlockTrait;
+use Concrete\Core\Production\Modes;
+use LgtToolkit\Package\AttributeTrait;
 use Concrete\Core\Attribute\Key\FileKey;
 use Concrete\Core\Attribute\Key\SiteKey;
-use Concrete\Core\Command\Task\Manager as TaskManager;
-use Concrete\Core\Database\Connection\Connection;
-use Concrete\Core\Http\Request;
-use Concrete\Core\Package\Package;
-use Concrete\Core\Production\Modes;
-use Core;
-use DebugBar\AssetHandler;
-use DebugBar\DataCollector\TimeDataCollector;
-use DebugBar\DebugBar;
-use DebugBar\StandardDebugBar;
-use Doctrine\DBAL\Logging\DebugStack;
-use Events;
-use LgtToolkit\DebugBar\DataCollector\DoctrineCollector;
-use LgtToolkit\DebugBar\DataCollector\EnvironmentDataCollector;
-use LgtToolkit\DebugBar\DataCollector\LogDataCollector;
-use LgtToolkit\DebugBar\DataCollector\RequestDataCollector;
-use LgtToolkit\DebugBar\DataCollector\SessionDataCollector;
-use LgtToolkit\DebugBar\Directors;
-use LgtToolkit\Events\Cache as CacheEvent;
 use LgtToolkit\Events\File as FileEvent;
 use LgtToolkit\Events\Page as PageEvent;
-use LgtToolkit\Package\AttributeTrait;
-use LgtToolkit\Package\BlockTrait;
-use LgtToolkit\Package\PageTrait;
-use Route;
+use LgtToolkit\Events\Cache as CacheEvent;
+use Concrete\Core\Attribute\Key\CollectionKey;
+use Concrete\Core\Command\Task\Manager as TaskManager;
 
 class Controller extends Package
 {
@@ -53,7 +44,7 @@ class Controller extends Package
      *
      * @var string
      */
-    protected $pkgVersion = '1.0.0-beta.22';
+    protected $pkgVersion = '1.0.0-beta.23';
 
     /**
      * The minimum Concrete version compatible with the package.
@@ -84,6 +75,7 @@ class Controller extends Package
         \LgtToolkit\Providers\AutoCache\AutoCacheServiceProvider::class,
         \LgtToolkit\Providers\FocalPoint\FocalPointServiceProvider::class,
         \LgtToolkit\Providers\Express\Debugger\ExpressDebuggerServiceProvider::class,
+        \LgtToolkit\Providers\DebugBar\DebugBarServiceProvider::class,
     ];
 
     /**
@@ -259,7 +251,6 @@ class Controller extends Package
         $this->addSinglePage('/dashboard/lgt_toolkit/cookie_popup', $pkg, t('Cookie Popup'), t('Cookie Popup settings.'));
         $this->addSinglePage('/dashboard/lgt_toolkit/cloudflare', $pkg, t('Cloudflare'), t('Cloudflare API settings.'));
         $this->addSinglePage('/dashboard/lgt_toolkit/mapbox', $pkg, t('Mapbox'), t('Mapbox API settings.'));
-        $this->addSinglePage('/dashboard/lgt_toolkit/uaccess', $pkg, t('UAccess'), t('UAccess Code.'));
         $this->addSinglePage('/dashboard/lgt_toolkit/duplicate_express', $pkg, t('Duplicate Express Objects'), t('Duplicate Express Objects'));
 
         // Attribute Setup
@@ -417,11 +408,10 @@ class Controller extends Package
             return;
         }
 
-        $request = $app->make(Request::class);
-        if ($request->isXmlHttpRequest() || \Illuminate\Support\Str::contains($request->headers->get('Accept', ''), 'application/json')) {
+        $request = Request::getInstance();
+        if ($request->isXmlHttpRequest() || $request->getPathInfo() === '/login') {
             return;
         }
-
 
         $pkg = Core::make('Concrete\Core\Package\PackageService')->getByHandle('lgt_toolkit');
         if (!$pkg) {
@@ -434,24 +424,16 @@ class Controller extends Package
         $siteConfig = Core::make('config');
         $inDev = $siteConfig->get('concrete.security.production.mode') === Modes::MODE_DEVELOPMENT;
 
-        // if (!$useDebug || !$inDev) return;
+        if (!$useDebug || !$inDev) {
+            return;
+        }
 
-        $this->debugbar = new StandardDebugBar();
+        $this->debugbar = new DebugBar();
 
-        // Custom Collectors
-        $this->debugbar->addCollector(new EnvironmentDataCollector());
-        $this->debugbar->addCollector(new LogDataCollector());
-        $this->debugbar->addCollector(new RequestDataCollector());
-        $this->debugbar->addCollector(new SessionDataCollector());
-
-        // Database Collector
-        $doctrineDebugStack = new DebugStack();
-        $connection = $this->getApplication()->make(Connection::class);
-        $connection->getConfiguration()->setSQLLogger($doctrineDebugStack);
-        $this->debugbar->addCollector(new DoctrineCollector($doctrineDebugStack));
-
-        // Other Data for Core Collectors
         $directors = new Directors($app, $this->debugbar);
+        $directors->addStandardCollectors();
+        $directors->addConcreteCollectors();
+        $directors->addDoctineCollectors();
         $directors->renderer();
     }
 
@@ -497,7 +479,7 @@ class Controller extends Package
     /**
      * Get the value of debugbar
      */
-    public function getDebugbar()
+    public function getDebugBar()
     {
         return $this->debugbar;
     }
