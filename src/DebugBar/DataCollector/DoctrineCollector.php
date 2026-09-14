@@ -1,0 +1,107 @@
+<?php
+
+namespace LgtToolkit\DebugBar\DataCollector;
+
+use DebugBar\DebugBarException;
+use Doctrine\ORM\EntityManager;
+use Doctrine\DBAL\Logging\DebugStack;
+use DebugBar\DataCollector\Renderable;
+use DebugBar\DataCollector\AssetProvider;
+use DebugBar\DataCollector\DataCollector;
+
+/**
+ * Collects Doctrine queries
+ *
+ * http://doctrine-project.org
+ *
+ * Uses the DebugStack logger to collects data about queries
+ *
+ * <code>
+ * $debugStack = new Doctrine\DBAL\Logging\DebugStack();
+ * $entityManager->getConnection()->getConfiguration()->setSQLLogger($debugStack);
+ * $debugbar->addCollector(new DoctrineCollector($debugStack));
+ * </code>
+ */
+class DoctrineCollector extends DataCollector implements Renderable, AssetProvider
+{
+    protected DebugStack $debugStack;
+
+    /**
+     * DoctrineCollector constructor.
+     * @param                    $debugStackOrEntityManager
+     * @throws DebugBarException
+     */
+    public function __construct(DebugStack|EntityManager $debugStackOrEntityManager)
+    {
+        if ($debugStackOrEntityManager instanceof EntityManager) {
+            $debugStackOrEntityManager = $debugStackOrEntityManager->getConnection()->getConfiguration()->getSQLLogger();
+        }
+        if (!($debugStackOrEntityManager instanceof DebugStack)) {
+            throw new DebugBarException("'DoctrineCollector' requires an 'EntityManager' or 'DebugStack' object");
+        }
+        $this->debugStack = $debugStackOrEntityManager;
+    }
+
+    /**
+     * @return array
+     */
+    public function collect(): array
+    {
+        $queries = [];
+        $totalExecTime = 0;
+        foreach ($this->debugStack->queries as $q) {
+            $queries[] = [
+                'sql' => $q['sql'],
+                'params' => (object) $q['params'],
+                'duration' => $q['executionMS'],
+                'duration_str' => $this->getDataFormatter()->formatDuration($q['executionMS']),
+            ];
+            $totalExecTime += $q['executionMS'];
+        }
+
+        return [
+            'nb_statements' => count($queries),
+            'accumulated_duration' => $totalExecTime,
+            'accumulated_duration_str' => $this->getDataFormatter()->formatDuration($totalExecTime),
+            'statements' => $queries,
+        ];
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return 'doctrine';
+    }
+
+    /**
+     * @return array
+     */
+    public function getWidgets(): array
+    {
+        return [
+            'database' => [
+                'icon' => 'arrow-right',
+                'widget' => 'PhpDebugBar.Widgets.SQLQueriesWidget',
+                'map' => 'doctrine',
+                'default' => '[]',
+            ],
+            'database:badge' => [
+                'map' => 'doctrine.nb_statements',
+                'default' => 0,
+            ],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function getAssets(): array
+    {
+        return [
+            'css' => 'widgets/sqlqueries/widget.css',
+            'js' => 'widgets/sqlqueries/widget.js',
+        ];
+    }
+}

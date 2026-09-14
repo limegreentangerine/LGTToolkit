@@ -2,10 +2,11 @@
 
 namespace LgtToolkit\Providers\Express\Debugger;
 
-use Package;
+use Core;
 use Concrete\Core\Entity\Express\Entry;
+use Concrete\Core\Production\Modes;
 use Concrete\Core\Support\Facade\Application;
-use DebugBar\DataCollector\MessagesCollector;
+use LgtToolkit\DebugBar\Directors;
 
 /**
  * Adds Express entity metadata to the application debug tools.
@@ -21,36 +22,36 @@ class ExpressDebuggerService
     {
         $express = $entry->getEntity();
         $app = Application::getFacadeApplication();
-        $pkg = Package::getByHandle('lgt_toolkit');
-        $config = $pkg->getFileConfig();
+        $pkg = Core::make('Concrete\Core\Package\PackageService')->getByHandle('lgt_toolkit');
 
-        if ($config->get('lgt_toolkit.debug') === true && \Core::make('config')->get('concrete.security.production.mode') === \Concrete\Core\Production\Modes::MODE_DEVELOPMENT) {
-            $debugBar = $app->make('debugbar');
-            $debugBar->addCollector(new MessagesCollector($express->getHandle()));
-            $debugBar[$express->getHandle()]->info(t('Available Attributes on Entity: %s', $express->getName()));
+        if (!$express || !$app || !$pkg) return;
+
+        $config = $pkg->getFileConfig();
+        $useDebug = $config->get('lgt_toolkit.debug') === true;
+
+        $siteConfig = Core::make('config');
+        $inDev = $siteConfig->get('concrete.security.production.mode') === Modes::MODE_DEVELOPMENT;
+
+        $debugbar = $pkg->getDebugbar();
+        if ($useDebug && $inDev) {
+            $director = new Directors($app, $debugbar);
+            $director->expressDebugging($express);
+        } else if ($inDev) {
+            ob_start();
+            echo '<script>';
+            echo 'console.group(\'%c' . t('Available Attributes on Entity: %s', $express->getName()) . '\', \'color:red;font-size:14px\');';
             foreach ($express->getAttributes() as $attribute) {
-                $debugBar[$express->getHandle()]->info(t('%s: can be access using getAttribute("%s") on this object. AttributeType: %s', $attribute->getAttributeKeyName(), $attribute->getAttributeKeyHandle(), $attribute->getAttributeTypeHandle()));
+                echo 'console.log(\'%c' . t('%s: can be access using getAttribute("%s") on this object. AttributeType: %s', $attribute->getAttributeKeyName(), $attribute->getAttributeKeyHandle(), $attribute->getAttributeTypeHandle()) . '\', \'color:blue\');';
             }
             foreach ($express->getAssociations() as $association) {
-                $debugBar[$express->getHandle()]->info(t('An object association was found, this can be access using getAssociation("%s") on this object.', $association->getComputedTargetPropertyName()));
+                echo 'console.log(\'%c' . t('An object association was found, this can be access using getAssociation("%s") on this object.', $association->getComputedTargetPropertyName()) . '\', \'color:green\');';
             }
-            $debugBar['messages']->aggregate($debugBar[$express->getHandle()]);
-        }
+            echo 'console.groupEnd();';
+            echo '</script>';
+            $html = ob_get_contents();
+            ob_end_clean();
 
-        ob_start();
-        echo '<script>';
-        echo 'console.group(\'%c' . t('Available Attributes on Entity: %s', $express->getName()) . '\', \'color:red;font-size:14px\');';
-        foreach ($express->getAttributes() as $attribute) {
-            echo 'console.log(\'%c' . t('%s: can be access using getAttribute("%s") on this object. AttributeType: %s', $attribute->getAttributeKeyName(), $attribute->getAttributeKeyHandle(), $attribute->getAttributeTypeHandle()) . '\', \'color:blue\');';
+            echo $html;
         }
-        foreach ($express->getAssociations() as $association) {
-            echo 'console.log(\'%c' . t('An object association was found, this can be access using getAssociation("%s") on this object.', $association->getComputedTargetPropertyName()) . '\', \'color:green\');';
-        }
-        echo 'console.groupEnd();';
-        echo '</script>';
-        $html = ob_get_contents();
-        ob_end_clean();
-
-        echo $html;
     }
 }
