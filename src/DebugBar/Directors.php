@@ -45,9 +45,10 @@ class Directors
             $this->debugbar->addCollector(new PhpInfoCollector());
         }
 
-        if (!$this->debugbar->hasCollector('request')) {
-            $this->debugbar->addCollector(new RequestDataCollector());
-        }
+        // TODO: screwing with login sessions, needs looking at
+        // if (!$this->debugbar->hasCollector('request')) {
+        //     $this->debugbar->addCollector(new RequestDataCollector());
+        // }
 
         if (!$this->debugbar->hasCollector('time')) {
             $this->debugbar->addCollector(new TimeDataCollector());

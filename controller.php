@@ -44,7 +44,7 @@ class Controller extends Package
      *
      * @var string
      */
-    protected $pkgVersion = '1.0.0-beta.23';
+    protected $pkgVersion = '1.0.0-beta.24';
 
     /**
      * The minimum Concrete version compatible with the package.
@@ -348,6 +348,11 @@ class Controller extends Package
             ['phone', 'Phone', 'fa fa-phone-square', '<i class="bi bi-telephone"></i>'],
             ['tiktok', 'TikTok', 'fa fa-tiktok', '<i class="bi bi-tiktok"></i>'],
         ]);
+
+        // marketplace database nightmare
+        $dbConfig = $this->app->make('config/database');
+        $dbConfig->save('concrete.marketplace.key.public', '');
+        $dbConfig->save('concrete.marketplace.key.private', '');
 
         $this->registerAliases($config);
     }
