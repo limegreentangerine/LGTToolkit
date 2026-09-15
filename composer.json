@@ -1,5 +1,5 @@
 {
-	"name": "limegreentangerine/lgt-toolkit",
+	"name": "limegreentangerine/lgt_toolkit",
 	"description": "LGT tools and defaults for Concrete CMS",
 	"type": "concrete5-package",
 	"license": "MIT",
