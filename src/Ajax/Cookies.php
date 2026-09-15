@@ -10,8 +10,24 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 class Cookies
 {
-    public string $cookieName = 'cookie_consent';
     private int $cookieTTL = 365 * 24 * 60 * 60; // 1 year in seconds
+    public string $cookieName = 'cookie_consent';
+
+    /**
+     * setConsentCookie
+     *
+     * @param string $value
+     */
+    private function setConsentCookie(string $value): void
+    {
+        setcookie($this->cookieName, $value, [
+            'expires' => time() + $this->cookieTTL,
+            'path' => '/',
+            'secure' => isset($_SERVER['HTTPS']),
+            'httponly' => false,
+            'samesite' => 'Lax',
+        ]);
+    }
 
     /**
      * Stores the user's cookie consent choice in the active session.
@@ -33,22 +49,5 @@ class Cookies
     {
         $this->setConsentCookie('declined');
         return new JsonResponse(['status' => 'declined']);
-    }
-
-    /**
-     * setConsentCookie
-     *
-     * @param  string $value
-     * @return void
-     */
-    private function setConsentCookie(string $value): void
-    {
-        setcookie($this->cookieName, $value, [
-            'expires'  => time() + $this->cookieTTL,
-            'path'     => '/',
-            'secure'   => isset($_SERVER['HTTPS']),
-            'httponly' => false,
-            'samesite' => 'Lax',
-        ]);
     }
 }
