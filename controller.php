@@ -18,7 +18,6 @@ use Concrete\Core\Attribute\Key\FileKey;
 use Concrete\Core\Attribute\Key\SiteKey;
 use LgtToolkit\Events\File as FileEvent;
 use LgtToolkit\Events\Page as PageEvent;
-use LgtToolkit\Events\Cache as CacheEvent;
 use Concrete\Core\Attribute\Key\CollectionKey;
 use Concrete\Core\Command\Task\Manager as TaskManager;
 
@@ -212,14 +211,6 @@ class Controller extends Package
             PageEvent::startDebugBar($this->debugbar);
         });
 
-        Events::addListener('on_user_logout', function () {
-            CacheEvent::disableDevMode();
-        });
-
-        Events::addListener('on_cache_flush', function () {
-            CacheEvent::forceCacheClear();
-        });
-
         Events::addListener('on_file_delete', function ($event) {
             FileEvent::removeFocalPoint($event);
         });
@@ -249,8 +240,6 @@ class Controller extends Package
         // Add Single Pages
         $this->addSinglePage('/dashboard/lgt_toolkit', $pkg, t('LGT Toolkit'));
         $this->addSinglePage('/dashboard/lgt_toolkit/cookie_popup', $pkg, t('Cookie Popup'), t('Cookie Popup settings.'));
-        $this->addSinglePage('/dashboard/lgt_toolkit/cloudflare', $pkg, t('Cloudflare'), t('Cloudflare API settings.'));
-        $this->addSinglePage('/dashboard/lgt_toolkit/mapbox', $pkg, t('Mapbox'), t('Mapbox API settings.'));
         $this->addSinglePage('/dashboard/lgt_toolkit/duplicate_express', $pkg, t('Duplicate Express Objects'), t('Duplicate Express Objects'));
 
         // Attribute Setup
