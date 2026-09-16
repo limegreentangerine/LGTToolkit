@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.concrete5.org/doctrine-xml/0.5"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.concrete5.org/doctrine-xml/0.5 https://concretecms.github.io/doctrine-xml/doctrine-xml-0.5.xsd">
+
+    <table name="btLgtBlockquote">
+        <field name="bID" type="integer">
+            <unsigned/>
+            <key/>
+        </field>
+        <field name="quote" type="text"/>
+        <field name="author" type="string" size="255"/>
+        <field name="hex_background" type="string" size="7"/>
+        <field name="hex_text" type="string" size="7"/>
+    </table>
+
+</schema>

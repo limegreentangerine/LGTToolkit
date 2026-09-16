@@ -1,7 +1,10 @@
 <?php
+
 namespace Concrete\Package\LgtToolkit\Controller\SinglePage\Dashboard\LgtToolkit;
 
-use Package;
+use Concrete\Core\Entity\Package;
+use Doctrine\ORM\PersistentCollection;
+use Concrete\Core\Error\ErrorList\ErrorList;
 use Concrete\Core\Page\Controller\DashboardPageController;
 
 class CookiePopup extends DashboardPageController
@@ -9,18 +12,40 @@ class CookiePopup extends DashboardPageController
     protected $helpers = [
         'form',
         'concrete/ui',
-        'form/page_selector'
+        'form/page_selector',
     ];
-    protected $pkg;
-    protected $locales;
-    protected $formContent;
-    protected $errors;
+    protected Package $pkg;
+    protected PersistentCollection $locales;
+    protected mixed $formContent;
+    protected ?ErrorList $errors;
+
+    protected function validateSubmit(array $args)
+    {
+        $vstrings = $this->app->make('helper/validation/strings');
+        $vnumbers = $this->app->make('helper/validation/numbers');
+
+        if (!$vstrings->notempty($args['data']['en']['title'])) {
+            $this->error->add(t('A title is required'), 'title');
+        }
+
+        if (!$vstrings->notempty($args['data']['en']['content'])) {
+            $this->error->add('Content is required', 'content');
+        }
+
+        if (!$vnumbers->integer($args['data']['en']['linkCID']) || $args['data']['en']['linkCID'] < 1) {
+            $this->error->add(t('Policy page must be selected'), 'linkCID');
+        }
+
+        if (count($this->formContent['styles']) < 8) {
+            $this->error->add(t('All styles need a value'));
+        }
+    }
 
     public function on_start()
     {
         parent::on_start();
 
-        $this->pkg = Package::getByHandle('lgt-toolkit');
+        $this->pkg = $this->app->make('Concrete\Core\Package\PackageService')->getByHandle('lgt_toolkit');
         $this->set('pkg', $this->pkg);
 
         $site = $this->app->make('site')->getActiveSiteForEditing();
@@ -77,36 +102,14 @@ class CookiePopup extends DashboardPageController
         $this->set('token', $this->token);
     }
 
-    protected function validateSubmit($args)
-    {
-        $vstrings = $this->app->make('helper/validation/strings');
-        $vnumbers = $this->app->make('helper/validation/numbers');
-
-        if (!$vstrings->notempty($args['data']['en']['title'])) {
-            $this->error->add(t('A title is required'), 'title');
-        }
-
-        if (!$vstrings->notempty($args['data']['en']['content'])) {
-            $this->error->add('Content is required', 'content');
-        }
-
-        if (!$vnumbers->integer($args['data']['en']['linkCID']) || $args['data']['en']['linkCID'] < 1) {
-            $this->error->add(t('Policy page must be selected'), 'linkCID');
-        }
-
-        if (count($this->formContent['styles']) < 8) {
-            $this->error->add(t('All styles need a value'));
-        }
-    }
-
-    public function getColourOptions()
+    public function getColourOptions(): array
     {
         return [
             '' => t('Choose a colour...'),
             'primary' => t('Primary'),
             'secondary' => t('Secondary'),
             'light' => t('Light'),
-            'dark' => t('Dark')
+            'dark' => t('Dark'),
         ];
     }
 }

@@ -1,4 +1,4 @@
-.cookie-popup {
+.lgt-cookie-popup {
 	position: fixed;
 	z-index: 9999;
 	bottom: 15px;
@@ -6,6 +6,7 @@
 	right: 15px;
 	padding: 20px 30px;
 	transform: translateY(120%);
+	opacity: 0;
 	transition: transform 400ms ease-in-out;
 	background-color: var(--lgtBgColor);
 	color: var(--lgtFgColor);
@@ -14,24 +15,25 @@
 }
 
 @media screen and (min-width: 768px) {
-	.cookie-popup {
+	.lgt-cookie-popup {
 		max-width: 40%;
 		left: auto;
 	}
 }
 
 @media screen and (min-width: 1200px) {
-	.cookie-popup {
+	.lgt-cookie-popup {
 		max-width: 40%;
 		left: auto;
 	}
 }
 
-.cookie-popup.notify {
+.lgt-cookie-popup.notify {
 	transform: translateY(0%);
+	opacity: 1;
 }
 
-.cookie-popup p a {
+.lgt-cookie-popup p a {
 	color: var(--lgtFgColor);
 	text-decoration: underline;
 }
@@ -39,6 +41,6 @@
 /**
     This hides the cookie popup when the C5 sidebar is open
 */
-.ccm-panel-transition-slide .cookie-popup {
+.ccm-panel-transition-slide .lgt-cookie-popup {
 	transform: translateY(120%) !important;
 }

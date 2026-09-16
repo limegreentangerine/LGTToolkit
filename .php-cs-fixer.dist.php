@@ -2,6 +2,12 @@
 
 $finder = PhpCsFixer\Finder::create()
     ->in([
+        __DIR__ . '/attributes',
+        __DIR__ . '/blocks',
+        __DIR__ . '/controllers',
+        __DIR__ . '/elements',
+        __DIR__ . '/overrides',
+        __DIR__ . '/single_pages',
         __DIR__ . '/src',
         __DIR__ . '/tests'
     ])
@@ -108,5 +114,8 @@ return (new PhpCsFixer\Config())
         // Code Quality
         'no_superfluous_elseif' => true,
         'no_useless_concat_operator' => true,
+        'echo_tag_syntax' => [
+            'format' => 'long'
+        ]
     ])
     ->setFinder($finder);

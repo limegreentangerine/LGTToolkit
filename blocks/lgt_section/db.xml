@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.concrete5.org/doctrine-xml/0.5"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.concrete5.org/doctrine-xml/0.5 https://concretecms.github.io/doctrine-xml/doctrine-xml-0.5.xsd">
+
+    <table name="btLgtSection">
+        <field name="bID" type="integer">
+            <unsigned/>
+            <key/>
+        </field>
+
+        <field name="media" type="integer">
+            <unsigned/>
+            <default value="0" />
+        </field>
+
+        <field name="title" type="string" size="255" />
+        <field name="content" type="text" />
+
+        <field name="linkType" type="string" size="255" />
+        <field name="linkContent" type="string" size="255" />
+        <field name="linkText" type="string" size="255" />
+
+        <field name="backgroundColor" type="string" size="7" />
+        <field name="foregroundColor" type="string" size="7" />
+
+        <field name="titleSize" type="string" size="255" />
+        <field name="contentSize" type="string" size="255" />
+        <field name="buttonSize" type="string" size="255" />
+        <field name="buttonStyle" type="string" size="255" />
+
+        <field name="imageColumnSize" type="integer">
+            <unsigned />
+            <default value="6" />
+        </field>
+        <field name="contentColumnSize" type="integer">
+            <unsigned />
+            <default value="6" />
+        </field>
+        <field name="columnArrangement" type="string" size="255" />
+        <field name="horizontalAlignment" type="string" size="255" />
+        <field name="verticalAlignment" type="string" size="255" />
+        <field name="gutterSize" type="integer">
+            <unsigned />
+            <default value="0" />
+        </field>
+    </table>
+
+</schema>

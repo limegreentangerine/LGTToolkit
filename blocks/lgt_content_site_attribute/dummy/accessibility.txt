@@ -1,0 +1,47 @@
+<p>At {site_company_name}, we strive to ensure that our website is accessible to all individuals, regardless of their abilities or disabilities. We are committed to providing an inclusive and user-friendly experience for everyone who visits our site. To achieve this goal, we have implemented the Web Content Accessibility Guidelines (WCAG) 2.1 as the basis for our accessibility standards. This statement outlines the measures we have taken to make our website accessible and the ongoing efforts we undertake to maintain and improve accessibility.</p>
+<h2>WCAG Compliance</h2>
+<p>Our website has been designed and developed to comply with the WCAG 2.1 Level AA success criteria. WCAG 2.1 provides recommendations for making web content more accessible to a wide range of disabilities. These guidelines are internationally recognized and widely accepted as the benchmark for web accessibility standards.</p>
+<h2>Accessibility Features Implemented</h2>
+<ol>
+    <li>Perceivable
+        <ul>
+            <li>We provide alternative text descriptions for all non-text content such as images, icons, and buttons to ensure screen readers can convey the information to visually impaired users.</li>
+            <li>We use clear and consistent headings, subheadings, and labels to improve content structure and navigation.</li>
+        </ul>
+    </li>
+    <li>Operable
+        <ul>
+            <li>Our website can be navigated using a keyboard, ensuring users who cannot operate a mouse can still access all features and functionalities.</li>
+            <li>We provide skip navigation links to allow users to bypass repetitive content and navigate directly to the main content area.</li>
+            <li>Time-based media, such as videos, have captions or transcripts available to provide equivalent access to audio information.</li>
+        </ul>
+    </li>
+    <li>Understandable
+        <ul>
+            <li>We strive to use plain and simple language throughout our website, making the content easy to understand for a diverse audience.</li>
+            <li>Forms and interactive elements are designed to be clear and straightforward, with appropriate error messages and instructions provided.</li>
+        </ul>
+    </li>
+    <li>Robust
+        <ul>
+            <li>Our website is built using modern web technologies and follows best practices to ensure compatibility with current and future assistive technologies.</li>
+        </ul>
+    </li>
+</ol>
+<h2>Ongoing Accessibility Efforts</h2>
+<p>Accessibility is an ongoing effort at {site_company_name}. We are committed to regularly reviewing and improving our website to maintain WCAG 2.1 compliance. Here are some of the steps we take:</p>
+<ul>
+    <li> Regular Audits: We conduct regular accessibility audits to identify and address any accessibility issues that may arise.</li>
+    <li>User Testing: We involve individuals with disabilities in user testing to gather feedback and insights to enhance the accessibility of our website.</li>
+    <li>Staff Training: Our team receives training on web accessibility best practices, ensuring they have the knowledge and skills to create and maintain an accessible website.</li>
+    <li>Feedback and Support: We welcome feedback from users regarding any accessibility barriers they may encounter. We are dedicated to promptly addressing and resolving such issues.</li>
+</ul>
+<h2>Contact Us</h2>
+<p>If you encounter any accessibility barriers while using our website or have suggestions for improvement, please contact us. Your feedback is invaluable in helping us enhance the accessibility of {site_company_name}.</p>
+<ul>
+<li>Email: <a href="mailto:{site_company_email}?subject=Accessibility" title="Email {site_company_name} regarding their Accessibility Statement">{site_company_email}</a></li>
+<li>Phone: <a href="tel{site_company_phone}" title="Call {site_company_name} regarding their Accessibility Statement">{site_company_phone}</a></li>
+</ul>
+<p>We are committed to providing an inclusive online experience for all visitors to {site_company_name} and will continue to strive for accessibility excellence.</p>
+<p>Date: [Current Date]</p>
+<p>Note: This accessibility statement is based on our current knowledge and understanding of accessibility standards and guidelines. It may be subject to change as new technologies and best practices emerge.</p>

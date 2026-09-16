@@ -1,16 +1,32 @@
 <?php
+
 namespace Concrete\Package\LgtToolkit\Controller\Dialog;
 
 use Concrete\Core\File\File;
+use Concrete\Core\Http\Request;
+use Concrete\Core\View\DialogView;
 use Concrete\Core\Permission\Checker;
-use Application\Entity\File\ImageFocalPoint;
 use Doctrine\ORM\EntityManagerInterface;
+use LgtToolkit\Entity\File\ImageFocalPoint;
+use Concrete\Core\Support\Facade\Application;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Concrete\Controller\Backend\UserInterface\File as BackendInterfaceFileController;
 
 class FocalPoint extends BackendInterfaceFileController
 {
     protected $viewPath = '/dialogs/focal_point';
+
+    public function __construct()
+    {
+        $this->app = Application::getFacadeApplication();
+        $this->error = $this->app->make('error');
+        $this->view = new DialogView($this->viewPath);
+        /** @var \Concrete\Core\View\View $view */
+        $view = $this->view;
+        $view->setPackageHandle('lgt_toolkit');
+        $view->setController($this);
+        $this->request = Request::getInstance();
+    }
 
     public function canAccess()
     {
@@ -23,7 +39,7 @@ class FocalPoint extends BackendInterfaceFileController
         parent::on_start();
 
         $html = $this->app->make('helper/html');
-        $this->addHeaderItem($html->css('focal_point.css', 'lgt-toolkit'));
+        $this->addHeaderItem($html->css('focal_point.css', 'lgt_toolkit'));
     }
 
     public function view()

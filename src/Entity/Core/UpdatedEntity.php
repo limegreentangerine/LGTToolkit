@@ -1,10 +1,9 @@
 <?php
 
-namespace LgtToolkit\Entity;
+namespace LgtToolkit\Entity\Core;
 
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping as ORM;
-use LgtToolkit\Entity\Core\BaseEntity;
 
 /**
  * @ORM\MappedSuperclass

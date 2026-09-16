@@ -7,8 +7,16 @@ use Localization;
 use Punic\Language;
 use Concrete\Core\Multilingual\Page\Section\Section as MultilingualSection;
 
+/**
+ * Extends the core global area with a locale-aware public handle.
+ */
 class GlobalArea extends \Concrete\Core\Area\GlobalArea
 {
+    /**
+     * Create a localized global area handle for the active locale.
+     *
+     * @param string $arHandle The base handle to localize.
+     */
     public function __construct(string $arHandle)
     {
         $ms = MultilingualSection::getCurrentSection();

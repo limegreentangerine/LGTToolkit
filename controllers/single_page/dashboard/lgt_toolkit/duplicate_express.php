@@ -1,4 +1,5 @@
 <?php
+
 namespace Concrete\Package\LgtToolkit\Controller\SinglePage\Dashboard\LgtToolkit;
 
 use Core;
@@ -20,7 +21,7 @@ class DuplicateExpress extends DashboardPageController
 
     public function getLocales()
     {
-        $site = Core::make('site')->getActiveSiteForEditing();
+        $site = $this->app->make('site')->getActiveSiteForEditing();
         return $site->getLocales();
     }
 
@@ -28,7 +29,7 @@ class DuplicateExpress extends DashboardPageController
     {
         $r = $this->entityManager->getRepository('\Concrete\Core\Entity\Express\Entity');
         $entities = [];
-        foreach($r->findPublicEntities() as $entity) {
+        foreach ($r->findPublicEntities() as $entity) {
             $permissions = new Checker($entity);
             if ($permissions->canViewExpressEntries()) {
                 $entities[] = $entity;

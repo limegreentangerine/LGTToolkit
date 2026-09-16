@@ -2,110 +2,69 @@
 
 namespace LgtToolkit\Events;
 
+use URL;
 use Core;
 use View;
-use Package;
-use PageList;
+use DebugBar\DebugBar;
+use Page as ConcretePage;
+use Illuminate\Support\Str;
+use Concrete\Core\Http\Request;
 use Concrete\Core\Localization\Localization;
-use Concrete\Core\Page\Page as ConcretePage;
+use Concrete\Core\Attribute\Key\CollectionKey;
+use Concrete\Package\LgtToolkit\Entity\Attribute\Value\Value\RedirectValue;
 
+/**
+ * Handles page-level event hooks for redirect and cookie policy processing.
+ */
 class Page
 {
+    /**
+     * Redirects the current request when a page-level redirect attribute is configured.
+     */
     public static function redirector(): void
     {
         $page = ConcretePage::getCurrentPage();
+        $attrKey = CollectionKey::getByHandle('page_redirector');
 
-        if (is_object($page)) {
-            // Check to see if page has 'page_redirector' attribute
-            $page_redirector = $page->getAttribute('page_redirector');
-            if ($page_redirector) {
-                $continue = false;
+        if (is_object($attrKey) && is_object($page) && !$page->isError()) {
+            $attributeValue = $page->getAttributeValueObject($attrKey);
 
-                if ($page_redirector['redirect_type'] == 'external') {
-                    // External URL, just load in the stored value to $url
-                    $url = $page_redirector['external_url'];
-                    $continue = true;
-                } elseif (in_array($page_redirector['redirect_type'], ['page-specific', 'page-parent'])) {
-                    // Parent or Specific page. Grab the page needed and put in $target_page
-                    switch ($page_redirector['redirect_type']) {
-                        case 'page-specific':
-                            $target_page = ConcretePage::getByID($page_redirector['page_cID']);
-                            break;
-                        case 'page-parent':
-                            $target_page = ConcretePage::getByID($page->getCollectionParentID());
-                            break;
-                        default:
-                            break;
-                    }
-                    if ((isset($target_page) && is_object($target_page)) && !$target_page->isError()) {
-                        // Assign to $url
-                        $url = $target_page->getCollectionLink();
-                        $continue = true;
-                    }
-                } else {
-                    // All other options are based on a needgin a pagelist, with specific sorting.
-                    $l = new PageList();
-                    $l->disableAutomaticSorting();
-                    $l->filterByParentID($page->getCollectionID());
-                    switch ($page_redirector['redirect_type']) {
-                        case 'child-display-asc':
-                            $l->sortByDisplayOrder();
-                            break;
-                        case 'child-display-desc':
-                            $l->sortByDisplayOrderDescending();
-                            break;
-                        case 'newest-child':
-                            $l->sortByPublicDateDescending();
-                            break;
-                        case 'oldest-child':
-                            $l->sortByPublicDate();
-                            break;
-                        case 'child-name-asc':
-                            $l->sortByName();
-                            break;
-                        case 'child-name-desc':
-                            $l->sortByNameDescending();
-                            break;
-                        case 'child-random':
-                            $l->sortBy('RAND()');
-                            break;
-                        default:
-                            $continue = false;
-                            break;
-                    }
+            if ($attributeValue !== null) {
+                $redirectValue = $attributeValue->getValueObject();
 
-                    $l->setItemsPerPage(1);
-                    $pagination = $l->getPagination();
-                    $pages = $pagination->getCurrentPageResults();
+                if ($redirectValue instanceof RedirectValue) {
+                    $type = $redirectValue->getRedirectType();
+                    $method = $redirectValue->getRedirectMethod();
+                    $value = $redirectValue->getValue();
 
-                    if (count($pages) > 0) {
-                        $target_page = $pages[0];
 
-                        // Check to see if this is an object and has no errors
-                        if (is_object($target_page) && !$target_page->isError()) {
-                            // Assign to $url
-                            $url = $target_page->getCollectionLink();
-                            $continue = true;
+                    if ($type === 'external') {
+                        $destination = $value;
+                    } elseif ($type === 'page') {
+                        $targetPage = ConcretePage::getByID($value);
+
+                        if (is_object($targetPage) && !$targetPage->isError()) {
+                            $destination = $targetPage->getCollectionLink();
                         }
                     }
-                }
 
-                // See if we are allowed to continue and if the $url is valid.
-                if ($continue && (isset($url) && filter_var($url, FILTER_VALIDATE_URL))) {
-                    // Set the HTTP Method
-                    http_response_code($page_redirector['redirect_method']);
-                    // Set the new location and redirect.
-                    header('Location: ' . $url);
-                    exit;
+                    if (isset($destination) && filter_var($destination, FILTER_VALIDATE_URL)) {
+                        http_response_code($method);
+                        header('Location: ' . $destination);
+                        exit;
+                    }
                 }
             }
         }
     }
 
+    /**
+     * Adds the site cookie policy output to the current page when enabled.
+     */
     public static function processCookiePolicy(): void
     {
         $page = ConcretePage::getCurrentPage();
-        $pkg = Package::getByHandle('lgt-toolkit');
+        $pkg = Core::make('Concrete\Core\Package\PackageService')->getByHandle('lgt_toolkit');
 
         if (is_object($page) && is_object($pkg) && !$page->isAdminArea() && $page->getCollectionHandle() !== 'login') {
             $config = $pkg->getFileConfig();
@@ -129,15 +88,15 @@ class Page
                 $args['styles'] = $config->get('lgt_toolkit.cookie_popup.styles');
 
                 ob_start();
-                View::element('cookie_popup/cookie_popup', $args, 'lgt-toolkit');
+                View::element('cookie_popup/cookie_popup', $args, 'lgt_toolkit');
                 $policy = ob_get_contents();
                 ob_end_clean();
 
                 $html = Core::make('helper/html');
                 $controller = $page->getPageController();
-                $controller->addHeaderItem($html->css('cookie-popup.css', 'lgt-toolkit'));
-                $controller->addFooterItem('<script type="text/x-template" id="cookie-popup-code">' . $policy . '</script>');
-                $controller->addFooterItem($html->javascript('cookie-popup.js', 'lgt-toolkit'));
+                $controller->addHeaderItem($html->css('cookie-popup.css', 'lgt_toolkit'));
+                $controller->addFooterItem($policy);
+                $controller->addFooterItem($html->javascript('cookie-popup.js', 'lgt_toolkit'));
 
                 if (!isset($session) || $session == null) {
                     $session = Core::make('session');
@@ -149,5 +108,29 @@ class Page
                 }
             }
         }
+    }
+
+    public static function startDebugBar(?DebugBar $debugbar)
+    {
+        $request = Core::make(Request::class);
+        if ($request->isXmlHttpRequest() || Str::contains($request->headers->get('Accept', ''), 'application/json')) {
+            return;
+        }
+
+        if (!$debugbar) {
+            return;
+        }
+
+        $page = ConcretePage::getCurrentPage();
+        if (!is_object($page) || $page->isError() || $page->isAdminArea()) {
+            return;
+        }
+
+        $debugbarRenderer = $debugbar->getJavascriptRenderer();
+        $debugbarRenderer->setAssetHandlerUrl(
+            URL::to('/debugbar/assets'),
+        );
+        $page->getPageController()->addHeaderItem($debugbarRenderer->renderHead());
+        $page->getPageController()->addFooterItem($debugbarRenderer->render());
     }
 }
