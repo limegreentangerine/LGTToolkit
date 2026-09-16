@@ -157,11 +157,6 @@ class Controller extends Package
         Route::register('/duplicate/express', 'LgtToolkit\Express\DuplicateExpressObjects::convert');
 
         /**
-         * Get Mapbox API Key from Settings
-         */
-        Route::register('/mapbox/init', '\LgtToolkit\Ajax\Mapbox::getApiKey');
-
-        /**
          * Block Ajax Routes
          */
         Route::register('/ajax/lgt/file-list', 'Concrete\Package\LgtToolkit\Block\LgtAjaxFileList\Controller::getFiles');
