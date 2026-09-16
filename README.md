@@ -88,14 +88,12 @@ The package creates dashboard pages for common tasks:
 
 - `/dashboard/lgt_toolkit`
 - `/dashboard/lgt_toolkit/cookie_popup`
-- `/dashboard/lgt_toolkit/cloudflare`
 - `/dashboard/lgt_toolkit/uaccess`
 - `/dashboard/lgt_toolkit/duplicate_express`
 
 These pages support configuration for:
 
 - cookie policy behaviour
-- Cloudflare settings
 - UAccess code
 - duplicate Express object tooling
 

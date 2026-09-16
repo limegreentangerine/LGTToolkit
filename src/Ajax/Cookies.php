@@ -2,7 +2,6 @@
 
 namespace LgtToolkit\Ajax;
 
-use Core;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -11,6 +10,25 @@ use Symfony\Component\HttpFoundation\JsonResponse;
  */
 class Cookies
 {
+    private int $cookieTTL = 365 * 24 * 60 * 60; // 1 year in seconds
+    public string $cookieName = 'cookie_consent';
+
+    /**
+     * setConsentCookie
+     *
+     * @param string $value
+     */
+    private function setConsentCookie(string $value): void
+    {
+        setcookie($this->cookieName, $value, [
+            'expires' => time() + $this->cookieTTL,
+            'path' => '/',
+            'secure' => isset($_SERVER['HTTPS']),
+            'httponly' => false,
+            'samesite' => 'Lax',
+        ]);
+    }
+
     /**
      * Stores the user's cookie consent choice in the active session.
      *
@@ -18,9 +36,8 @@ class Cookies
      */
     public function allowCookies(): Response
     {
-        $session = Core::make('session');
-        $session->set('site-cookies', true);
-        return new JsonResponse([ 'success' => true ]);
+        $this->setConsentCookie('accepted');
+        return new JsonResponse(['status' => 'accepted']);
     }
 
     /**
@@ -30,23 +47,7 @@ class Cookies
      */
     public function disallowCookies(): Response
     {
-        $session = Core::make('session');
-        $session->set('site-cookies', false);
-        return new JsonResponse([ 'success' => true ]);
-    }
-
-    /**
-     * Determines whether the current visitor has already accepted cookies.
-     *
-     * @return Response JSON response containing the current cookie state.
-     */
-    public function checkCookies(): Response
-    {
-        $session = Core::make('session');
-        if ($session->get('site-cookies') !== null) {
-            return new JsonResponse(false);
-        }
-        return new JsonResponse(true);
-
+        $this->setConsentCookie('declined');
+        return new JsonResponse(['status' => 'declined']);
     }
 }
