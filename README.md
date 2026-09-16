@@ -74,7 +74,6 @@ The package auto-installs these block types under a package-specific block set:
 - `lgt_content_site_attribute`
 - `lgt_fileset_gallery`
 - `lgt_manual_nav`
-- `lgt_mapbox`
 - `lgt_section`
 - `lgt_social_share`
 - `lgt_spacer`
@@ -90,7 +89,6 @@ The package creates dashboard pages for common tasks:
 - `/dashboard/lgt_toolkit`
 - `/dashboard/lgt_toolkit/cookie_popup`
 - `/dashboard/lgt_toolkit/cloudflare`
-- `/dashboard/lgt_toolkit/mapbox`
 - `/dashboard/lgt_toolkit/uaccess`
 - `/dashboard/lgt_toolkit/duplicate_express`
 
@@ -98,7 +96,6 @@ These pages support configuration for:
 
 - cookie policy behaviour
 - Cloudflare settings
-- Mapbox API configuration
 - UAccess code
 - duplicate Express object tooling
 
@@ -114,7 +111,6 @@ The package registers supporting services for common application needs:
 It also registers routes for:
 
 - duplicate Express object conversion
-- Mapbox API key lookup
 - LGT AJAX file/page listing endpoints
 - focal point dialog handling
 - cookie policy AJAX endpoints

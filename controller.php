@@ -158,11 +158,6 @@ class Controller extends Package
         Route::register('/duplicate/express', 'LgtToolkit\Express\DuplicateExpressObjects::convert');
 
         /**
-         * Get Mapbox API Key from Settings
-         */
-        Route::register('/mapbox/init', '\LgtToolkit\Ajax\Mapbox::getApiKey');
-
-        /**
          * Block Ajax Routes
          */
         Route::register('/ajax/lgt/file-list', 'Concrete\Package\LgtToolkit\Block\LgtAjaxFileList\Controller::getFiles');
@@ -250,7 +245,6 @@ class Controller extends Package
         $this->addSinglePage('/dashboard/lgt_toolkit', $pkg, t('LGT Toolkit'));
         $this->addSinglePage('/dashboard/lgt_toolkit/cookie_popup', $pkg, t('Cookie Popup'), t('Cookie Popup settings.'));
         $this->addSinglePage('/dashboard/lgt_toolkit/cloudflare', $pkg, t('Cloudflare'), t('Cloudflare API settings.'));
-        $this->addSinglePage('/dashboard/lgt_toolkit/mapbox', $pkg, t('Mapbox'), t('Mapbox API settings.'));
         $this->addSinglePage('/dashboard/lgt_toolkit/duplicate_express', $pkg, t('Duplicate Express Objects'), t('Duplicate Express Objects'));
 
         // Attribute Setup
