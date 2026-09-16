@@ -18,7 +18,6 @@ use Concrete\Core\Attribute\Key\FileKey;
 use Concrete\Core\Attribute\Key\SiteKey;
 use LgtToolkit\Events\File as FileEvent;
 use LgtToolkit\Events\Page as PageEvent;
-use LgtToolkit\Events\Cache as CacheEvent;
 use Concrete\Core\Attribute\Key\CollectionKey;
 use Concrete\Core\Command\Task\Manager as TaskManager;
 
@@ -210,14 +209,6 @@ class Controller extends Package
             PageEvent::redirector();
             PageEvent::processCookiePolicy();
             PageEvent::startDebugBar($this->debugbar);
-        });
-
-        Events::addListener('on_user_logout', function () {
-            CacheEvent::disableDevMode();
-        });
-
-        Events::addListener('on_cache_flush', function () {
-            CacheEvent::forceCacheClear();
         });
 
         Events::addListener('on_file_delete', function ($event) {
