@@ -240,8 +240,6 @@ class Controller extends Package
         // Add Single Pages
         $this->addSinglePage('/dashboard/lgt_toolkit', $pkg, t('LGT Toolkit'));
         $this->addSinglePage('/dashboard/lgt_toolkit/cookie_popup', $pkg, t('Cookie Popup'), t('Cookie Popup settings.'));
-        $this->addSinglePage('/dashboard/lgt_toolkit/cloudflare', $pkg, t('Cloudflare'), t('Cloudflare API settings.'));
-        $this->addSinglePage('/dashboard/lgt_toolkit/mapbox', $pkg, t('Mapbox'), t('Mapbox API settings.'));
         $this->addSinglePage('/dashboard/lgt_toolkit/duplicate_express', $pkg, t('Duplicate Express Objects'), t('Duplicate Express Objects'));
 
         // Attribute Setup
