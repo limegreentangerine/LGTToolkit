@@ -8,17 +8,16 @@ use Events;
 use Request;
 use DebugBar\DebugBar;
 use DebugBar\AssetHandler;
-use ClassKit\Package\PageTrait;
-use ClassKit\Package\BlockTrait;
-use Concrete\Core\Package\Package;
 use LgtToolkit\DebugBar\Directors;
 use Concrete\Core\Production\Modes;
-use ClassKit\Package\AttributeTrait;
+use ClassKit\Package\Traits\PageTrait;
 use ClassKit\Package\PackageController;
+use ClassKit\Package\Traits\BlockTrait;
 use Concrete\Core\Attribute\Key\FileKey;
 use Concrete\Core\Attribute\Key\SiteKey;
 use LgtToolkit\Events\File as FileEvent;
 use LgtToolkit\Events\Page as PageEvent;
+use ClassKit\Package\Traits\AttributeTrait;
 use Concrete\Core\Attribute\Key\CollectionKey;
 use Concrete\Core\Entity\Package as PackageEntity;
 use Concrete\Core\Command\Task\Manager as TaskManager;
@@ -102,7 +101,7 @@ class Controller extends PackageController
      * ]
      */
     protected $packageDependencies = [
-        'class_kit' => true
+        'class_kit' => '1.0.0',
     ];
 
     /**
@@ -133,11 +132,7 @@ class Controller extends PackageController
      *
      * @var array
      */
-    protected $aliases = [
-        'GlobalArea' => \LgtToolkit\Area\GlobalArea::class,
-        'PageList' => \LgtToolkit\Page\PageList::class,
-        'Theme' => \LgtToolkit\Page\Theme\Theme::class,
-    ];
+    protected $aliases = [];
 
     /**
      * Concrete Interface overrides to be copied to /application
@@ -164,7 +159,7 @@ class Controller extends PackageController
         }
     }
 
-    protected function setupAttributes(\Concrete\Core\Entity\Package $pkg): void
+    protected function setupAttributes(PackageEntity $pkg): void
     {
         // Add/Create Attribute Types
         $this->addAttributeType('country', t('Country'), $pkg);
@@ -455,6 +450,9 @@ class Controller extends PackageController
     public function install()
     {
         $pkg = parent::install();
+        if (!$pkg) {
+            $pkg = Core::make('Concrete\Core\Package\PackageService')->getByHandle($this->pkgHandle);
+        }
         $this->installDatabase();
         $this->installOrUpgrade($pkg);
     }

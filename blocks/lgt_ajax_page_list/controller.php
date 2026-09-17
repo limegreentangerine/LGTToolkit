@@ -13,7 +13,7 @@ use PageTemplate;
 use FilesystemIterator;
 use Concrete\Core\Block\Block;
 use Concrete\Core\Block\BlockController;
-use LgtToolkit\Page\TranslationAdaptorTrait;
+use ClassKit\Page\TranslationAdaptorTrait;
 use Concrete\Core\Error\UserMessageException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
