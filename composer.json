@@ -51,5 +51,14 @@
 			"@format:php:check",
 			"@format:js:check"
 		]
+	},
+	"repositories": [
+		{
+			"type": "composer",
+			"url": "https://packages.limegreentangerine.net"
+		}
+	],
+	"require": {
+		"limegreentangerine/class_kit": "^1.0"
 	}
 }

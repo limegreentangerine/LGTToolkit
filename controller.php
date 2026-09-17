@@ -8,20 +8,22 @@ use Events;
 use Request;
 use DebugBar\DebugBar;
 use DebugBar\AssetHandler;
-use LgtToolkit\Package\PageTrait;
+use ClassKit\Package\PageTrait;
+use ClassKit\Package\BlockTrait;
 use Concrete\Core\Package\Package;
 use LgtToolkit\DebugBar\Directors;
-use LgtToolkit\Package\BlockTrait;
 use Concrete\Core\Production\Modes;
-use LgtToolkit\Package\AttributeTrait;
+use ClassKit\Package\AttributeTrait;
+use ClassKit\Package\PackageController;
 use Concrete\Core\Attribute\Key\FileKey;
 use Concrete\Core\Attribute\Key\SiteKey;
 use LgtToolkit\Events\File as FileEvent;
 use LgtToolkit\Events\Page as PageEvent;
 use Concrete\Core\Attribute\Key\CollectionKey;
+use Concrete\Core\Entity\Package as PackageEntity;
 use Concrete\Core\Command\Task\Manager as TaskManager;
 
-class Controller extends Package
+class Controller extends PackageController
 {
     use AttributeTrait;
     use BlockTrait;
@@ -43,7 +45,7 @@ class Controller extends Package
      *
      * @var string
      */
-    protected $pkgVersion = '1.0.0-beta.24';
+    protected $pkgVersion = '0.0.0';
 
     /**
      * The minimum Concrete version compatible with the package.
@@ -99,7 +101,9 @@ class Controller extends Package
      *     'other_package_4' => ['2.0', '2.9'],
      * ]
      */
-    protected $packageDependencies = [];
+    protected $packageDependencies = [
+        'class_kit' => true
+    ];
 
     /**
      * Package class autoloader registrations
@@ -147,71 +151,6 @@ class Controller extends Package
     ];
 
     /**
-     * Register URL Routes
-     */
-    private function registerRoutes()
-    {
-        /**
-         * Duplicate Express Objects Routes
-         */
-        Route::register('/duplicate/express', 'LgtToolkit\Express\DuplicateExpressObjects::convert');
-
-        /**
-         * Block Ajax Routes
-         */
-        Route::register('/ajax/lgt/file-list', 'Concrete\Package\LgtToolkit\Block\LgtAjaxFileList\Controller::getFiles');
-        Route::register('/ajax/lgt/page-list', 'Concrete\Package\LgtToolkit\Block\LgtAjaxPageList\Controller::getNextPage');
-
-        /**
-         * Image Focal Point Routes
-         */
-        Route::register('/lgt_toolkit/focal_point', '\Concrete\Package\LgtToolkit\Controller\Dialog\FocalPoint::view');
-        Route::register('/lgt_toolkit/focal_point/submit', '\Concrete\Package\LgtToolkit\Controller\Dialog\FocalPoint::submit');
-
-        /**
-         * Placeholders
-         *
-         * @deprecated
-         */
-        Route::register('/ajax/lgt_toolkit/blocks/content_site_attribute/get_dummy_text', '\LgtToolkit\Ajax\PlaceholderText::getDummyText');
-
-        /**
-         * Cookie Routes
-         */
-        Route::register('/ajax/allow-cookies', '\LgtToolkit\Ajax\Cookies::allowCookies');
-        Route::register('/ajax/disallow-cookies', '\LgtToolkit\Ajax\Cookies::disallowCookies');
-        Route::register('/ajax/check-cookies', '\LgtToolkit\Ajax\Cookies::checkCookies');
-
-        /**
-         * Debug Bar
-         */
-        Route::register('/debugbar/assets', function () {
-            if (!$this->debugbar) {
-                exit;
-            }
-            $handler = new AssetHandler($this->debugbar);
-            $handler->handle($_GET);
-            exit;
-        });
-    }
-
-    /**
-     * Register Events
-     */
-    private function registerEvents()
-    {
-        Events::addListener('on_before_render', function () {
-            PageEvent::redirector();
-            PageEvent::processCookiePolicy();
-            PageEvent::startDebugBar($this->debugbar);
-        });
-
-        Events::addListener('on_file_delete', function ($event) {
-            FileEvent::removeFocalPoint($event);
-        });
-    }
-
-    /**
      * Register Package Tasks
      */
     private function registerTasks(): void
@@ -223,31 +162,6 @@ class Controller extends Package
                 return $this->app->make($class);
             });
         }
-    }
-
-    /**
-     * Install or Upgrade
-     *
-     * @var $pkg Package
-     */
-    protected function installOrUpgrade(\Concrete\Core\Entity\Package $pkg): void
-    {
-        // Add Single Pages
-        $this->addSinglePage('/dashboard/lgt_toolkit', $pkg, t('LGT Toolkit'));
-        $this->addSinglePage('/dashboard/lgt_toolkit/cookie_popup', $pkg, t('Cookie Popup'), t('Cookie Popup settings.'));
-        $this->addSinglePage('/dashboard/lgt_toolkit/duplicate_express', $pkg, t('Duplicate Express Objects'), t('Duplicate Express Objects'));
-
-        // Attribute Setup
-        $this->setupAttributes($pkg);
-
-        // Install Blocks
-        $this->autoInstallBlocks($pkg);
-
-        // Install Interface Overrides to /application
-        $this->installApplicationOverrides();
-
-        // Set Core configs
-        $this->setCoreConfigSettings();
     }
 
     protected function setupAttributes(\Concrete\Core\Entity\Package $pkg): void
@@ -424,6 +338,96 @@ class Controller extends Package
         $directors->addConcreteCollectors();
         $directors->addDoctineCollectors();
         $directors->renderer();
+    }
+
+    /**
+     * Register URL Routes
+     */
+    public function registerRoutes(): void
+    {
+        /**
+         * Duplicate Express Objects Routes
+         */
+        Route::register('/duplicate/express', 'LgtToolkit\Express\DuplicateExpressObjects::convert');
+
+        /**
+         * Block Ajax Routes
+         */
+        Route::register('/ajax/lgt/file-list', 'Concrete\Package\LgtToolkit\Block\LgtAjaxFileList\Controller::getFiles');
+        Route::register('/ajax/lgt/page-list', 'Concrete\Package\LgtToolkit\Block\LgtAjaxPageList\Controller::getNextPage');
+
+        /**
+         * Image Focal Point Routes
+         */
+        Route::register('/lgt_toolkit/focal_point', '\Concrete\Package\LgtToolkit\Controller\Dialog\FocalPoint::view');
+        Route::register('/lgt_toolkit/focal_point/submit', '\Concrete\Package\LgtToolkit\Controller\Dialog\FocalPoint::submit');
+
+        /**
+         * Placeholders
+         *
+         * @deprecated
+         */
+        Route::register('/ajax/lgt_toolkit/blocks/content_site_attribute/get_dummy_text', '\LgtToolkit\Ajax\PlaceholderText::getDummyText');
+
+        /**
+         * Cookie Routes
+         */
+        Route::register('/ajax/allow-cookies', '\LgtToolkit\Ajax\Cookies::allowCookies');
+        Route::register('/ajax/disallow-cookies', '\LgtToolkit\Ajax\Cookies::disallowCookies');
+        Route::register('/ajax/check-cookies', '\LgtToolkit\Ajax\Cookies::checkCookies');
+
+        /**
+         * Debug Bar
+         */
+        Route::register('/debugbar/assets', function () {
+            if (!$this->debugbar) {
+                exit;
+            }
+            $handler = new AssetHandler($this->debugbar);
+            $handler->handle($_GET);
+            exit;
+        });
+    }
+
+    /**
+     * Register Events
+     */
+    public function registerEvents(): void
+    {
+        Events::addListener('on_before_render', function () {
+            PageEvent::redirector();
+            PageEvent::processCookiePolicy();
+            PageEvent::startDebugBar($this->debugbar);
+        });
+
+        Events::addListener('on_file_delete', function ($event) {
+            FileEvent::removeFocalPoint($event);
+        });
+    }
+
+    /**
+     * Install or Upgrade
+     *
+     * @var $pkg Package
+     */
+    public function installOrUpgrade(PackageEntity $pkg): void
+    {
+        // Add Single Pages
+        $this->addSinglePage('/dashboard/lgt_toolkit', $pkg, t('LGT Toolkit'));
+        $this->addSinglePage('/dashboard/lgt_toolkit/cookie_popup', $pkg, t('Cookie Popup'), t('Cookie Popup settings.'));
+        $this->addSinglePage('/dashboard/lgt_toolkit/duplicate_express', $pkg, t('Duplicate Express Objects'), t('Duplicate Express Objects'));
+
+        // Attribute Setup
+        $this->setupAttributes($pkg);
+
+        // Install Blocks
+        $this->autoInstallBlocks($pkg);
+
+        // Install Interface Overrides to /application
+        $this->installApplicationOverrides();
+
+        // Set Core configs
+        $this->setCoreConfigSettings();
     }
 
     public function getPackageName()
