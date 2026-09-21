@@ -4,15 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c37b2b1a30cc3f046c66d896282c5d1c",
+    "content-hash": "ae2e7a89793f700a4130a41287e89767",
     "packages": [
         {
             "name": "limegreentangerine/class_kit",
-            "version": "dev-main",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/limegreentangerine/ClassKit.git",
+                "reference": "ed1fb3b8029d2070510640f219f21c0e7ee2881d"
+            },
             "dist": {
-                "type": "path",
-                "url": "/Users/leejones/Development/Composer/class_kit",
-                "reference": "f615d8e1591bd44f49f5caafb0bbcca6b60d00bc"
+                "type": "zip",
+                "url": "https://api.github.com/repos/limegreentangerine/ClassKit/zipball/ed1fb3b8029d2070510640f219f21c0e7ee2881d",
+                "reference": "ed1fb3b8029d2070510640f219f21c0e7ee2881d",
+                "shasum": ""
             },
             "require-dev": {
                 "concrete5/core": "^9.2",
@@ -26,44 +32,9 @@
                     "ClassKit\\": "src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "ClassKit\\Tests\\": "tests/"
-                }
-            },
-            "scripts": {
-                "test": [
-                    "phpunit"
-                ],
-                "test-coverage": [
-                    "phpunit --coverage-text"
-                ],
-                "format:php": [
-                    "php-cs-fixer fix"
-                ],
-                "format:php:check": [
-                    "php-cs-fixer check --diff"
-                ],
-                "format:js": [
-                    "npx prettier --write ."
-                ],
-                "format:js:check": [
-                    "npx prettier --check ."
-                ],
-                "format": [
-                    "@format:php",
-                    "@format:js"
-                ],
-                "format:check": [
-                    "@format:php:check",
-                    "@format:js:check"
-                ],
-                "post-install-cmd": [
-                    "npm install"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "proprietary"
+                "MIT"
             ],
             "authors": [
                 {
@@ -76,10 +47,11 @@
                 }
             ],
             "description": "Collection of helper classes for LGT packages.",
-            "transport-options": {
-                "symlink": true,
-                "relative": false
-            }
+            "support": {
+                "issues": "https://github.com/limegreentangerine/ClassKit/issues",
+                "source": "https://github.com/limegreentangerine/ClassKit/tree/1.0.0"
+            },
+            "time": "2026-09-18T08:47:28+00:00"
         },
         {
             "name": "php-debugbar/php-debugbar",
@@ -967,16 +939,16 @@
         },
         {
             "name": "concrete5/core",
-            "version": "9.5.3",
+            "version": "9.5.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/concretecms/concretecms-core.git",
-                "reference": "975e99861b77ca426aa666280bf6ef865c46f7fe"
+                "reference": "a6e90d5ee45375da7e99849a5c13963a93edac90"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/concretecms/concretecms-core/zipball/975e99861b77ca426aa666280bf6ef865c46f7fe",
-                "reference": "975e99861b77ca426aa666280bf6ef865c46f7fe",
+                "url": "https://api.github.com/repos/concretecms/concretecms-core/zipball/a6e90d5ee45375da7e99849a5c13963a93edac90",
+                "reference": "a6e90d5ee45375da7e99849a5c13963a93edac90",
                 "shasum": ""
             },
             "require": {
@@ -1111,7 +1083,7 @@
                 "forum": "https://forums.concretecms.org/",
                 "source": "https://documentation.concretecms.org/api/"
             },
-            "time": "2026-09-01T20:22:26+00:00"
+            "time": "2026-09-08T17:51:44+00:00"
         },
         {
             "name": "concrete5/oauth-user-data",
@@ -2996,16 +2968,16 @@
         },
         {
             "name": "friendsofphp/php-cs-fixer",
-            "version": "v3.95.25",
+            "version": "v3.95.26",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer.git",
-                "reference": "2cdfc1f3daf173d83a1ebb6177949b58c95de6ff"
+                "reference": "11839dfaf25718e1617c522c3dde01ebf96c875f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-CS-Fixer/PHP-CS-Fixer/zipball/2cdfc1f3daf173d83a1ebb6177949b58c95de6ff",
-                "reference": "2cdfc1f3daf173d83a1ebb6177949b58c95de6ff",
+                "url": "https://api.github.com/repos/PHP-CS-Fixer/PHP-CS-Fixer/zipball/11839dfaf25718e1617c522c3dde01ebf96c875f",
+                "reference": "11839dfaf25718e1617c522c3dde01ebf96c875f",
                 "shasum": ""
             },
             "require": {
@@ -3039,15 +3011,15 @@
             "require-dev": {
                 "facile-it/paraunit": "^1.3.1 || ^2.11.0",
                 "infection/infection": "^0.32.7",
-                "justinrainbow/json-schema": "^6.10.0",
+                "justinrainbow/json-schema": "^6.12.0",
                 "keradus/cli-executor": "^2.3",
                 "php-coveralls/php-coveralls": "^2.9.1",
                 "php-cs-fixer/phpunit-constraint-isidenticalstring": "^1.8",
                 "php-cs-fixer/phpunit-constraint-xmlmatchesxsd": "^1.8",
-                "phpunit/phpunit": "^9.6.35 || ^10.5.64 || ^11.5.56 || ^12.5.31 || ^13.0.6",
-                "symfony/polyfill-php85": "^1.38",
-                "symfony/var-dumper": "^5.4.48 || ^6.4.36 || ^7.4.8 || ^8.1.1",
-                "symfony/yaml": "^5.4.53 || ^6.4.41 || ^7.4.13 || ^8.1.1"
+                "phpunit/phpunit": "^9.6.36 || ^10.5.64 || ^11.5.56 || ^12.5.35 || ^13.3.3",
+                "symfony/polyfill-php85": "^1.41",
+                "symfony/var-dumper": "^5.4.48 || ^6.4.45 || ^7.4.18 || ^8.1.7",
+                "symfony/yaml": "^5.4.53 || ^6.4.45 || ^7.4.18 || ^8.1.6"
             },
             "suggest": {
                 "ext-dom": "For handling output formats in XML",
@@ -3088,7 +3060,7 @@
             ],
             "support": {
                 "issues": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/issues",
-                "source": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/tree/v3.95.25"
+                "source": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/tree/v3.95.26"
             },
             "funding": [
                 {
@@ -3096,7 +3068,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-09-08T11:11:37+00:00"
+            "time": "2026-09-19T19:04:32+00:00"
         },
         {
             "name": "friendsofphp/proxy-manager-lts",
@@ -4345,16 +4317,16 @@
         },
         {
             "name": "laminas/laminas-cache",
-            "version": "3.14.0",
+            "version": "3.14.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-cache.git",
-                "reference": "c4b556ba0e0ba6f9aac245b89f3245138e4e939b"
+                "reference": "0585be4d789e2e87efafa99017bc79bb1fb054a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-cache/zipball/c4b556ba0e0ba6f9aac245b89f3245138e4e939b",
-                "reference": "c4b556ba0e0ba6f9aac245b89f3245138e4e939b",
+                "url": "https://api.github.com/repos/laminas/laminas-cache/zipball/0585be4d789e2e87efafa99017bc79bb1fb054a0",
+                "reference": "0585be4d789e2e87efafa99017bc79bb1fb054a0",
                 "shasum": ""
             },
             "require": {
@@ -4438,11 +4410,11 @@
             },
             "funding": [
                 {
-                    "url": "https://funding.communitybridge.org/projects/laminas-project",
-                    "type": "community_bridge"
+                    "url": "https://crowdfunding.linuxfoundation.org/initiatives/laminas-project",
+                    "type": "custom"
                 }
             ],
-            "time": "2026-02-05T15:48:04+00:00"
+            "time": "2026-09-13T10:16:42+00:00"
         },
         {
             "name": "laminas/laminas-code",
@@ -4641,16 +4613,16 @@
         },
         {
             "name": "laminas/laminas-feed",
-            "version": "2.26.1",
+            "version": "2.26.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-feed.git",
-                "reference": "8b651d72f2a4ce0df53e1999de3fe16c78e37a2c"
+                "reference": "ff46114defd883d6f783acd39effc0dcd2a08055"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-feed/zipball/8b651d72f2a4ce0df53e1999de3fe16c78e37a2c",
-                "reference": "8b651d72f2a4ce0df53e1999de3fe16c78e37a2c",
+                "url": "https://api.github.com/repos/laminas/laminas-feed/zipball/ff46114defd883d6f783acd39effc0dcd2a08055",
+                "reference": "ff46114defd883d6f783acd39effc0dcd2a08055",
                 "shasum": ""
             },
             "require": {
@@ -4714,11 +4686,11 @@
             },
             "funding": [
                 {
-                    "url": "https://funding.communitybridge.org/projects/laminas-project",
-                    "type": "community_bridge"
+                    "url": "https://crowdfunding.linuxfoundation.org/initiatives/laminas-project",
+                    "type": "custom"
                 }
             ],
-            "time": "2026-03-03T09:55:19+00:00"
+            "time": "2026-09-14T21:00:46+00:00"
         },
         {
             "name": "laminas/laminas-i18n",
@@ -6371,16 +6343,16 @@
         },
         {
             "name": "mlocati/ip-lib",
-            "version": "1.22.0",
+            "version": "1.22.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mlocati/ip-lib.git",
-                "reference": "4e40ffd3bf9989db19403d89c4d8be44b87b8a91"
+                "reference": "f096c0e9ec8bd4691ee45394cfb77c97c6bba272"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mlocati/ip-lib/zipball/4e40ffd3bf9989db19403d89c4d8be44b87b8a91",
-                "reference": "4e40ffd3bf9989db19403d89c4d8be44b87b8a91",
+                "url": "https://api.github.com/repos/mlocati/ip-lib/zipball/f096c0e9ec8bd4691ee45394cfb77c97c6bba272",
+                "reference": "f096c0e9ec8bd4691ee45394cfb77c97c6bba272",
                 "shasum": ""
             },
             "require": {
@@ -6426,7 +6398,7 @@
             ],
             "support": {
                 "issues": "https://github.com/mlocati/ip-lib/issues",
-                "source": "https://github.com/mlocati/ip-lib/tree/1.22.0"
+                "source": "https://github.com/mlocati/ip-lib/tree/1.22.1"
             },
             "funding": [
                 {
@@ -6438,7 +6410,7 @@
                     "type": "other"
                 }
             ],
-            "time": "2025-10-15T12:35:09+00:00"
+            "time": "2026-09-17T09:24:44+00:00"
         },
         {
             "name": "mobiledetect/mobiledetectlib",
@@ -6757,16 +6729,16 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v5.8.0",
+            "version": "v5.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "044a6a392ff8ad0d61f14370a5fbbd0a0107152f"
+                "reference": "9e33da9553fe7786f0962b35f4e4ecf01be89def"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/044a6a392ff8ad0d61f14370a5fbbd0a0107152f",
-                "reference": "044a6a392ff8ad0d61f14370a5fbbd0a0107152f",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/9e33da9553fe7786f0962b35f4e4ecf01be89def",
+                "reference": "9e33da9553fe7786f0962b35f4e4ecf01be89def",
                 "shasum": ""
             },
             "require": {
@@ -6808,9 +6780,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nikic/PHP-Parser/issues",
-                "source": "https://github.com/nikic/PHP-Parser/tree/v5.8.0"
+                "source": "https://github.com/nikic/PHP-Parser/tree/v5.9.0"
             },
-            "time": "2026-07-04T14:30:18+00:00"
+            "time": "2026-09-13T18:51:52+00:00"
         },
         {
             "name": "pagerfanta/pagerfanta",
@@ -13006,16 +12978,16 @@
         },
         {
             "name": "symfony/process",
-            "version": "v8.1.6",
+            "version": "v8.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "d863f5e70d7c87abb906ac11b61f83036093000b"
+                "reference": "10823b09358e690df4ff943e24e8492bb1019fc3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/d863f5e70d7c87abb906ac11b61f83036093000b",
-                "reference": "d863f5e70d7c87abb906ac11b61f83036093000b",
+                "url": "https://api.github.com/repos/symfony/process/zipball/10823b09358e690df4ff943e24e8492bb1019fc3",
+                "reference": "10823b09358e690df4ff943e24e8492bb1019fc3",
                 "shasum": ""
             },
             "require": {
@@ -13047,7 +13019,7 @@
             "description": "Executes commands in sub-processes",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/process/tree/v8.1.6"
+                "source": "https://github.com/symfony/process/tree/v8.1.7"
             },
             "funding": [
                 {
@@ -13067,7 +13039,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-08-21T17:47:34+00:00"
+            "time": "2026-09-02T12:40:29+00:00"
         },
         {
             "name": "symfony/property-access",
@@ -13152,16 +13124,16 @@
         },
         {
             "name": "symfony/property-info",
-            "version": "v6.4.45",
+            "version": "v6.4.46",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/property-info.git",
-                "reference": "003ec301822cf2cf1b44b217fba1efdf4b4503f9"
+                "reference": "4789c9a2650f9285da6db0363ef40e5a21b42ce9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/property-info/zipball/003ec301822cf2cf1b44b217fba1efdf4b4503f9",
-                "reference": "003ec301822cf2cf1b44b217fba1efdf4b4503f9",
+                "url": "https://api.github.com/repos/symfony/property-info/zipball/4789c9a2650f9285da6db0363ef40e5a21b42ce9",
+                "reference": "4789c9a2650f9285da6db0363ef40e5a21b42ce9",
                 "shasum": ""
             },
             "require": {
@@ -13218,7 +13190,7 @@
                 "validator"
             ],
             "support": {
-                "source": "https://github.com/symfony/property-info/tree/v6.4.45"
+                "source": "https://github.com/symfony/property-info/tree/v6.4.46"
             },
             "funding": [
                 {
@@ -13238,7 +13210,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-08-24T07:52:32+00:00"
+            "time": "2026-09-03T19:31:46+00:00"
         },
         {
             "name": "symfony/psr-http-message-bridge",
@@ -13740,16 +13712,16 @@
         },
         {
             "name": "symfony/string",
-            "version": "v6.4.43",
+            "version": "v6.4.46",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/string.git",
-                "reference": "2a8d515c3eaa5d33cf76d5fa277cdadd0a4e5b49"
+                "reference": "4513ab2b0ad2d7845a2f920e2f30b61633c9e606"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/string/zipball/2a8d515c3eaa5d33cf76d5fa277cdadd0a4e5b49",
-                "reference": "2a8d515c3eaa5d33cf76d5fa277cdadd0a4e5b49",
+                "url": "https://api.github.com/repos/symfony/string/zipball/4513ab2b0ad2d7845a2f920e2f30b61633c9e606",
+                "reference": "4513ab2b0ad2d7845a2f920e2f30b61633c9e606",
                 "shasum": ""
             },
             "require": {
@@ -13805,7 +13777,7 @@
                 "utf8"
             ],
             "support": {
-                "source": "https://github.com/symfony/string/tree/v6.4.43"
+                "source": "https://github.com/symfony/string/tree/v6.4.46"
             },
             "funding": [
                 {
@@ -13825,7 +13797,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-07-28T07:28:15+00:00"
+            "time": "2026-09-11T09:03:57+00:00"
         },
         {
             "name": "symfony/translation",
@@ -14491,16 +14463,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "v3.28.0",
+            "version": "v3.29.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "597c12ed286fb9d1701a36684ce6e0cbe28ebc8b"
+                "reference": "45a3c6e9224c3377a39c7b150bb29d5d97d2c75d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/597c12ed286fb9d1701a36684ce6e0cbe28ebc8b",
-                "reference": "597c12ed286fb9d1701a36684ce6e0cbe28ebc8b",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/45a3c6e9224c3377a39c7b150bb29d5d97d2c75d",
+                "reference": "45a3c6e9224c3377a39c7b150bb29d5d97d2c75d",
                 "shasum": ""
             },
             "require": {
@@ -14555,7 +14527,7 @@
             ],
             "support": {
                 "issues": "https://github.com/twigphp/Twig/issues",
-                "source": "https://github.com/twigphp/Twig/tree/v3.28.0"
+                "source": "https://github.com/twigphp/Twig/tree/v3.29.0"
             },
             "funding": [
                 {
@@ -14567,7 +14539,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-07-03T20:44:34+00:00"
+            "time": "2026-09-18T09:10:14+00:00"
         },
         {
             "name": "voku/portable-ascii",
@@ -14896,9 +14868,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "limegreentangerine/class_kit": 20
-    },
+    "stability-flags": {},
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {},

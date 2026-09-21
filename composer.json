@@ -53,15 +53,12 @@
 	},
 	"repositories": [
 		{
-			"type": "path",
-			"url": "/Users/leejones/Development/Composer/class_kit",
-			"options": {
-				"symlink": true
-			}
+			"type": "composer",
+			"url": "https://packages.limegreentangerine.net"
 		}
 	],
 	"require": {
-		"limegreentangerine/class_kit": "@dev",
-		"php-debugbar/php-debugbar": "^3.8"
+		"php-debugbar/php-debugbar": "^3.8",
+		"limegreentangerine/class_kit": "^1.0"
 	}
 }
