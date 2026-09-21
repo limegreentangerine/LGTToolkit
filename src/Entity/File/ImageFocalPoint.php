@@ -3,7 +3,7 @@
 namespace LgtToolkit\Entity\File;
 
 use Doctrine\ORM\Mapping as ORM;
-use LgtToolkit\Entity\Core\BaseEntity;
+use ClassKit\Entity\Core\BaseEntity;
 use Concrete\Core\Entity\File\File as FileEntity;
 
 /**

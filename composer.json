@@ -28,8 +28,7 @@
 		"php": "^8.4",
 		"phpunit/phpunit": "^11",
 		"concrete5/core": "^9.2",
-		"friendsofphp/php-cs-fixer": "^3.95",
-		"php-debugbar/php-debugbar": "^3.8"
+		"friendsofphp/php-cs-fixer": "^3.95"
 	},
 	"config": {
 		"allow-plugins": {
@@ -51,5 +50,15 @@
 			"@format:php:check",
 			"@format:js:check"
 		]
+	},
+	"repositories": [
+		{
+			"type": "composer",
+			"url": "https://packages.limegreentangerine.net"
+		}
+	],
+	"require": {
+		"php-debugbar/php-debugbar": "^3.8",
+		"limegreentangerine/class_kit": "^1.0"
 	}
 }
