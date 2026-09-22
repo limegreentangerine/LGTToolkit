@@ -17,7 +17,6 @@ $slideshow->getView()->addFooterItem($html->javascript($slideshow->javascript(),
 <component-slideshow>
     <section class="component-slideshow"
         data-options='<?php echo $slideshow->getOptions(true); ?>'
-        style="<?php echo $slideshow->generateStyleVariables(); ?>"
     >
         <div class="component-slideshow__track">
             <?php foreach ($slideshow->getSlides() as $slide) { ?>

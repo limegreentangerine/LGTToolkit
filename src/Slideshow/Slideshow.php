@@ -2,8 +2,6 @@
 
 namespace LgtToolkit\Slideshow;
 
-use Concrete\Core\Error\UserMessageException;
-use Exception;
 use View;
 
 final readonly class Slideshow
@@ -16,7 +14,8 @@ final readonly class Slideshow
         public array $settings,
     ) {
         $this->view = new View();
-        $this->options = Options::fromArray(!empty($settings) ? $settings : $this->getDefaultSettings());
+        $settings = array_merge($this->getDefaultSettings(), $settings);
+        $this->options = Options::fromArray($settings);
     }
 
     private function getDefaultSettings()
