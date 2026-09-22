@@ -25,8 +25,8 @@ $slideshow->getView()->addFooterItem($html->javascript($slideshow->javascript(),
         </div>
 
         <div class="component-slideshow__buttons">
-            <button type="button" class="component-slideshow__buttons--prev"><i class="bi <?php echo $slideshow->getOption('prevIcon'); ?>">&laquo;</i></button>
-            <button type="button" class="component-slideshow__buttons--next"><i class="bi <?php echo $slideshow->getOption('nextIcon'); ?>">&raquo;</i></button>
+            <button type="button" class="component-slideshow__buttons--prev" title="Prev"><i class="bi <?php echo $slideshow->getOption('prevIcon'); ?>">&laquo;</i></button>
+            <button type="button" class="component-slideshow__buttons--next" title="Next"><i class="bi <?php echo $slideshow->getOption('nextIcon'); ?>">&raquo;</i></button>
         </div>
 
         <div class="component-slideshow__pagination"></div>

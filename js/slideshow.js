@@ -6,10 +6,10 @@ class ComponentSlideshow extends HTMLElement {
 		if (!this.container) return;
 
 		this.options = JSON.parse(this.container.dataset.options);
-		console.log(this.options);
 
 		this.track = this.container.querySelector('.component-slideshow__track');
-		this.slides = this.track.querySelectorAll('.component-slideshow__slide');
+		this.slides = Array.from(this.track.querySelectorAll('.component-slideshow__slide'));
+		if (!this.slides) return;
 
 		this.nav = this.container.querySelector('.component-slideshow__buttons');
 		if (!this.nav) return;
@@ -25,6 +25,7 @@ class ComponentSlideshow extends HTMLElement {
 		this.pages = 0;
 		this.showButtons = false;
 		this.showPagination = false;
+		this.currentSlide = 0;
 
 		this.initSlideshow();
 
@@ -32,6 +33,26 @@ class ComponentSlideshow extends HTMLElement {
 			this.initSlideshow();
 		});
 		observer.observe(this.container);
+
+		this.prevButton.addEventListener('click', this.moveSlide.bind(this));
+		this.nextButton.addEventListener('click', this.moveSlide.bind(this));
+		this.track.addEventListener('scrollend', this.calculateCurrentSlide.bind(this));
+	}
+
+	moveSlide(event) {
+		const target = event.currentTarget;
+		const title = target.getAttribute('title');
+		let nextSlideNumber = (title === 'Prev') ? this.currentSlide - 1 : this.currentSlide + 1;
+
+		if (nextSlideNumber >= this.slides.length || nextSlideNumber < 0) {
+			nextSlideNumber = 0;
+		}
+
+		const nextSlide = this.slides[nextSlideNumber];
+		this.track.scrollTo({
+			left: nextSlide.offsetLeft,
+			behavior: 'smooth'
+		});
 	}
 
 	initSlideshow() {
@@ -46,6 +67,7 @@ class ComponentSlideshow extends HTMLElement {
 
 		this.buildNav();
 		this.toggleButtons();
+		this.calculateCurrentSlide();
 	}
 
 	buildNav() {
@@ -63,6 +85,29 @@ class ComponentSlideshow extends HTMLElement {
 			this.nav.classList.add('d-none');
 		} else {
 			this.nav.classList.remove('d-none');
+		}
+	}
+
+	calculateCurrentSlide() {
+		const scrollLeft = this.track.scrollLeft;
+		this.currentSlide = this.slides.reduce((closestIndex, slide, index) => {
+			const currentDistance = Math.abs(slide.offsetLeft - scrollLeft);
+			const closestDistance = Math.abs(this.slides[closestIndex].offsetLeft - scrollLeft);
+			return currentDistance < closestDistance ? index : closestIndex;
+		}, 0);
+
+		// TODO: per page scrolling
+
+		if (this.currentSlide === 0) {
+			this.prevButton.setAttribute('disabled', 'disabled');
+		} else {
+			this.prevButton.removeAttribute('disabled');
+		}
+
+		if (this.currentSlide >= this.slides.length) {
+			this.nextButton.setAttribute('disabled', 'disabled');
+		} else {
+			this.nextButton.removeAttribute('disabled');
 		}
 	}
 
