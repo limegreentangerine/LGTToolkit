@@ -11,7 +11,7 @@
  * @param int    $width         (optional) - Max width of image
  * @param int    $height        (optional) - Max height of image
  * @param bool   $cropImage     (optional) - When resizing crop the image
- * @param bool   $forceSize     (optional) - Forces the size set in width/height params
+ * @param bool   $forceSize     (optional) - Forces the size set in width/height params eg. ['width' => 100, 'height' => 100]
  * @param bool   $lazyLoad      (optional) - Turn on browser based "lazy" property, set to TRUE by default
  * @param bool   $useCaption    (optional) - If set to TRUE wraps picture element in figure element with figcaption
  * @param bool   $useFocalPoint (optional) - If set to TRUE sets the focal point value as the image centre
@@ -32,6 +32,8 @@ if (isset($f)) {
     $theme = \PageTheme::getSiteTheme();
     $imageMap = $theme->getThemeResponsiveImageMap();
     $previousSize = 0;
+    $imageWidth = ($forceSize) ? $forceSize['width'] : ($f->getAttribute('width') ?? 800);
+    $imageHeight = ($forceSize) ? $forceSize['height'] : ($f->getAttribute('height') ?? 800);
 
     if ((isset($width) && $width > 0) || (isset($height) && $height > 0)) {
         foreach ($imageMap as $handle => $rawSize) {
@@ -102,10 +104,8 @@ if (isset($f)) {
             <?php if (isset($classes) && is_array($classes)) { ?>
                 class="<?php echo implode(' ', $classes); ?>"
             <?php } ?>
-            <?php if ($forceSize) { ?>
-                width="<?php echo $f->getAttribute('width'); ?>px"
-                height="<?php echo $f->getAttribute('height'); ?>px"
-            <?php } ?>
+            width="<?php echo $imageWidth; ?>"
+            height="<?php echo $imageHeight; ?>"
             src="<?php echo $f->getRelativePath(); ?>"
             <?php if (is_array($thumbs) && count($thumbs) > 0) { ?>
                 srcset="<?php echo implode(', ', $thumbs); ?>"
