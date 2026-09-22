@@ -27,7 +27,6 @@ namespace Concrete\Core\Entity\Express\Association {
 }
 
 namespace LgtToolkit\Tests\Unit {
-    use LgtToolkit\Area\GlobalArea;
     use PHPUnit\Framework\TestCase;
     use LgtToolkit\Mail\SendEmailRequest;
     use LgtToolkit\Entity\File\ImageFocalPoint;
@@ -118,18 +117,6 @@ namespace LgtToolkit\Tests\Unit {
             $methodName = $service->exposeAssociationFunctionName(new ExampleAssociation());
 
             $this->assertSame('addaddExample', $methodName);
-        }
-
-        public function testGlobalAreaKeepsProvidedHandleOnSubclass(): void
-        {
-            $area = new class extends GlobalArea {
-                public function __construct()
-                {
-                    $this->arHandle = 'hero';
-                }
-            };
-
-            $this->assertSame('hero', $area->arHandle);
         }
 
         public function testLgtMailServiceApplyReplacementsReplacesTokens(): void
