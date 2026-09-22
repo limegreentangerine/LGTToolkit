@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ae2e7a89793f700a4130a41287e89767",
+    "content-hash": "12d550c5b1cb2bfb8b524da593ecd717",
     "packages": [
         {
             "name": "limegreentangerine/class_kit",
-            "version": "1.0.0",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/limegreentangerine/ClassKit.git",
-                "reference": "ed1fb3b8029d2070510640f219f21c0e7ee2881d"
+                "reference": "3872211b493abdad31aa4ed263f22b91998e2fa3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/limegreentangerine/ClassKit/zipball/ed1fb3b8029d2070510640f219f21c0e7ee2881d",
-                "reference": "ed1fb3b8029d2070510640f219f21c0e7ee2881d",
+                "url": "https://api.github.com/repos/limegreentangerine/ClassKit/zipball/3872211b493abdad31aa4ed263f22b91998e2fa3",
+                "reference": "3872211b493abdad31aa4ed263f22b91998e2fa3",
                 "shasum": ""
             },
             "require-dev": {
@@ -49,9 +49,9 @@
             "description": "Collection of helper classes for LGT packages.",
             "support": {
                 "issues": "https://github.com/limegreentangerine/ClassKit/issues",
-                "source": "https://github.com/limegreentangerine/ClassKit/tree/1.0.0"
+                "source": "https://github.com/limegreentangerine/ClassKit/tree/1.0.2"
             },
-            "time": "2026-09-18T08:47:28+00:00"
+            "time": "2026-09-21T13:44:28+00:00"
         },
         {
             "name": "php-debugbar/php-debugbar",
@@ -2968,16 +2968,16 @@
         },
         {
             "name": "friendsofphp/php-cs-fixer",
-            "version": "v3.95.26",
+            "version": "v3.95.27",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer.git",
-                "reference": "11839dfaf25718e1617c522c3dde01ebf96c875f"
+                "reference": "1d0c68ee5f37446d8ad5970b82384cd1bb0a3317"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-CS-Fixer/PHP-CS-Fixer/zipball/11839dfaf25718e1617c522c3dde01ebf96c875f",
-                "reference": "11839dfaf25718e1617c522c3dde01ebf96c875f",
+                "url": "https://api.github.com/repos/PHP-CS-Fixer/PHP-CS-Fixer/zipball/1d0c68ee5f37446d8ad5970b82384cd1bb0a3317",
+                "reference": "1d0c68ee5f37446d8ad5970b82384cd1bb0a3317",
                 "shasum": ""
             },
             "require": {
@@ -3060,7 +3060,7 @@
             ],
             "support": {
                 "issues": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/issues",
-                "source": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/tree/v3.95.26"
+                "source": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/tree/v3.95.27"
             },
             "funding": [
                 {
@@ -3068,7 +3068,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-09-19T19:04:32+00:00"
+            "time": "2026-09-22T09:54:55+00:00"
         },
         {
             "name": "friendsofphp/proxy-manager-lts",

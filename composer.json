@@ -2,7 +2,7 @@
 	"name": "limegreentangerine/lgt_toolkit",
 	"description": "LGT tools and defaults for Concrete CMS",
 	"type": "concrete5-package",
-	"license": "proprietary",
+	"license": "MIT",
 	"minimum-stability": "stable",
 	"autoload": {
 		"psr-4": {
@@ -36,8 +36,8 @@
 		}
 	},
 	"scripts": {
-		"test": "phpunit",
-		"test-coverage": "phpunit --coverage-text",
+		"test": "php -d error_reporting=22527 vendor/bin/phpunit",
+		"test-coverage": "php -d error_reporting=22527 vendor/bin/phpunit --coverage-text",
 		"format:php": "php-cs-fixer fix",
 		"format:php:check": "php-cs-fixer check --diff",
 		"format:js": "npx prettier --write .",
@@ -49,14 +49,11 @@
 		"format:check": [
 			"@format:php:check",
 			"@format:js:check"
+		],
+		"post-install-cmd": [
+			"npm install"
 		]
 	},
-	"repositories": [
-		{
-			"type": "composer",
-			"url": "https://packages.limegreentangerine.net"
-		}
-	],
 	"require": {
 		"php-debugbar/php-debugbar": "^3.8",
 		"limegreentangerine/class_kit": "^1.0"
