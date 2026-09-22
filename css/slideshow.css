@@ -1,8 +1,61 @@
 component-slideshow {
 	.component-slideshow {
-		background: red;
+		position: relative;
 	}
 
 	.component-slideshow__track {
+		position: relative;
+		z-index: 0;
+		margin: 0;
+		padding: 0;
+		display: flex;
+		gap: calc(var(--padding) * 0.5);
+		padding-left: calc(var(--padding) * 0.5);
+		padding-right: calc(var(--padding) * 0.5);
+		scroll-margin-left: calc(var(--padding) * 0.5);
+		scroll-margin-right: calc(var(--padding) * 0.5);
+		overflow-x: scroll;
+		overflow-y: hidden;
+		scroll-behavior: smooth;
+		scroll-snap-type: x mandatory;
+		-ms-overflow-style: none;
+
+		&::-webkit-scrollbar {
+			width: 0;
+			height: 0;
+		}
+
+		&::-webkit-scrollbar-track {
+			background: transparent;
+			height: 0;
+		}
+
+		&::-webkit-scrollbar-thumb {
+			background: transparent;
+			border: none;
+			height: 0;
+		}
+
+		&.is-draggable {
+			cursor: grab;
+			user-select: none;
+			touch-action: pan-x;
+
+			* {
+				user-select: none;
+				pointer-events: none;
+			}
+		}
+
+		&.is-dragging {
+			cursor: grabbing;
+		}
+	}
+
+	.component-slideshow__slide {
+		position: relative;
+		scroll-snap-align: var(--snap);
+		width: calc(var(--slideWidth) - var(--peek));
+		flex: 0 0 calc(var(--slideWidth) - var(--peek));
 	}
 }

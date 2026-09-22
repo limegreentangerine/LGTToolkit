@@ -23,8 +23,15 @@ class ComponentSlideshow extends HTMLElement {
 		this.gap = 0;
 		this.peek = 0;
 		this.pages = 0;
+		this.showButtons = false;
+		this.showPagination = false;
 
 		this.initSlideshow();
+
+		const observer = new ResizeObserver(() => {
+			this.initSlideshow();
+		});
+		observer.observe(this.container);
 	}
 
 	initSlideshow() {
@@ -33,14 +40,29 @@ class ComponentSlideshow extends HTMLElement {
 		this.gap = this.options.gap[breakpoint];
 		this.peek = this.options.peek[breakpoint];
 		this.pages = Math.ceil(this.slides.length / this.options[breakpoint]);
+		this.showPagination = this.options.showPagination[breakpoint];
+		this.showButtons = this.options.showButtons[breakpoint];
 		this.container.style = `--slideWidth:${this.slideWidth}%;--snap:${this.options.snap};--padding:${this.gap}px;--peek:${this.peek}px;`;
 
 		this.buildNav();
+		this.toggleButtons();
 	}
 
 	buildNav() {
-		for (let i = 1; i < this.pages; i++) {
-			this.nav.insertAdjacentHTML('beforeend', `<button type="button" class="component-slideshow__nav--item" data-page="${i}" aria-label="Page ${i}">${i}</button>`);
+		this.pagination.innerHTML = '';
+
+		if (this.showPagination) {
+			for (let i = 1; i < this.pages; i++) {
+				this.pagination.insertAdjacentHTML('beforeend', `<button type="button" class="component-slideshow__nav--item" data-page="${i}" aria-label="Page ${i}">${i}</button>`);
+			}
+		}
+	}
+
+	toggleButtons() {
+		if (!this.showButtons) {
+			this.nav.classList.add('d-none');
+		} else {
+			this.nav.classList.remove('d-none');
 		}
 	}
 

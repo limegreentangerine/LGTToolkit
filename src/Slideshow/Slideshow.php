@@ -38,11 +38,11 @@ final readonly class Slideshow
             ],
             'showButtons' => [
                 'mobile' => false,
-                'desktop' => false,
-                'hd' => false,
+                'desktop' => true,
+                'hd' => true,
             ],
             'showPagination' => [
-                'mobile' => false,
+                'mobile' => true,
                 'desktop' => false,
                 'hd' => false,
             ],

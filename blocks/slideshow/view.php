@@ -12,17 +12,12 @@
     ],
     'options' => [
         'mobile' => 1,
-        'desktop' => 3,
-        'hd' => 4,
+        'desktop' => 2,
+        'hd' => 3,
         'gap' => [
             'mobile' => 10,
             'desktop' => 20,
             'hd' => 30
-        ],
-        'peek' => [
-            'mobile' => 50,
-            'desktop' => 100,
-            'hd' => 150
         ]
     ]
 ], 'lgt_toolkit');
