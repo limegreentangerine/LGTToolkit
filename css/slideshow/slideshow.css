@@ -58,4 +58,20 @@ component-slideshow {
 		width: calc(var(--slideWidth) - var(--peek));
 		flex: 0 0 calc(var(--slideWidth) - var(--peek));
 	}
+
+	.component-slideshow__buttons,
+	.component-slideshow__pagination {
+		display: flex;
+		align-items: center;
+	}
+
+	.component-slideshow__buttons {
+		justify-content: center;
+		gap: 10px;
+	}
+
+	.component-slideshow__pagination {
+		width: 100%;
+		justify-content: space-evenly;
+	}
 }

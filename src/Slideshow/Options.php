@@ -5,6 +5,7 @@ namespace LgtToolkit\Slideshow;
 use LgtToolkit\Slideshow\Enums\SnapOptions;
 use LgtToolkit\Slideshow\Options\OptionNumber;
 use LgtToolkit\Slideshow\Options\OptionBoolean;
+use LgtToolkit\Slideshow\Options\SlideTemplate;
 use LgtToolkit\Slideshow\Options\OptionAutoplay;
 
 final readonly class Options
@@ -19,9 +20,11 @@ final readonly class Options
         public OptionNumber $peek,
         public OptionBoolean $showButtons,
         public OptionBoolean $showPagination,
+        public ?bool $useTheme,
         public ?string $prevIcon,
         public ?string $nextIcon,
         public ?OptionAutoplay $autoplay,
+        public ?SlideTemplate $template,
     ) {}
 
     public function toArray(): array
@@ -36,9 +39,11 @@ final readonly class Options
             'peek' => $this->peek->toArray(),
             'showButtons' => $this->showButtons->toArray(),
             'showPagination' => $this->showPagination->toArray(),
+            'useTheme' => $this->useTheme ?? false,
             'prevIcon' => $this->prevIcon,
             'nextIcon' => $this->nextIcon,
             'autoplay' => $this->autoplay?->toArray(),
+            'template' => $this->template?->toArray(),
         ];
     }
 
@@ -54,9 +59,11 @@ final readonly class Options
             peek: OptionNumber::fromArray($data['peek'] ?? []),
             showButtons: OptionBoolean::fromArray($data['showButtons'] ?? []),
             showPagination: OptionBoolean::fromArray($data['showPagination'] ?? []),
+            useTheme: $data['useTheme'] ?? false,
             prevIcon: $data['prevIcon'] ?? 'bi-chevron-left',
             nextIcon: $data['nextIcon'] ?? 'bi-chevron-right',
             autoplay: OptionAutoplay::fromArray($data['autoplay'] ?? null),
+            template: SlideTemplate::fromArray($data['template']) ?? null,
         );
     }
 }

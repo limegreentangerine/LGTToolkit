@@ -1,14 +1,21 @@
 <?php \View::element('slideshow/slideshow', [
     'slides' => [
-        '<div>slide</div>',
-        '<div>slide</div>',
-        '<div>slide</div>',
-        '<div>slide</div>',
-        '<div>slide</div>',
-        '<div>slide</div>',
-        '<div>slide</div>',
-        '<div>slide</div>',
-        '<div>slide</div>'
+        new stdClass(),
+        new stdClass(),
+        new stdClass(),
+        new stdClass(),
+        new stdClass(),
+        new stdClass(),
+        new stdClass(),
+        new stdClass(),
+        new stdClass(),
+        new stdClass(),
+        new stdClass(),
+        new stdClass(),
+        new stdClass(),
+        new stdClass(),
+        new stdClass(),
+        new stdClass(),
     ],
     'options' => [
         'mobile' => 1,
@@ -17,7 +24,11 @@
         'gap' => [
             'mobile' => 10,
             'desktop' => 20,
-            'hd' => 30
+            'hd' => 30,
+        ],
+        'template' => [
+            'path' => 'slideshow/slides/image',
+            'pkgHandle' => 'lgt_toolkit'
         ]
-    ]
+    ],
 ], 'lgt_toolkit');

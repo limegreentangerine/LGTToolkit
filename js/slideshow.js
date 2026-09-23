@@ -8,7 +8,9 @@ class ComponentSlideshow extends HTMLElement {
 		this.options = JSON.parse(this.container.dataset.options);
 
 		this.track = this.container.querySelector('.component-slideshow__track');
-		this.slides = Array.from(this.track.querySelectorAll('.component-slideshow__slide'));
+		if (!this.track) return;
+
+		this.slides = Array.from(this.track.querySelectorAll('.component-slideshow__slide') ?? []);
 		if (!this.slides) return;
 
 		this.nav = this.container.querySelector('.component-slideshow__buttons');
@@ -22,10 +24,11 @@ class ComponentSlideshow extends HTMLElement {
 		this.slideWidth = 100;
 		this.gap = 0;
 		this.peek = 0;
+		this.perPage = 1;
 		this.pages = 0;
 		this.showButtons = false;
 		this.showPagination = false;
-		this.currentSlide = 0;
+		this.currentPage = 0;
 
 		this.initSlideshow();
 
@@ -36,23 +39,7 @@ class ComponentSlideshow extends HTMLElement {
 
 		this.prevButton.addEventListener('click', this.moveSlide.bind(this));
 		this.nextButton.addEventListener('click', this.moveSlide.bind(this));
-		this.track.addEventListener('scrollend', this.calculateCurrentSlide.bind(this));
-	}
-
-	moveSlide(event) {
-		const target = event.currentTarget;
-		const title = target.getAttribute('title');
-		let nextSlideNumber = (title === 'Prev') ? this.currentSlide - 1 : this.currentSlide + 1;
-
-		if (nextSlideNumber >= this.slides.length || nextSlideNumber < 0) {
-			nextSlideNumber = 0;
-		}
-
-		const nextSlide = this.slides[nextSlideNumber];
-		this.track.scrollTo({
-			left: nextSlide.offsetLeft,
-			behavior: 'smooth'
-		});
+		this.track.addEventListener('scrollend', this.calculateCurrentPage.bind(this));
 	}
 
 	initSlideshow() {
@@ -60,22 +47,65 @@ class ComponentSlideshow extends HTMLElement {
 		this.slideWidth = 100 / this.options[breakpoint];
 		this.gap = this.options.gap[breakpoint];
 		this.peek = this.options.peek[breakpoint];
-		this.pages = Math.ceil(this.slides.length / this.options[breakpoint]);
+		this.perPage = this.options[breakpoint];
+		this.pages = Math.ceil(this.slides.length / this.perPage);
 		this.showPagination = this.options.showPagination[breakpoint];
 		this.showButtons = this.options.showButtons[breakpoint];
 		this.container.style = `--slideWidth:${this.slideWidth}%;--snap:${this.options.snap};--padding:${this.gap}px;--peek:${this.peek}px;`;
 
 		this.buildNav();
 		this.toggleButtons();
-		this.calculateCurrentSlide();
+		this.calculateCurrentPage();
+	}
+
+	moveSlide(event) {
+		const target = event.currentTarget;
+		const title = target.getAttribute('title');
+
+		let nextPageNumber = title === 'Prev' ? this.currentPage - 1 : this.currentPage + 1;
+		if (nextPageNumber >= this.pages) nextPageNumber = 0;
+		if (nextPageNumber < 0) nextPageNumber = this.pages - 1;
+
+		const nextSlideNumber = nextPageNumber * this.perPage;
+		const nextSlide = this.slides[nextSlideNumber];
+		if (!nextSlide) return;
+
+		this.currentPage = nextPageNumber;
+		this.track.scrollTo({
+			left: nextSlide.offsetLeft,
+			behavior: 'smooth'
+		});
+	}
+
+	selectPage(event) {
+		const target = event.currentTarget;
+		if (!target) return;
+
+		const page = target.dataset.page - 1;
+		const nextSlideNumber = page * this.perPage;
+		const nextSlide = this.slides[nextSlideNumber];
+		if (!nextSlide) return;
+
+		this.currentPage = page;
+		this.track.scrollTo({
+			left: nextSlide.offsetLeft,
+			behavior: 'smooth'
+		});
 	}
 
 	buildNav() {
 		this.pagination.innerHTML = '';
 
 		if (this.showPagination) {
-			for (let i = 1; i < this.pages; i++) {
-				this.pagination.insertAdjacentHTML('beforeend', `<button type="button" class="component-slideshow__nav--item" data-page="${i}" aria-label="Page ${i}">${i}</button>`);
+			for (let i = 1; i <= this.pages; i++) {
+				this.pagination.insertAdjacentHTML(
+					'beforeend',
+					`<button type="button" class="component-slideshow__pagination--item" data-page="${i}" aria-label="Page ${i}">${i}</button>`
+				);
+			}
+
+			for (const button of this.pagination.children) {
+				button.addEventListener('click', this.selectPage.bind(this));
 			}
 		}
 	}
@@ -88,27 +118,28 @@ class ComponentSlideshow extends HTMLElement {
 		}
 	}
 
-	calculateCurrentSlide() {
-		const scrollLeft = this.track.scrollLeft;
-		this.currentSlide = this.slides.reduce((closestIndex, slide, index) => {
-			const currentDistance = Math.abs(slide.offsetLeft - scrollLeft);
-			const closestDistance = Math.abs(this.slides[closestIndex].offsetLeft - scrollLeft);
-			return currentDistance < closestDistance ? index : closestIndex;
-		}, 0);
-
-		// TODO: per page scrolling
-
-		if (this.currentSlide === 0) {
+	calculateCurrentPage() {
+		if (this.currentPage === 0) {
 			this.prevButton.setAttribute('disabled', 'disabled');
 		} else {
 			this.prevButton.removeAttribute('disabled');
 		}
 
-		if (this.currentSlide >= this.slides.length) {
+		if (this.currentPage >= this.pages - 1) {
 			this.nextButton.setAttribute('disabled', 'disabled');
 		} else {
 			this.nextButton.removeAttribute('disabled');
 		}
+
+		for (const button of this.pagination.children) {
+			button.classList.remove('active');
+		}
+
+		const activePage = this.pagination.querySelector(
+			`button[data-page="${this.currentPage + 1}"]`
+		);
+		if (!activePage) return;
+		activePage.classList.add('active');
 	}
 
 	getCurrentBreakpoint() {
@@ -122,12 +153,14 @@ class ComponentSlideshow extends HTMLElement {
 			return 'desktop';
 		}
 
-		return 'mobile'
+		return 'mobile';
 	}
 
 	getBreakpointValue(handle) {
-		const bp = getComputedStyle(document.documentElement).getPropertyValue(`--breakpoint-${handle}`).trim();
-		return (bp !== '') ? bp : null;
+		const bp = getComputedStyle(document.documentElement)
+			.getPropertyValue(`--breakpoint-${handle}`)
+			.trim();
+		return bp !== '' ? bp : null;
 	}
 }
 

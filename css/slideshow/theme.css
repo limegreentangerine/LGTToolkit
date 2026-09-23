@@ -1,0 +1,56 @@
+component-slideshow {
+	.component-slideshow__slide {
+		background: var(--bs-gray-200);
+		aspect-ratio: 1;
+	}
+
+	.component-slideshow__buttons--prev,
+	.component-slideshow__buttons--next {
+		background: none;
+		border: solid 1px var(--bs-primary);
+		color: var(--bs-primary);
+		border-radius: 9999px;
+		aspect-ratio: 1;
+		line-height: 1;
+		padding: 8px;
+		transition: all 400ms;
+	}
+
+	.component-slideshow__buttons--prev:disabled,
+	.component-slideshow__buttons--next:disabled {
+		opacity: 0.5;
+	}
+
+	.component-slideshow__buttons--prev .bi:after {
+		content: 'Prev';
+		text-transform: uppercase;
+		font-size: 12px;
+		line-height: 1;
+	}
+
+	.component-slideshow__buttons--next .bi:after {
+		content: 'Next';
+		text-transform: uppercase;
+		font-size: 12px;
+		line-height: 1;
+	}
+
+	.component-slideshow__pagination {
+		margin: 15px 0;
+	}
+
+	.component-slideshow__pagination--item {
+		background: var(--bs-gray-200);
+		padding: 0px;
+		text-indent: -9999px;
+		overflow: hidden;
+		height: 2px;
+		border: none;
+		width: 100%;
+		transition: all 400ms;
+	}
+
+	.component-slideshow__pagination--item.active {
+		background: var(--bs-primary);
+	}
+}

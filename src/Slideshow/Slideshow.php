@@ -2,6 +2,7 @@
 
 namespace LgtToolkit\Slideshow;
 
+use Exception;
 use View;
 
 final readonly class Slideshow
@@ -26,6 +27,8 @@ final readonly class Slideshow
             'hd' => 1,
             'draggable' => false,
             'snap' => 'start',
+            'useTheme' => true,
+            'template' => null,
             'gap' => [
                 'mobile' => 0,
                 'desktop' => 0,
@@ -37,14 +40,14 @@ final readonly class Slideshow
                 'hd' => 0,
             ],
             'showButtons' => [
-                'mobile' => false,
+                'mobile' => true,
                 'desktop' => true,
                 'hd' => true,
             ],
             'showPagination' => [
                 'mobile' => true,
-                'desktop' => false,
-                'hd' => false,
+                'desktop' => true,
+                'hd' => true,
             ],
             'prevIcon' => null,
             'nextIcon' => null,
@@ -54,7 +57,12 @@ final readonly class Slideshow
 
     public function stylesheet()
     {
-        return 'slideshow.css';
+        return 'slideshow/slideshow.css';
+    }
+
+    public function theme_stylesheet()
+    {
+        return 'slideshow/theme.css';
     }
 
     public function javascript()
@@ -77,7 +85,7 @@ final readonly class Slideshow
         return $this->getOptions()[$handle] ?? null;
     }
 
-    public function getSlides()
+    public function getSlides(): array
     {
         return $this->slides ?? [];
     }
@@ -92,5 +100,22 @@ final readonly class Slideshow
         $styles = $styles . '--snap:' . $this->getOption('snap') . ';';
 
         return $styles;
+    }
+
+    public function getArrayType(): string
+    {
+        if ($this->getSlides() === []) {
+            return 'empty';
+        }
+
+        if (array_all($this->getSlides(), fn ($value) => is_string($value))) {
+            return 'string';
+        }
+
+        if (array_all($this->getSlides(), fn ($value) => is_object($value))) {
+            return 'object';
+        }
+
+        throw new Exception(t('Slide array must contain a single type of string[] or object[]'));
     }
 }
