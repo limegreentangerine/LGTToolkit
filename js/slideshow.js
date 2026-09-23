@@ -119,6 +119,27 @@ class ComponentSlideshow extends HTMLElement {
 	}
 
 	calculateCurrentPage() {
+		const scrollLeft = this.track.scrollLeft;
+		const currentSlide = this.slides.reduce((closestIndex, slide, index) => {
+			const currentDistance = Math.abs(slide.offsetLeft - scrollLeft);
+			const closestDistance = Math.abs(this.slides[closestIndex].offsetLeft - scrollLeft);
+
+			return currentDistance < closestDistance ? index : closestIndex;
+		}, 0);
+		const roundedPage = Math.round(currentSlide / this.perPage);
+
+		if (roundedPage !== this.currentPage) {
+			const nextSlideNumber = roundedPage * this.perPage;
+			const nextSlide = this.slides[nextSlideNumber];
+			if (!nextSlide) return;
+
+			this.currentPage = roundedPage;
+			this.track.scrollTo({
+				left: nextSlide.offsetLeft,
+				behavior: 'smooth'
+			});
+		}
+
 		if (this.currentPage === 0) {
 			this.prevButton.setAttribute('disabled', 'disabled');
 		} else {
