@@ -127,6 +127,64 @@ It also registers routes for:
 
 This package is intentionally opinionated and is meant to provide a shared baseline for multiple Concrete CMS sites. It centralises commonly reused configuration, block patterns, and attribute definitions so projects can start from a predictable, production-friendly standard.
 
+## Slideshow helper
+
+The package includes a reusable slideshow utility in `src/Slideshow` for building slide configurations and exposing the generated option payload for front-end rendering. It supports either a list of string slides or an array of slide objects, and provides the default viewport sizing, snap behaviour, autoplay, and button controls used across site builds.
+
+### Example
+
+```php
+use LgtToolkit\Slideshow\Slideshow;
+
+$slides = [
+    ['title' => 'One', 'image' => '/images/one.jpg'],
+    ['title' => 'Two', 'image' => '/images/two.jpg'],
+];
+
+$slideshow = new Slideshow($slides, [
+    'mobile' => 1,
+    'desktop' => 2,
+    'hd' => 3,
+    'draggable' => true,
+    'snap' => 'center',
+    'autoplay' => [
+        'enabled' => true,
+        'speed' => 6,
+        'useTimer' => true,
+    ],
+]);
+
+$options = $slideshow->getOptions();
+$styleVars = $slideshow->generateStyleVariables();
+```
+
+### Supported settings
+
+The slideshow settings array supports the following options:
+
+- `mobile`, `desktop`, `hd`: visible slides per breakpoint
+- `draggable`: whether drag/swipe interaction is enabled
+- `snap`: snap alignment (`none`, `start`, `center`, `end`)
+- `gap`, `peek`: per-breakpoint spacing values
+- `showButtons`, `showPagination`: per-breakpoint visibility toggles
+- `useTheme`: whether the theme stylesheet should be used
+- `prevIcon`, `nextIcon`: icon classes for navigation buttons
+- `autoplay`: nested settings for enabled state, speed, and timer usage
+- `template`: optional package template metadata
+
+The utility exposes helper methods for the generated stylesheet, theme stylesheet, JavaScript asset, options payload, and CSS variable string, which makes it easy to render custom slide components in a Concrete CMS view layer.
+
+## Testing
+
+The package uses PHPUnit for regression coverage. Tests live under the `tests/` directory and cover its package helpers, file-focal metadata, and content utility classes.
+
+Run the suite with:
+
+- `composer test`
+- `composer test-coverage`
+
+These commands are intended for local validation when working on package changes or preparing a release.
+
 ## License
 
 MIT

@@ -1,0 +1,104 @@
+@keyframes slideLoading {
+	from {
+		width: 0%;
+	}
+	to {
+		width: 100%;
+	}
+}
+
+component-slideshow {
+	.component-slideshow {
+		position: relative;
+	}
+
+	.component-slideshow__track {
+		position: relative;
+		z-index: 0;
+		margin: 0;
+		padding: 0;
+		display: flex;
+		gap: calc(var(--padding) * 0.5);
+		padding-left: calc(var(--padding) * 0.5);
+		/* padding-right: calc(var(--padding) * 0.5); */
+		scroll-margin-left: calc(var(--padding) * 0.5);
+		scroll-margin-right: calc(var(--padding) * 0.5);
+		overflow-x: scroll;
+		overflow-y: hidden;
+		scroll-behavior: smooth;
+		scroll-snap-type: x mandatory;
+		-ms-overflow-style: none;
+
+		&::-webkit-scrollbar {
+			width: 0;
+			height: 0;
+		}
+
+		&::-webkit-scrollbar-track {
+			background: transparent;
+			height: 0;
+		}
+
+		&::-webkit-scrollbar-thumb {
+			background: transparent;
+			border: none;
+			height: 0;
+		}
+
+		&.is-draggable {
+			cursor: grab;
+			user-select: none;
+			touch-action: pan-x;
+
+			* {
+				user-select: none;
+				pointer-events: none;
+			}
+		}
+
+		&.is-dragging {
+			cursor: grabbing;
+		}
+	}
+
+	.component-slideshow__slide {
+		position: relative;
+		scroll-snap-align: var(--snap);
+		width: calc(var(--slideWidth) - var(--peek));
+		flex: 0 0 calc(var(--slideWidth) - var(--peek));
+	}
+
+	.component-slideshow__buttons,
+	.component-slideshow__pagination {
+		display: flex;
+		align-items: center;
+	}
+
+	.component-slideshow__buttons {
+		justify-content: center;
+		gap: 10px;
+	}
+
+	.component-slideshow__pagination {
+		width: 100%;
+		justify-content: space-evenly;
+	}
+
+	.component-slideshow__timer {
+		display: block;
+		height: 100%;
+		width: 100%;
+		animation: none;
+	}
+
+	.component-slideshow__autoplay.component-slideshow__autoplay--timer
+		.component-slideshow__pagination--item.active
+		.component-slideshow__timer {
+		animation-name: slideLoading;
+		animation-duration: var(--speed);
+		animation-delay: 0ms;
+		animation-timing-function: linear;
+		animation-iteration-count: 1;
+		animation-fill-mode: forwards;
+	}
+}
