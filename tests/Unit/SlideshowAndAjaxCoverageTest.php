@@ -4,19 +4,17 @@ declare(strict_types=1);
 
 namespace {
     if (!class_exists('View', false)) {
-        class View
-        {
-        }
+        class View {}
     }
 }
 
 namespace LgtToolkit\Tests\Unit {
     use LgtToolkit\Ajax\Cookies;
-    use LgtToolkit\Block\SocialShare\ShareLink;
-    use LgtToolkit\Slideshow\Enums\SnapOptions;
+    use PHPUnit\Framework\TestCase;
     use LgtToolkit\Slideshow\Options;
     use LgtToolkit\Slideshow\Slideshow;
-    use PHPUnit\Framework\TestCase;
+    use LgtToolkit\Block\SocialShare\ShareLink;
+    use LgtToolkit\Slideshow\Enums\SnapOptions;
     use Symfony\Component\HttpFoundation\JsonResponse;
 
     final class SlideshowAndAjaxCoverageTest extends TestCase
