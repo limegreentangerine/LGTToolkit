@@ -30,7 +30,7 @@ class ComponentSlideshow extends HTMLElement {
 		this.showPagination = false;
 		this.currentPage = 0;
 		this.autoplay = this.options.autoplay.enabled;
-		this.speed = (this.options.autoplay.speed * 1000);
+		this.speed = this.options.autoplay.speed * 1000;
 		this.useTimer = this.options.autoplay.useTimer;
 		this.interval = null;
 
@@ -137,7 +137,7 @@ class ComponentSlideshow extends HTMLElement {
 
 		if (this.autoplay) {
 			this.interval = setInterval(() => {
-				this.currentPage = (this.currentPage === (this.pages - 1)) ? 0 : (this.currentPage + 1);
+				this.currentPage = this.currentPage === this.pages - 1 ? 0 : this.currentPage + 1;
 				this.#goToCurrentPage();
 			}, this.speed);
 

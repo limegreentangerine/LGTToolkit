@@ -2,10 +2,10 @@
 
 namespace LgtToolkit\Slideshow\Options;
 
-use Concrete\Core\Entity\Package;
-use Concrete\Core\Error\UserMessageException;
-use Concrete\Core\Package\PackageService;
 use Core;
+use Concrete\Core\Entity\Package;
+use Concrete\Core\Package\PackageService;
+use Concrete\Core\Error\UserMessageException;
 
 final readonly class SlideTemplate
 {

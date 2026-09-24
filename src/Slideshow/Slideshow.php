@@ -2,8 +2,8 @@
 
 namespace LgtToolkit\Slideshow;
 
-use Exception;
 use View;
+use Exception;
 
 final readonly class Slideshow
 {
@@ -54,7 +54,7 @@ final readonly class Slideshow
             'autoplay' => [
                 'enabled' => false,
                 'speed' => 6,
-                'useTimer' => true
+                'useTimer' => true,
             ],
         ];
     }
@@ -112,11 +112,11 @@ final readonly class Slideshow
             return 'empty';
         }
 
-        if (array_all($this->getSlides(), fn ($value) => is_string($value))) {
+        if (array_all($this->getSlides(), fn($value) => is_string($value))) {
             return 'string';
         }
 
-        if (array_all($this->getSlides(), fn ($value) => is_object($value))) {
+        if (array_all($this->getSlides(), fn($value) => is_object($value))) {
             return 'object';
         }
 

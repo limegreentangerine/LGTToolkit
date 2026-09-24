@@ -1,6 +1,10 @@
 @keyframes slideLoading {
-	from { width: 0%; }
-	to { width: 100%; }
+	from {
+		width: 0%;
+	}
+	to {
+		width: 100%;
+	}
 }
 
 component-slideshow {
@@ -87,7 +91,9 @@ component-slideshow {
 		animation: none;
 	}
 
-	.component-slideshow__autoplay.component-slideshow__autoplay--timer .component-slideshow__pagination--item.active .component-slideshow__timer {
+	.component-slideshow__autoplay.component-slideshow__autoplay--timer
+		.component-slideshow__pagination--item.active
+		.component-slideshow__timer {
 		animation-name: slideLoading;
 		animation-duration: var(--speed);
 		animation-delay: 0ms;

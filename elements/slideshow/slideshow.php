@@ -27,7 +27,7 @@ if ($slideshow->getOption('useTheme') === true) {
                     <div class="component-slideshow__slide"><?php echo $slide; ?></div>
                 <?php } ?>
             </div>
-        <?php } else if ($slideshow->getArrayType() == 'object') { ?>
+        <?php } elseif ($slideshow->getArrayType() == 'object') { ?>
             <?php if ($slideshow->getOption('template')) { ?>
                 <div class="component-slideshow__track">
                     <?php foreach ($slideshow->getSlides() as $index => $slide) { ?>
@@ -35,9 +35,9 @@ if ($slideshow->getOption('useTheme') === true) {
                             <?php
                                 echo $slideshow->getView()->element($slideshow->getOption('template')['path'], [
                                     'index' => $index,
-                                    'data' => $slide
+                                    'data' => $slide,
                                 ], $slideshow->getOption('template')['pkgHandle']);
-                            ?>
+                        ?>
                         </div>
                     <?php } ?>
                 </div>

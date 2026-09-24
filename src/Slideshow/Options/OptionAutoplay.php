@@ -7,7 +7,7 @@ final readonly class OptionAutoplay
     public function __construct(
         public bool $enabled,
         public int $speed,
-        public bool $useTimer
+        public bool $useTimer,
     ) {}
 
     public static function fromArray(?array $data): self
@@ -15,7 +15,7 @@ final readonly class OptionAutoplay
         return new self(
             enabled: $data['enabled'] ?? false,
             speed: $data['speed'] ?? 0,
-            useTimer: $data['useTimer'] ?? true
+            useTimer: $data['useTimer'] ?? true,
         );
     }
 
@@ -24,7 +24,7 @@ final readonly class OptionAutoplay
         return [
             'enabled' => $this->enabled,
             'speed' => $this->speed,
-            'useTimer' => $this->useTimer
+            'useTimer' => $this->useTimer,
         ];
     }
 }

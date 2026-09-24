@@ -63,7 +63,7 @@ final readonly class Options
             prevIcon: $data['prevIcon'] ?? 'bi-chevron-left',
             nextIcon: $data['nextIcon'] ?? 'bi-chevron-right',
             autoplay: OptionAutoplay::fromArray($data['autoplay'] ?? null),
-            template: SlideTemplate::fromArray($data['template']) ?? null,
+            template: SlideTemplate::fromArray($data['template'] ?? null) ?? null,
         );
     }
 }
