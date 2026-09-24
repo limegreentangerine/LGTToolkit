@@ -26,6 +26,11 @@
             'desktop' => 20,
             'hd' => 30,
         ],
+        'autoplay' => [
+            'enabled' => true,
+            'speed' => 8,
+            'useTimer' => true
+        ],
         'template' => [
             'path' => 'slideshow/slides/image',
             'pkgHandle' => 'lgt_toolkit'

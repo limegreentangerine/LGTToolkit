@@ -37,6 +37,7 @@ component-slideshow {
 
 	.component-slideshow__pagination {
 		margin: 15px 0;
+		gap: 5px;
 	}
 
 	.component-slideshow__pagination--item {
@@ -50,7 +51,7 @@ component-slideshow {
 		transition: all 400ms;
 	}
 
-	.component-slideshow__pagination--item.active {
+	.component-slideshow__pagination--item.active .component-slideshow__timer {
 		background: var(--bs-primary);
 	}
 }

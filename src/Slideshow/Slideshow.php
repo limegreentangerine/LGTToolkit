@@ -51,7 +51,11 @@ final readonly class Slideshow
             ],
             'prevIcon' => null,
             'nextIcon' => null,
-            'autoplay' => null,
+            'autoplay' => [
+                'enabled' => false,
+                'speed' => 6,
+                'useTimer' => true
+            ],
         ];
     }
 

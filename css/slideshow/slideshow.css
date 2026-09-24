@@ -1,3 +1,8 @@
+@keyframes slideLoading {
+	from { width: 0%; }
+	to { width: 100%; }
+}
+
 component-slideshow {
 	.component-slideshow {
 		position: relative;
@@ -11,7 +16,7 @@ component-slideshow {
 		display: flex;
 		gap: calc(var(--padding) * 0.5);
 		padding-left: calc(var(--padding) * 0.5);
-		padding-right: calc(var(--padding) * 0.5);
+		/* padding-right: calc(var(--padding) * 0.5); */
 		scroll-margin-left: calc(var(--padding) * 0.5);
 		scroll-margin-right: calc(var(--padding) * 0.5);
 		overflow-x: scroll;
@@ -73,5 +78,21 @@ component-slideshow {
 	.component-slideshow__pagination {
 		width: 100%;
 		justify-content: space-evenly;
+	}
+
+	.component-slideshow__timer {
+		display: block;
+		height: 100%;
+		width: 100%;
+		animation: none;
+	}
+
+	.component-slideshow__autoplay.component-slideshow__autoplay--timer .component-slideshow__pagination--item.active .component-slideshow__timer {
+		animation-name: slideLoading;
+		animation-duration: var(--speed);
+		animation-delay: 0ms;
+		animation-timing-function: linear;
+		animation-iteration-count: 1;
+		animation-fill-mode: forwards;
 	}
 }

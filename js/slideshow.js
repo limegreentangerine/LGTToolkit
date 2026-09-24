@@ -29,21 +29,27 @@ class ComponentSlideshow extends HTMLElement {
 		this.showButtons = false;
 		this.showPagination = false;
 		this.currentPage = 0;
+		this.autoplay = this.options.autoplay.enabled;
+		this.speed = (this.options.autoplay.speed * 1000);
+		this.useTimer = this.options.autoplay.useTimer;
+		this.interval = null;
 
-		this.initSlideshow();
+		this.#initSlideshow();
 
 		const observer = new ResizeObserver(() => {
-			this.initSlideshow();
+			this.#initSlideshow();
 		});
 		observer.observe(this.container);
 
-		this.prevButton.addEventListener('click', this.moveSlide.bind(this));
-		this.nextButton.addEventListener('click', this.moveSlide.bind(this));
+		this.prevButton.addEventListener('click', this.nextPrevSlide.bind(this));
+		this.nextButton.addEventListener('click', this.nextPrevSlide.bind(this));
 		this.track.addEventListener('scrollend', this.calculateCurrentPage.bind(this));
+
+		this.#initAutoplay();
 	}
 
-	initSlideshow() {
-		const breakpoint = this.getCurrentBreakpoint();
+	#initSlideshow() {
+		const breakpoint = this.#getCurrentBreakpoint();
 		this.slideWidth = 100 / this.options[breakpoint];
 		this.gap = this.options.gap[breakpoint];
 		this.peek = this.options.peek[breakpoint];
@@ -51,56 +57,64 @@ class ComponentSlideshow extends HTMLElement {
 		this.pages = Math.ceil(this.slides.length / this.perPage);
 		this.showPagination = this.options.showPagination[breakpoint];
 		this.showButtons = this.options.showButtons[breakpoint];
-		this.container.style = `--slideWidth:${this.slideWidth}%;--snap:${this.options.snap};--padding:${this.gap}px;--peek:${this.peek}px;`;
 
-		this.buildNav();
-		this.toggleButtons();
+		this.#addContainerClasses();
+		this.#buildNav();
+		this.#toggleButtons();
 		this.calculateCurrentPage();
 	}
 
-	moveSlide(event) {
-		const target = event.currentTarget;
-		const title = target.getAttribute('title');
+	#addContainerClasses() {
+		this.container.style = `--slideWidth:${this.slideWidth}%;--snap:${this.options.snap};--padding:${this.gap}px;--peek:${this.peek}px;--speed:${this.speed}ms;`;
+	}
 
-		let nextPageNumber = title === 'Prev' ? this.currentPage - 1 : this.currentPage + 1;
-		if (nextPageNumber >= this.pages) nextPageNumber = 0;
-		if (nextPageNumber < 0) nextPageNumber = this.pages - 1;
-
-		const nextSlideNumber = nextPageNumber * this.perPage;
+	#goToCurrentPage() {
+		const nextSlideNumber = this.currentPage * this.perPage;
 		const nextSlide = this.slides[nextSlideNumber];
 		if (!nextSlide) return;
 
-		this.currentPage = nextPageNumber;
 		this.track.scrollTo({
 			left: nextSlide.offsetLeft,
 			behavior: 'smooth'
 		});
+
+		if (this.autoplay) {
+			this.container.classList.remove('component-slideshow__autoplay');
+			this.container.classList.add('component-slideshow__autoplay');
+		}
 	}
 
-	selectPage(event) {
-		const target = event.currentTarget;
-		if (!target) return;
+	#getCurrentBreakpoint() {
+		const componentWidth = window.innerWidth;
+		const desktopBreakpoint = this.#getBreakpointValue('lg') ?? 992;
+		const hdBreakpoint = this.#getBreakpointValue('hd') ?? 1800;
 
-		const page = target.dataset.page - 1;
-		const nextSlideNumber = page * this.perPage;
-		const nextSlide = this.slides[nextSlideNumber];
-		if (!nextSlide) return;
+		if (hdBreakpoint !== null && componentWidth >= hdBreakpoint) {
+			return 'hd';
+		} else if (desktopBreakpoint !== null && componentWidth >= desktopBreakpoint) {
+			return 'desktop';
+		}
 
-		this.currentPage = page;
-		this.track.scrollTo({
-			left: nextSlide.offsetLeft,
-			behavior: 'smooth'
-		});
+		return 'mobile';
 	}
 
-	buildNav() {
+	#getBreakpointValue(handle) {
+		const bp = getComputedStyle(document.documentElement)
+			.getPropertyValue(`--breakpoint-${handle}`)
+			.trim();
+		return bp !== '' ? bp : null;
+	}
+
+	#buildNav() {
 		this.pagination.innerHTML = '';
 
 		if (this.showPagination) {
 			for (let i = 1; i <= this.pages; i++) {
 				this.pagination.insertAdjacentHTML(
 					'beforeend',
-					`<button type="button" class="component-slideshow__pagination--item" data-page="${i}" aria-label="Page ${i}">${i}</button>`
+					`<button type="button" class="component-slideshow__pagination--item" data-page="${i}" aria-label="Page ${i}">
+						<div class="component-slideshow__timer"></div>
+					</button>`
 				);
 			}
 
@@ -110,7 +124,7 @@ class ComponentSlideshow extends HTMLElement {
 		}
 	}
 
-	toggleButtons() {
+	#toggleButtons() {
 		if (!this.showButtons) {
 			this.nav.classList.add('d-none');
 		} else {
@@ -118,27 +132,37 @@ class ComponentSlideshow extends HTMLElement {
 		}
 	}
 
-	calculateCurrentPage() {
-		const scrollLeft = this.track.scrollLeft;
-		const currentSlide = this.slides.reduce((closestIndex, slide, index) => {
-			const currentDistance = Math.abs(slide.offsetLeft - scrollLeft);
-			const closestDistance = Math.abs(this.slides[closestIndex].offsetLeft - scrollLeft);
+	#initAutoplay() {
+		this.interval = null;
 
-			return currentDistance < closestDistance ? index : closestIndex;
-		}, 0);
-		const roundedPage = Math.round(currentSlide / this.perPage);
+		if (this.autoplay) {
+			this.interval = setInterval(() => {
+				this.currentPage = (this.currentPage === (this.pages - 1)) ? 0 : (this.currentPage + 1);
+				this.#goToCurrentPage();
+			}, this.speed);
 
-		if (roundedPage !== this.currentPage) {
-			const nextSlideNumber = roundedPage * this.perPage;
-			const nextSlide = this.slides[nextSlideNumber];
-			if (!nextSlide) return;
-
-			this.currentPage = roundedPage;
-			this.track.scrollTo({
-				left: nextSlide.offsetLeft,
-				behavior: 'smooth'
-			});
+			this.container.classList.add('component-slideshow__autoplay');
 		}
+
+		console.log('useTimer', this.useTimer);
+
+		if (this.autoplay && this.useTimer) {
+			this.container.classList.add('component-slideshow__autoplay--timer');
+		} else {
+			this.container.classList.remove('component-slideshow__autoplay--timer');
+		}
+	}
+
+	calculateCurrentPage() {
+		for (const button of this.pagination.children) {
+			button.classList.remove('active');
+		}
+
+		const activePage = this.pagination.querySelector(
+			`button[data-page="${this.currentPage + 1}"]`
+		);
+		if (!activePage) return;
+		activePage.classList.add('active');
 
 		if (this.currentPage === 0) {
 			this.prevButton.setAttribute('disabled', 'disabled');
@@ -151,37 +175,27 @@ class ComponentSlideshow extends HTMLElement {
 		} else {
 			this.nextButton.removeAttribute('disabled');
 		}
-
-		for (const button of this.pagination.children) {
-			button.classList.remove('active');
-		}
-
-		const activePage = this.pagination.querySelector(
-			`button[data-page="${this.currentPage + 1}"]`
-		);
-		if (!activePage) return;
-		activePage.classList.add('active');
 	}
 
-	getCurrentBreakpoint() {
-		const componentWidth = window.innerWidth;
-		const desktopBreakpoint = this.getBreakpointValue('lg') ?? 992;
-		const hdBreakpoint = this.getBreakpointValue('hd') ?? 1800;
+	nextPrevSlide(event) {
+		const target = event.currentTarget;
+		const title = target.getAttribute('title');
 
-		if (hdBreakpoint !== null && componentWidth >= hdBreakpoint) {
-			return 'hd';
-		} else if (desktopBreakpoint !== null && componentWidth >= desktopBreakpoint) {
-			return 'desktop';
-		}
-
-		return 'mobile';
+		let nextPageNumber = title === 'Prev' ? this.currentPage - 1 : this.currentPage + 1;
+		if (nextPageNumber >= this.pages) nextPageNumber = 0;
+		if (nextPageNumber < 0) nextPageNumber = this.pages - 1;
+		this.currentPage = nextPageNumber;
+		this.#goToCurrentPage();
+		this.#initAutoplay();
 	}
 
-	getBreakpointValue(handle) {
-		const bp = getComputedStyle(document.documentElement)
-			.getPropertyValue(`--breakpoint-${handle}`)
-			.trim();
-		return bp !== '' ? bp : null;
+	selectPage(event) {
+		const target = event.currentTarget;
+		if (!target) return;
+
+		this.currentPage = target.dataset.page - 1;
+		this.#goToCurrentPage();
+		this.#initAutoplay();
 	}
 }
 
