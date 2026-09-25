@@ -2,25 +2,26 @@
 
 namespace Concrete\Package\LgtToolkit;
 
-use Core;
-use Route;
-use Events;
-use Request;
-use DebugBar\DebugBar;
-use DebugBar\AssetHandler;
-use LgtToolkit\DebugBar\Directors;
-use Concrete\Core\Production\Modes;
-use ClassKit\Package\Traits\PageTrait;
 use ClassKit\Package\PackageController;
+use ClassKit\Package\Traits\AttributeTrait;
 use ClassKit\Package\Traits\BlockTrait;
+use ClassKit\Package\Traits\PageTrait;
+use Concrete\Core\Attribute\Key\CollectionKey;
 use Concrete\Core\Attribute\Key\FileKey;
 use Concrete\Core\Attribute\Key\SiteKey;
+use Concrete\Core\Command\Task\Manager as TaskManager;
+use Concrete\Core\Entity\Package as PackageEntity;
+use Concrete\Core\Production\Modes;
+use Core;
+use DebugBar\AssetHandler;
+use DebugBar\DebugBar;
+use Events;
+use LgtToolkit\DebugBar\Directors;
 use LgtToolkit\Events\File as FileEvent;
 use LgtToolkit\Events\Page as PageEvent;
-use ClassKit\Package\Traits\AttributeTrait;
-use Concrete\Core\Attribute\Key\CollectionKey;
-use Concrete\Core\Entity\Package as PackageEntity;
-use Concrete\Core\Command\Task\Manager as TaskManager;
+use Request;
+use Route;
+use Symfony\Component\Process\Process;
 
 class Controller extends PackageController
 {
@@ -44,7 +45,7 @@ class Controller extends PackageController
      *
      * @var string
      */
-    protected $pkgVersion = '0.0.4';
+    protected $pkgVersion = '0.0.5';
 
     /**
      * The minimum Concrete version compatible with the package.
@@ -248,6 +249,25 @@ class Controller extends PackageController
         $dbConfig->save('concrete.marketplace.key.private', '');
 
         $this->registerAliases($config);
+        $this->createUrlRewriteFile();
+    }
+
+    protected function createUrlRewriteFile(): void
+    {
+        $command = './vendor/bin/create-htaccess';
+        echo $command;
+
+        if (!is_file($command)) {
+            throw new \RuntimeException('The LGT ToolKit create-htaccess Composer command was not found: ' . $command);
+        }
+
+        $process = new Process([$command]);
+        $process->run();
+
+        if (!$process->isSuccessful()) {
+            $output = trim($process->getErrorOutput() . PHP_EOL . $process->getOutput());
+            throw new \RuntimeException('Unable to create LGT ToolKit htaccess file.' . ($output !== '' ? ' ' . $output : ''));
+        }
     }
 
     protected function registerAliases(mixed $config): void
