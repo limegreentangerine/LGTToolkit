@@ -2,25 +2,25 @@
 
 namespace Concrete\Package\LgtToolkit;
 
-use ClassKit\Package\PackageController;
-use ClassKit\Package\Traits\AttributeTrait;
-use ClassKit\Package\Traits\BlockTrait;
+use Core;
+use Route;
+use Events;
+use Request;
+use DebugBar\DebugBar;
+use DebugBar\AssetHandler;
+use LgtToolkit\DebugBar\Directors;
+use Concrete\Core\Production\Modes;
 use ClassKit\Package\Traits\PageTrait;
-use Concrete\Core\Attribute\Key\CollectionKey;
+use ClassKit\Package\PackageController;
+use ClassKit\Package\Traits\BlockTrait;
 use Concrete\Core\Attribute\Key\FileKey;
 use Concrete\Core\Attribute\Key\SiteKey;
-use Concrete\Core\Command\Task\Manager as TaskManager;
-use Concrete\Core\Entity\Package as PackageEntity;
-use Concrete\Core\Production\Modes;
-use Core;
-use DebugBar\AssetHandler;
-use DebugBar\DebugBar;
-use Events;
-use LgtToolkit\DebugBar\Directors;
 use LgtToolkit\Events\File as FileEvent;
 use LgtToolkit\Events\Page as PageEvent;
-use Request;
-use Route;
+use ClassKit\Package\Traits\AttributeTrait;
+use Concrete\Core\Attribute\Key\CollectionKey;
+use Concrete\Core\Entity\Package as PackageEntity;
+use Concrete\Core\Command\Task\Manager as TaskManager;
 
 class Controller extends PackageController
 {
@@ -44,7 +44,7 @@ class Controller extends PackageController
      *
      * @var string
      */
-    protected $pkgVersion = '0.0.7';
+    protected $pkgVersion = '0.0.8';
 
     /**
      * The minimum Concrete version compatible with the package.
