@@ -21,7 +21,6 @@ use LgtToolkit\Events\File as FileEvent;
 use LgtToolkit\Events\Page as PageEvent;
 use Request;
 use Route;
-use Symfony\Component\Process\Process;
 
 class Controller extends PackageController
 {
@@ -45,7 +44,7 @@ class Controller extends PackageController
      *
      * @var string
      */
-    protected $pkgVersion = '0.0.6';
+    protected $pkgVersion = '0.0.7';
 
     /**
      * The minimum Concrete version compatible with the package.
@@ -255,18 +254,15 @@ class Controller extends PackageController
     protected function createUrlRewriteFile(): void
     {
         $command = './vendor/bin/create-htaccess';
-        echo $command;
 
         if (!is_file($command)) {
             throw new \RuntimeException('The LGT ToolKit create-htaccess Composer command was not found: ' . $command);
         }
 
-        $process = new Process([$command]);
-        $process->run();
+        exec(escapeshellarg($command) . ' 2>&1', $output, $exitCode);
 
-        if (!$process->isSuccessful()) {
-            $output = trim($process->getErrorOutput() . PHP_EOL . $process->getOutput());
-            throw new \RuntimeException('Unable to create LGT ToolKit htaccess file.' . ($output !== '' ? ' ' . $output : ''));
+        if ($exitCode !== 0) {
+            throw new \RuntimeException('Unable to create LGT ToolKit htaccess file.' . ($output !== [] ? ' ' . implode(PHP_EOL, $output) : ''));
         }
     }
 

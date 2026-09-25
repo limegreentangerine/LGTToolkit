@@ -10,7 +10,7 @@ if (!isset($_composer_autoload_path)) {
 
 $filename = '.htaccess';
 $projectRoot = dirname($_composer_autoload_path);
-$destination = $projectRoot . '/../' . $filename;
+$destination = $projectRoot . '/' . $filename;
 
 if (file_exists($destination)) {
     echo "Skipped (already exists): " . basename($filename) . PHP_EOL;
