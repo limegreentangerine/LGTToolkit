@@ -45,7 +45,7 @@ class Controller extends PackageController
      *
      * @var string
      */
-    protected $pkgVersion = '0.0.5';
+    protected $pkgVersion = '0.0.6';
 
     /**
      * The minimum Concrete version compatible with the package.
