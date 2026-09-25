@@ -24,6 +24,10 @@
 			"email": "david@limegreentangerine.co.uk"
 		}
 	],
+	"require": {
+		"php-debugbar/php-debugbar": "^3.8",
+		"limegreentangerine/class_kit": "^1.0"
+	},
 	"require-dev": {
 		"php": "^8.4",
 		"phpunit/phpunit": "^11",
@@ -54,8 +58,7 @@
 			"npm install"
 		]
 	},
-	"require": {
-		"php-debugbar/php-debugbar": "^3.8",
-		"limegreentangerine/class_kit": "^1.0"
-	}
+	"bin": [
+		"bin/create-htaccess"
+	]
 }
