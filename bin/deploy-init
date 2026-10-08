@@ -11,7 +11,8 @@ if (!isset($_composer_autoload_path)) {
 $filename = 'deploy.sh';
 
 $packageDirectory = dirname(__DIR__);
-$source = $packageDirectory . '/resources/' . $filename;
+$resourcesFolder = $packageDirectory . '/resources';
+$source = $resourcesFolder . '/' . $filename;
 
 $projectRoot = dirname($_composer_autoload_path);
 $destination = $projectRoot . '/../public/' . $filename;
