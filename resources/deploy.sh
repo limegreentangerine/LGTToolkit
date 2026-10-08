@@ -1,19 +1,22 @@
 #!/usr/bin/env bash
 set -euo pipefail
-cd "$(dirname "$0")"
+cd "$(dirname "$0")/.."   # project root (where composer.json and vendor/ live)
 
-# PHP version can be passed as a variable now eg: ./deploy.sh 8.4
-PHP_VERSION="${1:-8.3}"
-PHP="/opt/plesk/php/${PHP_VERSION}/bin/php"
+# Non-interactive runs (git hook/cron) have a minimal PATH, so add phpenv and Plesk PHP
+export PHPENV_ROOT="${PHPENV_ROOT:-$HOME/.phpenv}"
+export PATH="$PHPENV_ROOT/shims:$PHPENV_ROOT/bin:$(ls -d /opt/plesk/php/*/bin 2>/dev/null | sort -V | tail -n1):/usr/local/bin:$PATH"
 
-if [[ ! -x "$PHP" ]]; then
-  echo "PHP $PHP_VERSION not found or not executable: $PHP" >&2
-  exit 1
-fi
-
-COMPOSER="$PHP $HOME/bin/composer.phar"
-CONCRETE="$PHP vendor/bin/concrete"
+COMPOSER="$HOME/.phpenv/shims/composer"
+CONCRETE="./vendor/bin/concrete"
 LOG="$HOME/logs/deploy.log"
+mkdir -p "$(dirname "$LOG")"
+
+# set -e aborts on any failing step; record it in the log and show the tail on the console
+trap 'rc=$?; if [ "$rc" -ne 0 ]; then
+  echo "=== FAILED (exit $rc) $(date -Is)" >> "$LOG"
+  echo "Deploy FAILED (exit $rc). Last log lines ($LOG):" >&2
+  tail -n 20 "$LOG" >&2
+fi' EXIT
 
 {
   echo "=== Deploy $(date -Is) $(git -C ~/git/*.git rev-parse --short HEAD 2>/dev/null || true)"
@@ -25,3 +28,5 @@ LOG="$HOME/logs/deploy.log"
   $CONCRETE c5:clear-cache -n
   echo "=== Done"
 } >> "$LOG" 2>&1
+
+echo "Deploy complete. Log: $LOG"
