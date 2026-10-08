@@ -59,6 +59,7 @@
 		]
 	},
 	"bin": [
-		"bin/create-htaccess"
+		"bin/create-htaccess",
+		"bin/deploy"
 	]
 }
