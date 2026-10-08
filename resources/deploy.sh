@@ -2,7 +2,7 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 
-# PHP version can be passed as a variable now eg: ./bin/deploy.sh 8.4
+# PHP version can be passed as a variable now eg: ./deploy.sh 8.4
 PHP_VERSION="${1:-8.3}"
 PHP="/opt/plesk/php/${PHP_VERSION}/bin/php"
 
