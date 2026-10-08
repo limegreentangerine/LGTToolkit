@@ -80,7 +80,7 @@ The package auto-installs these block types under a package-specific block set:
 - `lgt_video`
 - `lgt_vimeo_video`
 
-These blocks provide content patterns and UI elements commonly used across LGT sites, including page lists, navigation, buttons, sections, maps, video embeds, and social share utilities.
+These blocks provide content patterns and UI elements commonly used across LGT sites, including page and file lists, navigation, buttons, content sections, galleries, video embeds, and social sharing.
 
 ### Dashboard utilities
 
@@ -88,13 +88,11 @@ The package creates dashboard pages for common tasks:
 
 - `/dashboard/lgt_toolkit`
 - `/dashboard/lgt_toolkit/cookie_popup`
-- `/dashboard/lgt_toolkit/uaccess`
 - `/dashboard/lgt_toolkit/duplicate_express`
 
 These pages support configuration for:
 
 - cookie policy behaviour
-- UAccess code
 - duplicate Express object tooling
 
 ### Package services and integrations
@@ -176,14 +174,16 @@ The utility exposes helper methods for the generated stylesheet, theme styleshee
 
 ## Testing
 
-The package uses PHPUnit for regression coverage. Tests live under the `tests/` directory and cover its package helpers, file-focal metadata, and content utility classes.
+The package uses PHPUnit for regression coverage. Tests live under `tests/` and use a lightweight bootstrap for package code that does not require a running Concrete CMS site.
+
+Coverage includes slideshow settings and rendering, AJAX cookie and placeholder responses, mail template rendering, social-share links, focal-point and redirect values, attribute and block behavior, dashboard output, and the responsive picture override.
 
 Run the suite with:
 
 - `composer test`
 - `composer test-coverage`
 
-These commands are intended for local validation when working on package changes or preparing a release.
+Run `composer test` after making changes to verify the suite. Use `composer test-coverage` to print a coverage report when the required coverage driver is available.
 
 ## License
 
