@@ -8,7 +8,7 @@ export PATH="$PHPENV_ROOT/shims:$PHPENV_ROOT/bin:$(ls -d /opt/plesk/php/*/bin 2>
 
 COMPOSER="$HOME/.phpenv/shims/composer"
 CONCRETE="./vendor/bin/concrete"
-LOG="$HOME/logs/deploy.log"
+LOG="$HOME/logs/$(basename "$PWD")/deploy.log"
 NPM="$HOME/.nodenv/shims/npm"
 mkdir -p "$(dirname "$LOG")"
 
