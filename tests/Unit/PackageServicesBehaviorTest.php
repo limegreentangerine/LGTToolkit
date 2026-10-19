@@ -51,27 +51,26 @@ namespace LgtToolkit\Tests\Unit {
     {
         public function testAutoCacheAddsFileModificationTimeAndLeavesMissingPathsAlone(): void
         {
-            $documentRoot = sys_get_temp_dir() . '/lgt-autocache-' . uniqid('', true);
-            mkdir($documentRoot . '/assets', 0777, true);
-            $filePath = $documentRoot . '/assets/app.css';
+            $relativeDirectory = '/lgt-autocache-' . uniqid('', true);
+            $temporaryDirectory = DIR_BASE . ltrim($relativeDirectory, '/');
+            mkdir($temporaryDirectory . '/assets', 0777, true);
+            $filePath = $temporaryDirectory . '/assets/app.css';
             file_put_contents($filePath, 'body { color: red; }');
-
-            $originalDocumentRoot = $_SERVER['DOCUMENT_ROOT'] ?? null;
-            $_SERVER['DOCUMENT_ROOT'] = $documentRoot;
 
             try {
                 $service = new AutoCacheService();
-                self::assertSame('/assets/app.css?' . filemtime($filePath), $service->autocache('/assets', 'app.css'));
-                self::assertSame('/assets/missing.css', $service->autocache('/assets', 'missing.css'));
+                self::assertSame(
+                    $relativeDirectory . '/assets/app.css?' . filemtime($filePath),
+                    $service->autocache($relativeDirectory . '/assets/app.css'),
+                );
+                self::assertSame(
+                    $relativeDirectory . '/assets/missing.css',
+                    $service->autocache($relativeDirectory . '/assets/missing.css'),
+                );
             } finally {
-                if ($originalDocumentRoot === null) {
-                    unset($_SERVER['DOCUMENT_ROOT']);
-                } else {
-                    $_SERVER['DOCUMENT_ROOT'] = $originalDocumentRoot;
-                }
                 unlink($filePath);
-                rmdir($documentRoot . '/assets');
-                rmdir($documentRoot);
+                rmdir($temporaryDirectory . '/assets');
+                rmdir($temporaryDirectory);
             }
         }
 
