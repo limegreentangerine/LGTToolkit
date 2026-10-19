@@ -8,6 +8,7 @@ namespace {
     }
 
     foreach ([
+        'DIR_BASE' => sys_get_temp_dir() . DIRECTORY_SEPARATOR,
         'DIR_PACKAGES_CORE' => sys_get_temp_dir(),
         'DIR_PACKAGES' => sys_get_temp_dir(),
         'REL_DIR_PACKAGES_CORE' => '/concrete/packages',

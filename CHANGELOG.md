@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.0.10] - 2026-10-19
+
+### Changed
+
+Updated ClassKit dependency to ^2.0
+
 ## [0.0.9] - 2026-10-08
 
 ### Added

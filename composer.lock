@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "12d550c5b1cb2bfb8b524da593ecd717",
+    "content-hash": "506d074fb6282ded93aa4f1999c47567",
     "packages": [
         {
             "name": "limegreentangerine/class_kit",
-            "version": "1.0.3",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/limegreentangerine/ClassKit.git",
-                "reference": "876738da7d363526642e504f1076b4c8b15d2b3b"
+                "reference": "fbd158285376f4e68fea994ac72533ac5e022f79"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/limegreentangerine/ClassKit/zipball/876738da7d363526642e504f1076b4c8b15d2b3b",
-                "reference": "876738da7d363526642e504f1076b4c8b15d2b3b",
+                "url": "https://api.github.com/repos/limegreentangerine/ClassKit/zipball/fbd158285376f4e68fea994ac72533ac5e022f79",
+                "reference": "fbd158285376f4e68fea994ac72533ac5e022f79",
                 "shasum": ""
             },
             "require-dev": {
@@ -26,6 +26,9 @@
                 "php": "^8.4",
                 "phpunit/phpunit": "^11"
             },
+            "bin": [
+                "bin/create-svelte-component"
+            ],
             "type": "concrete5-package",
             "autoload": {
                 "psr-4": {
@@ -49,9 +52,9 @@
             "description": "Collection of helper classes for LGT packages.",
             "support": {
                 "issues": "https://github.com/limegreentangerine/ClassKit/issues",
-                "source": "https://github.com/limegreentangerine/ClassKit/tree/1.0.3"
+                "source": "https://github.com/limegreentangerine/ClassKit/tree/2.0.0"
             },
-            "time": "2026-09-22T13:36:56+00:00"
+            "time": "2026-10-19T11:40:44+00:00"
         },
         {
             "name": "php-debugbar/php-debugbar",
