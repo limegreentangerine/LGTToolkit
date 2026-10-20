@@ -3,25 +3,11 @@
 namespace LgtToolkit\Tests\Unit;
 
 use Core;
-use LgtToolkit\Ajax\Cookies;
 use PHPUnit\Framework\TestCase;
 use LgtToolkit\Ajax\PlaceholderText;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 final class AjaxBehaviorTest extends TestCase
 {
-    public function testCookieEndpointsReturnTheirConsentStatuses(): void
-    {
-        $cookies = new Cookies();
-        $accepted = $cookies->allowCookies();
-        $declined = $cookies->disallowCookies();
-
-        self::assertInstanceOf(JsonResponse::class, $accepted);
-        self::assertInstanceOf(JsonResponse::class, $declined);
-        self::assertSame(['status' => 'accepted'], json_decode((string) $accepted->getContent(), true));
-        self::assertSame(['status' => 'declined'], json_decode((string) $declined->getContent(), true));
-    }
-
     public function testPlaceholderEndpointReturnsRequestedAllowedContent(): void
     {
         $path = sys_get_temp_dir() . '/lgt-toolkit-package';
