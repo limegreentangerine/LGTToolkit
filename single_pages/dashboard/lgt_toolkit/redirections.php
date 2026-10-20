@@ -36,30 +36,40 @@ $listUrl = (string) \URL::to('/dashboard/lgt_toolkit/redirections');
     <fieldset>
         <legend><?php echo $isEditing ? t('Edit Redirection') : t('Add Redirection'); ?></legend>
 
-        <div class="form-group">
-            <?php echo $form->label('source', t('Old URL')); ?>
-            <?php echo $form->text('source', $sourceValue, ['placeholder' => '/old-page']); ?>
-            <div class="form-text"><?php echo t('A path on this site (or a full URL on this domain). Any query string is ignored when matching.'); ?></div>
-        </div>
-
-        <div class="form-group">
-            <?php echo $form->label('destination', t('Redirect To')); ?>
-            <?php echo $form_page_selector->selectPage('destination', $destinationValue ?: false); ?>
-        </div>
-
-        <div class="form-group">
-            <?php echo $form->label('code', t('Redirect Type')); ?>
-            <?php echo $form->select('code', $statusOptions, (string) $codeValue); ?>
-        </div>
-
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary"><?php echo $isEditing ? t('Save') : t('Add Redirection'); ?></button>
-            <?php if ($isEditing) { ?>
-                <a href="<?php echo $listUrl; ?>" class="btn btn-secondary"><?php echo t('Cancel'); ?></a>
-            <?php } ?>
+        <div class="row">
+            <div class="col-12 col-lg">
+                <div class="form-group">
+                    <?php echo $form->label('source', t('Old URL')); ?>
+                    <?php echo $form->text('source', $sourceValue, ['placeholder' => '/old-page']); ?>
+                    <div class="form-text"><?php echo t('A path on this site (or a full URL on this domain). Any query string is ignored when matching.'); ?></div>
+                </div>
+            </div>
+            <div class="col-12 col-lg">
+                <div class="form-group">
+                    <?php echo $form->label('destination', t('Redirect To')); ?>
+                    <?php echo $form_page_selector->selectPage('destination', $destinationValue ?: false); ?>
+                </div>
+            </div>
+            <div class="col-12 col-lg">
+                <div class="form-group">
+                    <?php echo $form->label('code', t('Redirect Type')); ?>
+                    <?php echo $form->select('code', $statusOptions, (string) $codeValue); ?>
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="form-group">
+                    <?php echo $form->label('', ''); ?>
+                    <button type="submit" class="btn btn-primary"><?php echo $isEditing ? t('Save') : t('Add Redirection'); ?></button>
+                    <?php if ($isEditing) { ?>
+                        <a href="<?php echo $listUrl; ?>" class="btn btn-secondary"><?php echo t('Cancel'); ?></a>
+                    <?php } ?>
+                </div>
+            </div>
         </div>
     </fieldset>
 </form>
+
+<hr />
 
 <?php if (!$isEditing) { ?>
     <form method="post" action="<?php echo $view->action('import'); ?>" enctype="multipart/form-data">
@@ -82,7 +92,9 @@ $listUrl = (string) \URL::to('/dashboard/lgt_toolkit/redirections');
             </div>
         </fieldset>
     </form>
-
+    
+    <hr /> 
+    
     <fieldset>
         <legend><?php echo t('Redirections'); ?></legend>
 

@@ -251,22 +251,6 @@ class Controller extends PackageController
         $dbConfig->save('concrete.marketplace.key.private', '');
 
         $this->registerAliases($config);
-        $this->createUrlRewriteFile();
-    }
-
-    protected function createUrlRewriteFile(): void
-    {
-        $command = './vendor/bin/create-htaccess';
-
-        if (!is_file($command)) {
-            throw new \RuntimeException('The LGT ToolKit create-htaccess Composer command was not found: ' . $command);
-        }
-
-        exec(escapeshellarg($command) . ' 2>&1', $output, $exitCode);
-
-        if ($exitCode !== 0) {
-            throw new \RuntimeException('Unable to create LGT ToolKit htaccess file.' . ($output !== [] ? ' ' . implode(PHP_EOL, $output) : ''));
-        }
     }
 
     protected function registerAliases(mixed $config): void
