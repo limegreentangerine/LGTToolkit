@@ -88,4 +88,117 @@ namespace {
             }
         }
     }
+    if (!class_exists('Page', false)) {
+        class Page
+        {
+            /** @var array<int, Page> */
+            public static array $byId = [];
+
+            /** @var array<string, Page> */
+            public static array $byPath = [];
+
+            public array $addedPaths = [];
+
+            public function __construct(
+                public int $cID = 1,
+                public string $path = '/page',
+                public bool $error = false,
+                public bool $trashed = false,
+                public bool $adminArea = false,
+                public bool $systemPage = false,
+                public string $externalLink = '',
+                public int $nextPagePathID = 100,
+            ) {}
+
+            public static function reset(): void
+            {
+                self::$byId = [];
+                self::$byPath = [];
+            }
+
+            public static function getByID(int $cID, string $version = 'RECENT'): self
+            {
+                return self::$byId[$cID] ?? new self($cID, '', true);
+            }
+
+            public static function getByPath(string $path, string $version = 'RECENT'): self
+            {
+                return self::$byPath[$path] ?? new self(0, '', true);
+            }
+
+            public function isError(): bool
+            {
+                return $this->error;
+            }
+
+            public function isInTrash(): bool
+            {
+                return $this->trashed;
+            }
+
+            public function isAdminArea(): bool
+            {
+                return $this->adminArea;
+            }
+
+            public function isSystemPage(): bool
+            {
+                return $this->systemPage;
+            }
+
+            public function getCollectionPointerExternalLink(): string
+            {
+                return $this->externalLink;
+            }
+
+            public function getCollectionID(): int
+            {
+                return $this->cID;
+            }
+
+            public function getCollectionPath(): string
+            {
+                return $this->path;
+            }
+
+            public function getCollectionLink(): string
+            {
+                return 'https://example.com' . $this->path;
+            }
+
+            public function addAdditionalPagePath(string $path): object
+            {
+                $this->addedPaths[] = $path;
+                $id = $this->nextPagePathID++;
+
+                return new class($id) {
+                    public function __construct(private int $id) {}
+
+                    public function getPagePathID(): int
+                    {
+                        return $this->id;
+                    }
+                };
+            }
+        }
+    }
+
+    if (!class_exists('Request', false)) {
+        class Request
+        {
+            public static string $host = 'example.com';
+
+            public static function getInstance(): object
+            {
+                return new class(self::$host) {
+                    public function __construct(private string $host) {}
+
+                    public function getHost(): string
+                    {
+                        return $this->host;
+                    }
+                };
+            }
+        }
+    }
 }

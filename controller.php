@@ -13,6 +13,7 @@ use Concrete\Core\Production\Modes;
 use ClassKit\Package\Traits\PageTrait;
 use ClassKit\Package\PackageController;
 use ClassKit\Package\Traits\BlockTrait;
+use Concrete\Core\Http\ServerInterface;
 use Concrete\Core\Attribute\Key\FileKey;
 use Concrete\Core\Attribute\Key\SiteKey;
 use LgtToolkit\Events\File as FileEvent;
@@ -20,6 +21,7 @@ use LgtToolkit\Events\Page as PageEvent;
 use ClassKit\Package\Traits\AttributeTrait;
 use Concrete\Core\Attribute\Key\CollectionKey;
 use Concrete\Core\Entity\Package as PackageEntity;
+use LgtToolkit\Redirections\RedirectionMiddleware;
 use Concrete\Core\Command\Task\Manager as TaskManager;
 
 class Controller extends PackageController
@@ -44,7 +46,7 @@ class Controller extends PackageController
      *
      * @var string
      */
-    protected $pkgVersion = '0.0.11';
+    protected $pkgVersion = '0.0.12';
 
     /**
      * The minimum Concrete version compatible with the package.
@@ -76,6 +78,7 @@ class Controller extends PackageController
         \LgtToolkit\Providers\FocalPoint\FocalPointServiceProvider::class,
         \LgtToolkit\Providers\Express\Debugger\ExpressDebuggerServiceProvider::class,
         \LgtToolkit\Providers\DebugBar\DebugBarServiceProvider::class,
+        \LgtToolkit\Providers\Redirections\RedirectionServiceProvider::class,
     ];
 
     /**
@@ -248,22 +251,6 @@ class Controller extends PackageController
         $dbConfig->save('concrete.marketplace.key.private', '');
 
         $this->registerAliases($config);
-        $this->createUrlRewriteFile();
-    }
-
-    protected function createUrlRewriteFile(): void
-    {
-        $command = './vendor/bin/create-htaccess';
-
-        if (!is_file($command)) {
-            throw new \RuntimeException('The LGT ToolKit create-htaccess Composer command was not found: ' . $command);
-        }
-
-        exec(escapeshellarg($command) . ' 2>&1', $output, $exitCode);
-
-        if ($exitCode !== 0) {
-            throw new \RuntimeException('Unable to create LGT ToolKit htaccess file.' . ($output !== [] ? ' ' . implode(PHP_EOL, $output) : ''));
-        }
     }
 
     protected function registerAliases(mixed $config): void
@@ -347,7 +334,7 @@ class Controller extends PackageController
         $directors = new Directors($app, $this->debugbar);
         $directors->addStandardCollectors();
         $directors->addConcreteCollectors();
-        $directors->addDoctineCollectors();
+        $directors->addDoctrineCollectors();
         $directors->renderer();
     }
 
@@ -381,13 +368,6 @@ class Controller extends PackageController
         Route::register('/ajax/lgt_toolkit/blocks/content_site_attribute/get_dummy_text', '\LgtToolkit\Ajax\PlaceholderText::getDummyText');
 
         /**
-         * Cookie Routes
-         */
-        Route::register('/ajax/allow-cookies', '\LgtToolkit\Ajax\Cookies::allowCookies');
-        Route::register('/ajax/disallow-cookies', '\LgtToolkit\Ajax\Cookies::disallowCookies');
-        Route::register('/ajax/check-cookies', '\LgtToolkit\Ajax\Cookies::checkCookies');
-
-        /**
          * Debug Bar
          */
         Route::register('/debugbar/assets', function () {
@@ -401,13 +381,20 @@ class Controller extends PackageController
     }
 
     /**
+     * Register HTTP middleware
+     */
+    public function registerMiddleware(): void
+    {
+        $this->app->make(ServerInterface::class)->addMiddleware(new RedirectionMiddleware($this->app), 20);
+    }
+
+    /**
      * Register Events
      */
     public function registerEvents(): void
     {
         Events::addListener('on_before_render', function () {
             PageEvent::redirector();
-            PageEvent::processCookiePolicy();
             PageEvent::startDebugBar($this->debugbar);
         });
 
@@ -425,8 +412,8 @@ class Controller extends PackageController
     {
         // Add Single Pages
         $this->addSinglePage('/dashboard/lgt_toolkit', $pkg, t('LGT Toolkit'));
-        $this->addSinglePage('/dashboard/lgt_toolkit/cookie_popup', $pkg, t('Cookie Popup'), t('Cookie Popup settings.'));
         $this->addSinglePage('/dashboard/lgt_toolkit/duplicate_express', $pkg, t('Duplicate Express Objects'), t('Duplicate Express Objects'));
+        $this->addSinglePage('/dashboard/lgt_toolkit/redirections', $pkg, t('Redirections'), t('Manage 301 and 302 redirections to pages.'));
 
         // Attribute Setup
         $this->setupAttributes($pkg);
@@ -455,6 +442,7 @@ class Controller extends PackageController
     {
         $this->registerServiceProviders();
         $this->registerRoutes();
+        $this->registerMiddleware();
         $this->registerEvents();
         $this->registerTasks();
         $this->registerDebugBar();

@@ -1,4 +1,5 @@
 {
 	"intelephense.environment.phpVersion": "8.4",
-	"intelephense.files.exclude": ["**/node_modules/**"]
+	"intelephense.files.exclude": ["**/node_modules/**"],
+	"cSpell.words": ["dribbble", "LGTCMSSESSION", "Normaliser", "Normalises", "redirections"]
 }
