@@ -334,7 +334,7 @@ class Controller extends PackageController
         $directors = new Directors($app, $this->debugbar);
         $directors->addStandardCollectors();
         $directors->addConcreteCollectors();
-        $directors->addDoctineCollectors();
+        $directors->addDoctrineCollectors();
         $directors->renderer();
     }
 
@@ -366,13 +366,6 @@ class Controller extends PackageController
          * @deprecated
          */
         Route::register('/ajax/lgt_toolkit/blocks/content_site_attribute/get_dummy_text', '\LgtToolkit\Ajax\PlaceholderText::getDummyText');
-
-        /**
-         * Cookie Routes
-         */
-        Route::register('/ajax/allow-cookies', '\LgtToolkit\Ajax\Cookies::allowCookies');
-        Route::register('/ajax/disallow-cookies', '\LgtToolkit\Ajax\Cookies::disallowCookies');
-        Route::register('/ajax/check-cookies', '\LgtToolkit\Ajax\Cookies::checkCookies');
 
         /**
          * Debug Bar
@@ -420,7 +413,6 @@ class Controller extends PackageController
     {
         // Add Single Pages
         $this->addSinglePage('/dashboard/lgt_toolkit', $pkg, t('LGT Toolkit'));
-        $this->addSinglePage('/dashboard/lgt_toolkit/cookie_popup', $pkg, t('Cookie Popup'), t('Cookie Popup settings.'));
         $this->addSinglePage('/dashboard/lgt_toolkit/duplicate_express', $pkg, t('Duplicate Express Objects'), t('Duplicate Express Objects'));
         $this->addSinglePage('/dashboard/lgt_toolkit/redirections', $pkg, t('Redirections'), t('Manage 301 and 302 redirections to pages.'));
 
