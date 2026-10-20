@@ -459,7 +459,6 @@ class Controller extends PackageController
     {
         Events::addListener('on_before_render', function () {
             PageEvent::redirector();
-            PageEvent::processCookiePolicy();
             PageEvent::startDebugBar($this->debugbar);
         });
 
