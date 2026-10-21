@@ -59,7 +59,6 @@
 		]
 	},
 	"bin": [
-		"bin/create-htaccess",
 		"bin/deploy-init"
 	]
 }
