@@ -2,8 +2,9 @@
 
 namespace Concrete\Package\LgtToolkit\Attribute\LgtPageRedirector;
 
-use Concrete\Core\Attribute\FontAwesomeIconFormatter;
 use Concrete\Core\Attribute\Controller as AttributeController;
+use Concrete\Core\Attribute\FontAwesomeIconFormatter;
+use Concrete\Core\Package\PackageService;
 use Concrete\Package\LgtToolkit\Entity\Attribute\Value\Value\RedirectValue;
 
 class Controller extends AttributeController
@@ -15,7 +16,7 @@ class Controller extends AttributeController
 
     protected function addAssets(): void
     {
-        $pkg = $this->app->make('Concrete\Core\Package\PackageService')->getByHandle('lgt_toolkit');
+        $pkg = $this->app->make(PackageService::class)->getByHandle('lgt_toolkit');
         $this->addFooterItem(
             $this->app->make('helper/html')->javascript(
                 $pkg->getRelativePath() . '/attributes/lgt_page_redirector/js/form.js',
