@@ -2,9 +2,9 @@
 
 namespace Concrete\Package\LgtToolkit\Attribute\LgtPageRedirector;
 
-use Concrete\Core\Attribute\Controller as AttributeController;
-use Concrete\Core\Attribute\FontAwesomeIconFormatter;
 use Concrete\Core\Package\PackageService;
+use Concrete\Core\Attribute\FontAwesomeIconFormatter;
+use Concrete\Core\Attribute\Controller as AttributeController;
 use Concrete\Package\LgtToolkit\Entity\Attribute\Value\Value\RedirectValue;
 
 class Controller extends AttributeController
