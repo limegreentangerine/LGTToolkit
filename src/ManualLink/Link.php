@@ -1,4 +1,5 @@
 <?php
+
 namespace LgtToolkit\ManualLink;
 
 use Page;
@@ -26,7 +27,7 @@ class Link
     /**
      * Set the value of id
      *
-     * @return  self
+     * @return self
      */
     public function setId(int $id)
     {
@@ -46,7 +47,7 @@ class Link
     /**
      * Set the value of bID
      *
-     * @return  self
+     * @return self
      */
     public function setBlockId(int $bID)
     {
@@ -66,7 +67,7 @@ class Link
     /**
      * Set the value of title
      *
-     * @return  self
+     * @return self
      */
     public function setTitle(string $title)
     {
@@ -86,7 +87,7 @@ class Link
     /**
      * Set the value of linkCID
      *
-     * @return  self
+     * @return self
      */
     public function setLinkCID(int $linkCID)
     {
@@ -110,7 +111,7 @@ class Link
     /**
      * Set the value of isExternal
      *
-     * @return  self
+     * @return self
      */
     public function setIsExternal(int $isExternal)
     {
@@ -130,7 +131,7 @@ class Link
     /**
      * Set the value of externalUrl
      *
-     * @return  self
+     * @return self
      */
     public function setExternalURL(string $externalUrl)
     {
@@ -150,7 +151,7 @@ class Link
     /**
      * Set the value of sortOrder
      *
-     * @return  self
+     * @return self
      */
     public function setSortOrder(int $sortOrder)
     {
@@ -205,9 +206,9 @@ class Link
     {
         if ($this->getIsExternal(true)) {
             return $this->getExternalURL();
-        } else {
-            return $this->getPageLink();
         }
+        return $this->getPageLink();
+
     }
 
     /**
