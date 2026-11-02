@@ -13,7 +13,7 @@ echo $form->text('title', $title ?? null);
     <div class="form-group">
         <?php
     echo $form->label('content', t('Content'));
-$editor = $this->app->make('editor');
+$editor = \Core::make('editor');
 echo $editor->outputBlockEditModeEditor('content', $content ?? null);
 ?>
     </div>
