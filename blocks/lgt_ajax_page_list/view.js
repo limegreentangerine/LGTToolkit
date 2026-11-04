@@ -11,6 +11,8 @@ class ComponentAjaxPageList extends HTMLElement {
 
 		this.loading = false;
 		this.button.addEventListener('click', this.loadPage.bind(this));
+
+		this.button.click();
 	}
 
 	async loadPage() {
