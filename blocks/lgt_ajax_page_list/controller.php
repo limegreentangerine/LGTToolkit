@@ -39,18 +39,29 @@ class Controller extends BlockController
 
     protected function getAjaxTemplateHandles(): array
     {
-        $pkg = $this->app->make('Concrete\Core\Package\PackageService')->getByHandle('lgt_toolkit');
-        $path = $pkg->getPackagePath() . DIRECTORY_SEPARATOR . 'elements' . DIRECTORY_SEPARATOR . $this->btHandle;
-        $paths = new FilesystemIterator($path, FilesystemIterator::SKIP_DOTS);
-
         $templatePaths = [];
 
-        foreach ($paths as $path) {
-            $santizedPath = str_replace(['.php','-','_'], ['', ' ', ' '], $path->getFileName());
-            $templatePaths[$santizedPath] = ucwords($santizedPath);
+        $applicationPath = DIR_APPLICATION . DIRECTORY_SEPARATOR  . 'elements' . DIRECTORY_SEPARATOR . $this->btHandle;
+        $applicationPaths = new FilesystemIterator($applicationPath, FilesystemIterator::SKIP_DOTS);
+
+        foreach ($applicationPaths as $p) {
+            $santizedPath = str_replace(['.php','-','_'], ['', ' ', ' '], $p->getFileName());
+            $templatePaths[DIR_APPLICATION][$santizedPath] = ucwords($santizedPath);
         }
 
-        $this->set('ajaxTemplatePath', $pkg->getPackageHandle() . DIRECTORY_SEPARATOR . 'elements' . DIRECTORY_SEPARATOR . $this->btHandle);
+        $pkg = $this->app->make('Concrete\Core\Package\PackageService')->getByHandle('lgt_toolkit');
+        $packagePath = $pkg->getPackagePath() . DIRECTORY_SEPARATOR . 'elements' . DIRECTORY_SEPARATOR . $this->btHandle;
+        $packagePaths = new FilesystemIterator($packagePath, FilesystemIterator::SKIP_DOTS);
+
+        foreach ($packagePaths as $p) {
+            $santizedPath = str_replace(['.php','-','_'], ['', ' ', ' '], $p->getFileName());
+            $templatePaths[$pkg->getPackageHandle()][$santizedPath] = ucwords($santizedPath);
+        }
+
+        $this->set('ajaxTemplatePaths', [
+            $applicationPath,
+            $pkg->getPackageHandle() . DIRECTORY_SEPARATOR . 'elements' . DIRECTORY_SEPARATOR . $this->btHandle
+        ]);
 
         return $templatePaths;
     }
@@ -166,18 +177,28 @@ class Controller extends BlockController
         $pages = $pagination->getCurrentPageResults();
         $response['pages'] = $pages;
 
-        $template = ($instance->get('ajaxTemplateHandle') !== null) ? strtolower($instance->get('ajaxTemplateHandle')) : 'card';
-        $templatePath = $bt->getBlockTypeHandle() . DIRECTORY_SEPARATOR . $template;
+        $template = ($instance->get('ajaxTemplateHandle') !== null) ? strtolower($instance->get('ajaxTemplateHandle')) : 'default';
+        $templatePath = $this->locateTemplate($template);
+        if (!$templatePath) {
+            throw new UserMessageException(t('Template %s not found in paths', $template));
+        }
 
         $adaptor = $this->getTranslationAdaptor($instance->get('parent_cID'));
 
         ob_start();
         $view = new View();
         foreach ($pages as $p) {
-            $view->element($templatePath, [
-                'page' => $p,
-                'adapter' => $adaptor,
-            ], 'lgt_toolkit');
+            if ($templatePath !== null) {
+                $view->element($templatePath['path'], [
+                    'page' => $p,
+                    'adapter' => $adaptor,
+                ], $templatePath['pkg']);
+            } else {
+                $view->element($templatePath['path'], [
+                    'page' => $p,
+                    'adapter' => $adaptor,
+                ]);
+            }
         }
         $html = ob_get_contents();
         ob_end_clean();
@@ -185,5 +206,31 @@ class Controller extends BlockController
         $response['html'] = $html;
 
         return new JsonResponse($response);
+    }
+
+    protected function locateTemplate(string $handle): ?array
+    {
+        $pkg = $this->app->make('Concrete\Core\Package\PackageService')->getByHandle('lgt_toolkit');
+        $packagePath = $pkg->getPackagePath() . DIRECTORY_SEPARATOR . 'elements' . DIRECTORY_SEPARATOR . $this->btHandle;
+        $testPath = $packagePath . DIRECTORY_SEPARATOR . $handle;
+
+        if (file_exists($testPath . '.php')) {
+            return [
+                'path' => $this->btHandle . DIRECTORY_SEPARATOR . $handle,
+                'pkg' => $pkg->getPackageHandle()
+            ];
+        }
+
+        $applicationPath = DIR_APPLICATION . DIRECTORY_SEPARATOR  . 'elements' . DIRECTORY_SEPARATOR . $this->btHandle;
+        $testPath = $applicationPath . DIRECTORY_SEPARATOR . $handle;
+
+        if (file_exists($testPath . '.php')) {
+            return [
+                'path' => $this->btHandle . DIRECTORY_SEPARATOR . $handle,
+                'pkg' => null
+            ];
+        }
+
+        return null;
     }
 }
