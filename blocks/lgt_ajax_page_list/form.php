@@ -7,6 +7,7 @@
  * @var string $ajaxTemplateHandle
  * @var int    $pageTemplateID
  * @var string $sortOrder
+ * @var \Concrete\Package\LgtToolkit\Block\LgtAjaxPageList\Controller $controller
  */
 ?>
 
@@ -44,9 +45,10 @@
 
     <div class="form-group">
         <?php echo $form->label('ajaxTemplateHandle', t('Ajax Template Handle')); ?>
+
         <select id="ajaxTemplateHandle" name="ajaxTemplateHandle" class="form-control">
             <option value="" readonly><?php echo t('Choose...'); ?></option>
-            <?php foreach ($ajaxTemplatePaths as $section => $paths) { ?>
+            <?php foreach ($controller->getAjaxTemplateHandles() as $section => $paths) { ?>
                 <optgroup label="<?php echo $section; ?>">
                     <?php foreach ($paths as $path => $text) {
                         $selected = ($ajaxTemplateHandle && $key == $ajaxTemplateHandle) ? 'selected' : '';
@@ -57,7 +59,10 @@
             <?php } ?>
         </select>
         <div class="help-block">
-            <?php echo t('Templates for ajax responses can be found in <code>%s</code>', implode(', ', $ajaxTemplatePaths)); ?>
+            <?php echo t('Templates for ajax responses can be found in:'); ?>
+            <?php foreach ($ajaxTemplatePaths as $tp) { ?>
+                <code class="d-block"><?php echo $tp . '/*'; ?></code>
+            <?php } ?>
         </div>
     </div>
 
