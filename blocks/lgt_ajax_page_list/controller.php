@@ -41,7 +41,7 @@ class Controller extends BlockController
     {
         $templatePaths = [];
 
-        $applicationPath = DIR_APPLICATION . DIRECTORY_SEPARATOR  . 'elements' . DIRECTORY_SEPARATOR . $this->btHandle;
+        $applicationPath = DIR_APPLICATION . DIRECTORY_SEPARATOR . 'elements' . DIRECTORY_SEPARATOR . $this->btHandle;
         $applicationPaths = new FilesystemIterator($applicationPath, FilesystemIterator::SKIP_DOTS);
 
         foreach ($applicationPaths as $p) {
@@ -60,10 +60,36 @@ class Controller extends BlockController
 
         $this->set('ajaxTemplatePaths', [
             $applicationPath,
-            $pkg->getPackageHandle() . DIRECTORY_SEPARATOR . 'elements' . DIRECTORY_SEPARATOR . $this->btHandle
+            $pkg->getPackageHandle() . DIRECTORY_SEPARATOR . 'elements' . DIRECTORY_SEPARATOR . $this->btHandle,
         ]);
 
         return $templatePaths;
+    }
+
+    protected function locateTemplate(string $handle): ?array
+    {
+        $pkg = $this->app->make('Concrete\Core\Package\PackageService')->getByHandle('lgt_toolkit');
+        $packagePath = $pkg->getPackagePath() . DIRECTORY_SEPARATOR . 'elements' . DIRECTORY_SEPARATOR . $this->btHandle;
+        $testPath = $packagePath . DIRECTORY_SEPARATOR . $handle;
+
+        if (file_exists($testPath . '.php')) {
+            return [
+                'path' => $this->btHandle . DIRECTORY_SEPARATOR . $handle,
+                'pkg' => $pkg->getPackageHandle(),
+            ];
+        }
+
+        $applicationPath = DIR_APPLICATION . DIRECTORY_SEPARATOR . 'elements' . DIRECTORY_SEPARATOR . $this->btHandle;
+        $testPath = $applicationPath . DIRECTORY_SEPARATOR . $handle;
+
+        if (file_exists($testPath . '.php')) {
+            return [
+                'path' => $this->btHandle . DIRECTORY_SEPARATOR . $handle,
+                'pkg' => null,
+            ];
+        }
+
+        return null;
     }
 
     public function getBlockTypeName()
@@ -206,31 +232,5 @@ class Controller extends BlockController
         $response['html'] = $html;
 
         return new JsonResponse($response);
-    }
-
-    protected function locateTemplate(string $handle): ?array
-    {
-        $pkg = $this->app->make('Concrete\Core\Package\PackageService')->getByHandle('lgt_toolkit');
-        $packagePath = $pkg->getPackagePath() . DIRECTORY_SEPARATOR . 'elements' . DIRECTORY_SEPARATOR . $this->btHandle;
-        $testPath = $packagePath . DIRECTORY_SEPARATOR . $handle;
-
-        if (file_exists($testPath . '.php')) {
-            return [
-                'path' => $this->btHandle . DIRECTORY_SEPARATOR . $handle,
-                'pkg' => $pkg->getPackageHandle()
-            ];
-        }
-
-        $applicationPath = DIR_APPLICATION . DIRECTORY_SEPARATOR  . 'elements' . DIRECTORY_SEPARATOR . $this->btHandle;
-        $testPath = $applicationPath . DIRECTORY_SEPARATOR . $handle;
-
-        if (file_exists($testPath . '.php')) {
-            return [
-                'path' => $this->btHandle . DIRECTORY_SEPARATOR . $handle,
-                'pkg' => null
-            ];
-        }
-
-        return null;
     }
 }

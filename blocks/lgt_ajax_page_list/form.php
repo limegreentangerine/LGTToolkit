@@ -1,11 +1,11 @@
 <?php defined('C5_EXECUTE') or die('Access Denied.');
 /**
- * @var array $templates
- * @var array $sorting
- * @var array $ajaxTemplates
- * @var array $ajaxTemplatePaths
+ * @var array  $templates
+ * @var array  $sorting
+ * @var array  $ajaxTemplates
+ * @var array  $ajaxTemplatePaths
  * @var string $ajaxTemplateHandle
- * @var int $pageTemplateID
+ * @var int    $pageTemplateID
  * @var string $sortOrder
  */
 ?>
@@ -50,7 +50,7 @@
                 <optgroup label="<?php echo $section; ?>">
                     <?php foreach ($paths as $path => $text) {
                         $selected = ($ajaxTemplateHandle && $key == $ajaxTemplateHandle) ? 'selected' : '';
-                    ?>
+                        ?>
                         <option value="<?php echo $path; ?>" <?php echo $selected; ?>><?php echo $text; ?></option>
                     <?php } ?>
                 </optgroup>
