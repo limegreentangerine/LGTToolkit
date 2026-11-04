@@ -37,7 +37,7 @@ class Controller extends BlockController
         'alpha_desc' => 'Name (Z-A)',
     ];
 
-    protected function getAjaxTemplateHandles(): array
+    public function getAjaxTemplateHandles(): array
     {
         $templatePaths = [];
 
@@ -45,8 +45,8 @@ class Controller extends BlockController
         $applicationPaths = new FilesystemIterator($applicationPath, FilesystemIterator::SKIP_DOTS);
 
         foreach ($applicationPaths as $p) {
-            $santizedPath = str_replace(['.php','-','_'], ['', ' ', ' '], $p->getFileName());
-            $templatePaths[DIR_APPLICATION][$santizedPath] = ucwords($santizedPath);
+            $santizedPath = str_replace([DIR_APPLICATION, '.php','-','_'], ['application', '', ' ', ' '], $p->getFileName());
+            $templatePaths['application'][$santizedPath] = ucwords($santizedPath);
         }
 
         $pkg = $this->app->make('Concrete\Core\Package\PackageService')->getByHandle('lgt_toolkit');
@@ -58,33 +58,29 @@ class Controller extends BlockController
             $templatePaths[$pkg->getPackageHandle()][$santizedPath] = ucwords($santizedPath);
         }
 
-        $this->set('ajaxTemplatePaths', [
-            $applicationPath,
-            $pkg->getPackageHandle() . DIRECTORY_SEPARATOR . 'elements' . DIRECTORY_SEPARATOR . $this->btHandle,
-        ]);
-
         return $templatePaths;
     }
 
     protected function locateTemplate(string $handle): ?array
     {
+        $btHandle = 'lgt_ajax_page_list';
         $pkg = $this->app->make('Concrete\Core\Package\PackageService')->getByHandle('lgt_toolkit');
-        $packagePath = $pkg->getPackagePath() . DIRECTORY_SEPARATOR . 'elements' . DIRECTORY_SEPARATOR . $this->btHandle;
+        $packagePath = $pkg->getPackagePath() . DIRECTORY_SEPARATOR . 'elements' . DIRECTORY_SEPARATOR . $btHandle;
         $testPath = $packagePath . DIRECTORY_SEPARATOR . $handle;
 
         if (file_exists($testPath . '.php')) {
             return [
-                'path' => $this->btHandle . DIRECTORY_SEPARATOR . $handle,
+                'path' => $btHandle . DIRECTORY_SEPARATOR . $handle,
                 'pkg' => $pkg->getPackageHandle(),
             ];
         }
 
-        $applicationPath = DIR_APPLICATION . DIRECTORY_SEPARATOR . 'elements' . DIRECTORY_SEPARATOR . $this->btHandle;
+        $applicationPath = DIR_APPLICATION . DIRECTORY_SEPARATOR . 'elements' . DIRECTORY_SEPARATOR . $btHandle;
         $testPath = $applicationPath . DIRECTORY_SEPARATOR . $handle;
 
         if (file_exists($testPath . '.php')) {
             return [
-                'path' => $this->btHandle . DIRECTORY_SEPARATOR . $handle,
+                'path' => $btHandle . DIRECTORY_SEPARATOR . $handle,
                 'pkg' => null,
             ];
         }
@@ -107,7 +103,12 @@ class Controller extends BlockController
         $this->set('pl', $this->app->make('helper/form/page_selector'));
         $this->set('templates', PageTemplate::getList());
         $this->set('sorting', $this->sortingOptions);
-        $this->set('ajaxTemplates', $this->getAjaxTemplateHandles());
+
+        $pkg = $this->app->make('Concrete\Core\Package\PackageService')->getByHandle('lgt_toolkit');
+        $this->set('ajaxTemplatePaths', [
+            'application/elements' . DIRECTORY_SEPARATOR . $this->btHandle,
+            $pkg->getPackageHandle() . DIRECTORY_SEPARATOR . 'elements' . DIRECTORY_SEPARATOR . $this->btHandle,
+        ]);
     }
 
     public function edit()
@@ -115,7 +116,12 @@ class Controller extends BlockController
         $this->set('pl', $this->app->make('helper/form/page_selector'));
         $this->set('templates', PageTemplate::getList());
         $this->set('sorting', $this->sortingOptions);
-        $this->set('ajaxTemplates', $this->getAjaxTemplateHandles());
+
+        $pkg = $this->app->make('Concrete\Core\Package\PackageService')->getByHandle('lgt_toolkit');
+        $this->set('ajaxTemplatePaths', [
+            '/application/elements' . DIRECTORY_SEPARATOR . $this->btHandle,
+            '/packages' . DIRECTORY_SEPARATOR . $pkg->getPackageHandle() . DIRECTORY_SEPARATOR . 'elements' . DIRECTORY_SEPARATOR . $this->btHandle,
+        ]);
     }
 
     public function getNextPage(): Response
@@ -214,7 +220,7 @@ class Controller extends BlockController
         ob_start();
         $view = new View();
         foreach ($pages as $p) {
-            if ($templatePath !== null) {
+            if ($templatePath['pkg'] !== null) {
                 $view->element($templatePath['path'], [
                     'page' => $p,
                     'adapter' => $adaptor,
