@@ -24,20 +24,18 @@ class ComponentAjaxPageList extends HTMLElement {
 		this.loading = true;
 
 		try {
-			const response = await fetch('/ajax/lgt/page-list', {
-				method: 'post',
+			const response = await fetch(`/ajax/lgt/page-list/${data.bid}/${data.cid}/${data.page}/${data.template}`, {
+				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(data)
+				}
 			});
 
 			if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
 
 			const res = await response.json();
-			console.log(res);
 
-			if (res.files.length > 0 && res.html) {
+			if (res.pages.length > 0 && res.html) {
 				this.list.insertAdjacentHTML('beforeend', res.html);
 			}
 

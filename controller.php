@@ -349,7 +349,7 @@ class Controller extends PackageController
          * Block Ajax Routes
          */
         Route::register('/ajax/lgt/file-list', 'Concrete\Package\LgtToolkit\Block\LgtAjaxFileList\Controller::getFiles');
-        Route::register('/ajax/lgt/page-list', 'Concrete\Package\LgtToolkit\Block\LgtAjaxPageList\Controller::getNextPage');
+        Route::register('/ajax/lgt/page-list/{bid}/{cid}/{page}/{template}', 'Concrete\Package\LgtToolkit\Block\LgtAjaxPageList\Controller::getNextPage');
 
         /**
          * Image Focal Point Routes

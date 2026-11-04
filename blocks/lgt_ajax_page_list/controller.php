@@ -15,6 +15,7 @@ use Concrete\Core\Block\Block;
 use Concrete\Core\Block\BlockController;
 use ClassKit\Page\TranslationAdaptorTrait;
 use Concrete\Core\Error\UserMessageException;
+use Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -124,14 +125,25 @@ class Controller extends BlockController
         ]);
     }
 
-    public function getNextPage(): Response
+    public function getNextPage(string|int $bid, string|int $cid, string|int $page, string $template): Response
     {
-        $bID = (int) $_REQUEST['bid'];
-        $page = (int) $_REQUEST['page'];
-        $template = $_REQUEST['template'];
+        if (!$this->request->isPost()) {
+            throw new Exception(t('Must be post request'), Response::HTTP_METHOD_NOT_ALLOWED);
+        }
+
+        $bID = (int) $bid;
+        $cID = (int) $cid;
+        $page = (int) $page;
+        $template = $template;
         $response = [
-            'request' => $_REQUEST,
+            'request' => [
+                'bID' => $bID,
+                'cID' => $cID,
+                'page' => $page,
+                'template' => $template,
+            ],
         ];
+
 
         $bt = Block::getByID($bID);
         if (!is_object($bt)) {
@@ -140,9 +152,9 @@ class Controller extends BlockController
 
         $instance = $bt->getController();
 
-        $parent = Page::getByID($instance->get('parent_cID'));
-        if (!is_object($parent) && $parent->isError()) {
-            throw new Exception('Parent Page (CID: ' . $instance->get('parent_cID') . '): not found', 404);
+        $parent = Page::getByID($cID);
+        if ($parent->isError()) {
+            throw new Exception('Parent Page (CID: ' . $cID . '): not found', 404);
         }
 
         $pl = new PageList();
