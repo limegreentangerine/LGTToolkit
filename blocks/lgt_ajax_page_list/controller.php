@@ -63,23 +63,24 @@ class Controller extends BlockController
 
     protected function locateTemplate(string $handle): ?array
     {
+        $btHandle = 'lgt_ajax_page_list';
         $pkg = $this->app->make('Concrete\Core\Package\PackageService')->getByHandle('lgt_toolkit');
-        $packagePath = $pkg->getPackagePath() . DIRECTORY_SEPARATOR . 'elements' . DIRECTORY_SEPARATOR . $this->btHandle;
+        $packagePath = $pkg->getPackagePath() . DIRECTORY_SEPARATOR . 'elements' . DIRECTORY_SEPARATOR . $btHandle;
         $testPath = $packagePath . DIRECTORY_SEPARATOR . $handle;
 
         if (file_exists($testPath . '.php')) {
             return [
-                'path' => $this->btHandle . DIRECTORY_SEPARATOR . $handle,
+                'path' => $btHandle . DIRECTORY_SEPARATOR . $handle,
                 'pkg' => $pkg->getPackageHandle(),
             ];
         }
 
-        $applicationPath = DIR_APPLICATION . DIRECTORY_SEPARATOR . 'elements' . DIRECTORY_SEPARATOR . $this->btHandle;
+        $applicationPath = DIR_APPLICATION . DIRECTORY_SEPARATOR . 'elements' . DIRECTORY_SEPARATOR . $btHandle;
         $testPath = $applicationPath . DIRECTORY_SEPARATOR . $handle;
 
         if (file_exists($testPath . '.php')) {
             return [
-                'path' => $this->btHandle . DIRECTORY_SEPARATOR . $handle,
+                'path' => $btHandle . DIRECTORY_SEPARATOR . $handle,
                 'pkg' => null,
             ];
         }
@@ -219,7 +220,7 @@ class Controller extends BlockController
         ob_start();
         $view = new View();
         foreach ($pages as $p) {
-            if ($templatePath !== null) {
+            if ($templatePath['pkg'] !== null) {
                 $view->element($templatePath['path'], [
                     'page' => $p,
                     'adapter' => $adaptor,
