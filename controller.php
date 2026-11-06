@@ -45,7 +45,7 @@ class Controller extends PackageController
      *
      * @var string
      */
-    protected $pkgVersion = '1.0.3';
+    protected $pkgVersion = '1.0.4';
 
     /**
      * The minimum Concrete version compatible with the package.
@@ -282,9 +282,36 @@ class Controller extends PackageController
             ],
         ];
 
-        if (file_put_contents($configFile, '<?php' . PHP_EOL . 'return ' . var_export($configArr, true) . ';' . PHP_EOL) === false) {
+        $contents = '<?php' . PHP_EOL . PHP_EOL . 'return ' . $this->exportArray($configArr) . ';' . PHP_EOL;
+
+        if (file_put_contents($configFile, $contents) === false) {
             throw new Exception(t('Error: unable to write to %s', $configFile));
         }
+    }
+
+    /**
+     * Export a value as formatted PHP code using short array syntax.
+     */
+    protected function exportArray(mixed $value, int $depth = 0): string
+    {
+        if (!is_array($value)) {
+            return var_export($value, true);
+        }
+
+        if ($value === []) {
+            return '[]';
+        }
+
+        $indent = str_repeat('    ', $depth + 1);
+        $isList = array_is_list($value);
+        $lines = [];
+
+        foreach ($value as $key => $item) {
+            $prefix = $isList ? '' : var_export($key, true) . ' => ';
+            $lines[] = $indent . $prefix . $this->exportArray($item, $depth + 1) . ',';
+        }
+
+        return '[' . PHP_EOL . implode(PHP_EOL, $lines) . PHP_EOL . str_repeat('    ', $depth) . ']';
     }
 
     protected function registerAliases(mixed $config): void
