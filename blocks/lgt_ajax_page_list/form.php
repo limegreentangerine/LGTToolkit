@@ -1,12 +1,12 @@
 <?php defined('C5_EXECUTE') or die('Access Denied.');
 /**
- * @var array  $templates
- * @var array  $sorting
- * @var array  $ajaxTemplates
- * @var array  $ajaxTemplatePaths
- * @var string $ajaxTemplateHandle
- * @var int    $pageTemplateID
- * @var string $sortOrder
+ * @var array                                                         $templates
+ * @var array                                                         $sorting
+ * @var array                                                         $ajaxTemplates
+ * @var array                                                         $ajaxTemplatePaths
+ * @var string                                                        $ajaxTemplateHandle
+ * @var int                                                           $pageTemplateID
+ * @var string                                                        $sortOrder
  * @var \Concrete\Package\LgtToolkit\Block\LgtAjaxPageList\Controller $controller
  */
 ?>

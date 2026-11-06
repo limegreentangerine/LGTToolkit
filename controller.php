@@ -6,6 +6,7 @@ use Core;
 use Route;
 use Events;
 use Request;
+use Exception;
 use DebugBar\DebugBar;
 use DebugBar\AssetHandler;
 use LgtToolkit\DebugBar\Directors;
@@ -44,7 +45,7 @@ class Controller extends PackageController
      *
      * @var string
      */
-    protected $pkgVersion = '1.0.2';
+    protected $pkgVersion = '1.0.3';
 
     /**
      * The minimum Concrete version compatible with the package.
@@ -248,6 +249,42 @@ class Controller extends PackageController
         $dbConfig->save('concrete.marketplace.key.private', '');
 
         $this->registerAliases($config);
+        $this->setMailSettings();
+    }
+
+    protected function setMailSettings()
+    {
+        $env = (isset($_ENV['CONCRETE5_ENV'])) ? $_ENV['CONCRETE5_ENV'] : ((isset($_SERVER['CONCRETE5_ENV'])) ? $_SERVER['CONCRETE5_ENV'] : false);
+        $applicationConfigDir = DIR_APPLICATION . DIRECTORY_SEPARATOR . 'config';
+        $configFile = ($env) ? $applicationConfigDir . DIRECTORY_SEPARATOR . $env . '.concrete.php' : $applicationConfigDir . '/concrete.php';
+
+        if (!is_dir($applicationConfigDir)) {
+            throw new Exception(t('Error: %s does not exist', $applicationConfigDir));
+        }
+
+        if (!file_exists($configFile)) {
+            throw new Exception(t('Error: %s does not exist', $configFile));
+        }
+
+        $configArr = include $configFile;
+
+        $configArr['mail'] = [
+            'method' => 'smtp',
+            'methods' => [
+                'smtp' => [
+                    'server' => 'mail.authsmtp.com',
+                    'port' => '25',
+                    'username' => 'ac64715',
+                    'password' => 'aynjtuv6dvbzrt',
+                    'encryption' => '',
+                    'messages_per_connection' => null,
+                ],
+            ],
+        ];
+
+        if (file_put_contents($configFile, '<?php' . PHP_EOL . 'return ' . var_export($configArr, true) . ';' . PHP_EOL) === false) {
+            throw new Exception(t('Error: unable to write to %s', $configFile));
+        }
     }
 
     protected function registerAliases(mixed $config): void

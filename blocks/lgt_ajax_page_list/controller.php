@@ -15,7 +15,6 @@ use Concrete\Core\Block\Block;
 use Concrete\Core\Block\BlockController;
 use ClassKit\Page\TranslationAdaptorTrait;
 use Concrete\Core\Error\UserMessageException;
-use Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -37,30 +36,6 @@ class Controller extends BlockController
         'alpha_asc' => 'Name (A-Z)',
         'alpha_desc' => 'Name (Z-A)',
     ];
-
-    public function getAjaxTemplateHandles(): array
-    {
-        $templatePaths = [];
-
-        $applicationPath = DIR_APPLICATION . DIRECTORY_SEPARATOR . 'elements' . DIRECTORY_SEPARATOR . $this->btHandle;
-        $applicationPaths = new FilesystemIterator($applicationPath, FilesystemIterator::SKIP_DOTS);
-
-        foreach ($applicationPaths as $p) {
-            $santizedPath = str_replace([DIR_APPLICATION, '.php','-','_'], ['application', '', ' ', ' '], $p->getFileName());
-            $templatePaths['application'][$santizedPath] = ucwords($santizedPath);
-        }
-
-        $pkg = $this->app->make('Concrete\Core\Package\PackageService')->getByHandle('lgt_toolkit');
-        $packagePath = $pkg->getPackagePath() . DIRECTORY_SEPARATOR . 'elements' . DIRECTORY_SEPARATOR . $this->btHandle;
-        $packagePaths = new FilesystemIterator($packagePath, FilesystemIterator::SKIP_DOTS);
-
-        foreach ($packagePaths as $p) {
-            $santizedPath = str_replace(['.php','-','_'], ['', ' ', ' '], $p->getFileName());
-            $templatePaths[$pkg->getPackageHandle()][$santizedPath] = ucwords($santizedPath);
-        }
-
-        return $templatePaths;
-    }
 
     protected function locateTemplate(string $handle): ?array
     {
@@ -87,6 +62,30 @@ class Controller extends BlockController
         }
 
         return null;
+    }
+
+    public function getAjaxTemplateHandles(): array
+    {
+        $templatePaths = [];
+
+        $applicationPath = DIR_APPLICATION . DIRECTORY_SEPARATOR . 'elements' . DIRECTORY_SEPARATOR . $this->btHandle;
+        $applicationPaths = new FilesystemIterator($applicationPath, FilesystemIterator::SKIP_DOTS);
+
+        foreach ($applicationPaths as $p) {
+            $santizedPath = str_replace([DIR_APPLICATION, '.php','-','_'], ['application', '', ' ', ' '], $p->getFileName());
+            $templatePaths['application'][$santizedPath] = ucwords($santizedPath);
+        }
+
+        $pkg = $this->app->make('Concrete\Core\Package\PackageService')->getByHandle('lgt_toolkit');
+        $packagePath = $pkg->getPackagePath() . DIRECTORY_SEPARATOR . 'elements' . DIRECTORY_SEPARATOR . $this->btHandle;
+        $packagePaths = new FilesystemIterator($packagePath, FilesystemIterator::SKIP_DOTS);
+
+        foreach ($packagePaths as $p) {
+            $santizedPath = str_replace(['.php','-','_'], ['', ' ', ' '], $p->getFileName());
+            $templatePaths[$pkg->getPackageHandle()][$santizedPath] = ucwords($santizedPath);
+        }
+
+        return $templatePaths;
     }
 
     public function getBlockTypeName()
