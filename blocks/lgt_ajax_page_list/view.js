@@ -26,12 +26,15 @@ class ComponentAjaxPageList extends HTMLElement {
 		this.loading = true;
 
 		try {
-			const response = await fetch(`/ajax/lgt/page-list/${data.bid}/${data.cid}/${data.page}/${data.template}`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
+			const response = await fetch(
+				`/ajax/lgt/page-list/${data.bid}/${data.cid}/${data.page}/${data.template}`,
+				{
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					}
 				}
-			});
+			);
 
 			if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
 
