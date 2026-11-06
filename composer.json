@@ -55,7 +55,8 @@
 			"@format:js:check"
 		],
 		"post-install-cmd": [
-			"npm install"
+			"npm install",
+			"@php bin/mail-setup.php"
 		]
 	},
 	"bin": [
