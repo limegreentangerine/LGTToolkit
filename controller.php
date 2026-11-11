@@ -274,8 +274,8 @@ class Controller extends PackageController
                 'smtp' => [
                     'server' => 'mail.authsmtp.com',
                     'port' => '25',
-                    'username' => 'ac64715',
-                    'password' => 'aynjtuv6dvbzrt',
+                    'username' => (isset($_ENV['MAIL_USERNAME']) ? $_ENV['MAIL_USERNAME'] : (isset($_SERVER['MAIL_USERNAME']) ? $_SERVER['MAIL_USERNAME'] : '')),
+                    'password' => (isset($_ENV['MAIL_PASSWORD']) ? $_ENV['MAIL_PASSWORD'] : (isset($_SERVER['MAIL_PASSWORD']) ? $_SERVER['MAIL_PASSWORD'] : '')),
                     'encryption' => '',
                     'messages_per_connection' => null,
                 ],
