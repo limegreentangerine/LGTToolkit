@@ -78,7 +78,7 @@ class Directors
         }
     }
 
-    public function addDoctineCollectors()
+    public function addDoctrineCollectors()
     {
         $doctrineDebugStack = new DebugStack();
         $connection = $this->application->make(Connection::class);

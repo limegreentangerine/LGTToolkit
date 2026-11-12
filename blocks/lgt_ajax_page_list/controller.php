@@ -39,6 +39,10 @@ class Controller extends BlockController
 
     protected function locateTemplate(string $handle): ?array
     {
+        if (!preg_match('/^[a-z0-9_-]+$/', $handle)) {
+            return null;
+        }
+
         $btHandle = 'lgt_ajax_page_list';
         $pkg = $this->app->make('Concrete\Core\Package\PackageService')->getByHandle('lgt_toolkit');
         $packagePath = $pkg->getPackagePath() . DIRECTORY_SEPARATOR . 'elements' . DIRECTORY_SEPARATOR . $btHandle;

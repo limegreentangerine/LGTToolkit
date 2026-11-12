@@ -89,11 +89,69 @@ The package creates dashboard pages for common tasks:
 - `/dashboard/lgt_toolkit`
 - `/dashboard/lgt_toolkit/cookie_popup`
 - `/dashboard/lgt_toolkit/duplicate_express`
+- `/dashboard/lgt_toolkit/redirections`
 
 These pages support configuration for:
 
 - cookie policy behaviour
 - duplicate Express object tooling
+- 301/302 redirections to pages
+
+### Redirections
+
+The **Redirections** dashboard page (`/dashboard/lgt_toolkit/redirections`) manages redirections from old URL paths to pages on the site, for example after a migration or a page rename.
+
+Each rule has a source path, a destination page and a status code:
+
+- **Temporary (302)** is the default and is recommended.
+- **Permanent (301)** can be chosen per rule.
+
+From the dashboard page you can add, edit, delete and bulk-delete rules, and filter the list by source path or status code. The list is paginated and sortable.
+
+#### How redirections are served
+
+Rules are stored in the `LgtRedirections` table. Each rule's source path is also added as a non-canonical `PagePath` on the destination page, and removed again when the rule is changed or deleted. Canonical page paths are never touched.
+
+A request middleware answers matching requests before Concrete issues its own redirect for additional page paths. Core always uses a 301, so this is what allows 302 rules to work. The middleware:
+
+- only handles `GET` and `HEAD` requests
+- keeps the original query string on the redirect
+- does nothing if the destination page has been deleted, trashed or is no longer routable
+- fails open, so a database problem never takes the site down
+
+#### Path rules
+
+Source paths are normalised before they are stored or matched: lowercase, a leading slash, no trailing slash, and no query string or fragment. Full URLs are accepted if they are on the current site's host; URLs on other hosts are rejected.
+
+A rule is rejected if the source:
+
+- is empty, the home page (`/`), or contains control characters, whitespace or `.` / `..` segments
+- is a reserved system path, such as `/dashboard`, `/login`, `/logout`, `/concrete`, `/ccm`, `/application`, `/packages`, `/updates`, `/index.php`, `/robots.txt` or `/sitemap.xml`
+- is already the address of the destination page, or of any other page
+- already has a redirection
+
+The destination must be an existing, published page. Trashed, system, admin and external-link pages cannot be used.
+
+#### CSV import
+
+Rules can be imported in bulk from the dashboard page, which also offers a sample file to download. Files must be `.csv` or `.txt` and up to 2MB. Up to 5,000 rows are read.
+
+```csv
+source,destination,code
+/old-about-us,/about-us,302
+/old-contact,/contact,301
+/old-news,/news,
+```
+
+- Columns are source, destination and an optional status code (301 or 302; blank uses 302).
+- The delimiter (comma, semicolon or tab) is detected from the first line.
+- A header row is skipped if the first cell starts with `source`, `from` or `old`.
+- The destination is a path or full URL of a page on this site.
+- Invalid rows are skipped rather than failing the whole import. The import report lists each skipped row with its line number and reason, including duplicates within the file.
+
+#### Page Redirector attribute
+
+Separately, the `lgt_page_redirector` attribute type and its `page_redirector` page attribute (in the Navigation and Indexing set) redirect an individual page, when it is viewed, to another page or an external URL using a chosen HTTP status. This is independent of the Redirections dashboard page.
 
 ### Package services and integrations
 
