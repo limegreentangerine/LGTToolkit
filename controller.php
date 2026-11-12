@@ -6,7 +6,6 @@ use Core;
 use Route;
 use Events;
 use Request;
-use Exception;
 use DebugBar\DebugBar;
 use DebugBar\AssetHandler;
 use LgtToolkit\DebugBar\Directors;
