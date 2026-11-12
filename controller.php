@@ -252,44 +252,6 @@ class Controller extends PackageController
         $dbConfig->save('concrete.marketplace.key.private', '');
 
         $this->registerAliases($config);
-        $this->setMailSettings();
-    }
-
-    protected function setMailSettings()
-    {
-        $env = (isset($_ENV['CONCRETE5_ENV'])) ? $_ENV['CONCRETE5_ENV'] : ((isset($_SERVER['CONCRETE5_ENV'])) ? $_SERVER['CONCRETE5_ENV'] : false);
-        $applicationConfigDir = DIR_APPLICATION . DIRECTORY_SEPARATOR . 'config';
-        $configFile = ($env) ? $applicationConfigDir . DIRECTORY_SEPARATOR . $env . '.concrete.php' : $applicationConfigDir . '/concrete.php';
-
-        if (!is_dir($applicationConfigDir)) {
-            throw new Exception(t('Error: %s does not exist', $applicationConfigDir));
-        }
-
-        if (!file_exists($configFile)) {
-            throw new Exception(t('Error: %s does not exist', $configFile));
-        }
-
-        $configArr = include $configFile;
-
-        $configArr['mail'] = [
-            'method' => 'smtp',
-            'methods' => [
-                'smtp' => [
-                    'server' => (isset($_ENV['MAIL_SERVER']) ? $_ENV['MAIL_SERVER'] : (isset($_SERVER['MAIL_SERVER']) ? $_SERVER['MAIL_SERVER'] : 'mail.authsmtp.com')),
-                    'port' => (isset($_ENV['MAIL_PORT']) ? $_ENV['MAIL_PORT'] : (isset($_SERVER['MAIL_PORT']) ? $_SERVER['MAIL_PORT'] : '25')),
-                    'username' => (isset($_ENV['MAIL_USERNAME']) ? $_ENV['MAIL_USERNAME'] : (isset($_SERVER['MAIL_USERNAME']) ? $_SERVER['MAIL_USERNAME'] : '')),
-                    'password' => (isset($_ENV['MAIL_PASSWORD']) ? $_ENV['MAIL_PASSWORD'] : (isset($_SERVER['MAIL_PASSWORD']) ? $_SERVER['MAIL_PASSWORD'] : '')),
-                    'encryption' => (isset($_ENV['MAIL_ENCRYPTION']) ? $_ENV['MAIL_ENCRYPTION'] : (isset($_SERVER['MAIL_ENCRYPTION']) ? $_SERVER['MAIL_ENCRYPTION'] : '')),
-                    'messages_per_connection' => (isset($_ENV['MAIL_MESSAGES_PER_CONNECTION']) ? $_ENV['MAIL_MESSAGES_PER_CONNECTION'] : (isset($_SERVER['MAIL_MESSAGES_PER_CONNECTION']) ? $_SERVER['MAIL_MESSAGES_PER_CONNECTION'] : null)),
-                ],
-            ],
-        ];
-
-        $contents = '<?php' . PHP_EOL . PHP_EOL . 'return ' . $this->exportArray($configArr) . ';' . PHP_EOL;
-
-        if (file_put_contents($configFile, $contents) === false) {
-            throw new Exception(t('Error: unable to write to %s', $configFile));
-        }
     }
 
     /**
