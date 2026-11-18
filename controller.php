@@ -224,7 +224,7 @@ class Controller extends PackageController
         $config->save('concrete.design.enable_layouts', false);
 
         // security
-        $config->save('concrete.security.session.invalidate_on_ip_mismatch', true);
+        $config->save('concrete.security.session.invalidate_on_ip_mismatch', false);
 
         //social media
         $config->save('concrete.social.additional_services', [
