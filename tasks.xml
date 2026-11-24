@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<concrete5-cif version="1.0">
+    <tasks>
+        <task handle="lgt_support_retry" package="lgt_toolkit" />
+    </tasks>
+
+    <tasksets>
+        <taskset handle="lgt_toolkit" name="LGT Toolkit" package="lgt_toolkit">
+            <task handle="lgt_support_retry" />
+        </taskset>
+    </tasksets>
+</concrete5-cif>

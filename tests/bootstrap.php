@@ -13,6 +13,7 @@ namespace {
         'DIR_PACKAGES' => sys_get_temp_dir(),
         'REL_DIR_PACKAGES_CORE' => '/concrete/packages',
         'REL_DIR_PACKAGES' => '/packages',
+        'DIR_APPLICATION' => sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'lgt_toolkit_test_application',
     ] as $name => $value) {
         if (!defined($name)) {
             define($name, $value);

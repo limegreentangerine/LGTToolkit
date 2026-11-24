@@ -14,6 +14,7 @@ use ClassKit\Package\Traits\PageTrait;
 use ClassKit\Package\PackageController;
 use ClassKit\Package\Traits\BlockTrait;
 use Concrete\Core\Http\ServerInterface;
+use LgtToolkit\Support\SupportSettings;
 use Concrete\Core\Attribute\Key\FileKey;
 use Concrete\Core\Attribute\Key\SiteKey;
 use LgtToolkit\Events\File as FileEvent;
@@ -46,7 +47,7 @@ class Controller extends PackageController
      *
      * @var string
      */
-    protected $pkgVersion = '1.0.4';
+    protected $pkgVersion = '1.1.2';
 
     /**
      * The minimum Concrete version compatible with the package.
@@ -79,6 +80,7 @@ class Controller extends PackageController
         \LgtToolkit\Providers\Express\Debugger\ExpressDebuggerServiceProvider::class,
         \LgtToolkit\Providers\DebugBar\DebugBarServiceProvider::class,
         \LgtToolkit\Providers\Redirections\RedirectionServiceProvider::class,
+        \LgtToolkit\Providers\Support\SupportServiceProvider::class,
     ];
 
     /**
@@ -126,7 +128,20 @@ class Controller extends PackageController
      *
      * @var array
      */
-    protected $tasks = [];
+    protected $tasks = [
+        'lgt_support_retry' => \LgtToolkit\Command\Task\Controller\RetrySupportTicketsController::class,
+    ];
+
+    /**
+     * Tables dropped on uninstall when "purge database tables" is ticked.
+     *
+     * @var array
+     */
+    protected $databaseTables = [
+        'LgtSupportTicketQueueAttachments',
+        'LgtSupportTicketQueue',
+        'LgtSupportTickets',
+    ];
 
     /**
      * Package classes to override core concrete classes
@@ -364,6 +379,22 @@ class Controller extends PackageController
     }
 
     /**
+     * Support tickets: the toolbar button (the retry job is the lgt_support_retry task).
+     * The button's controller checks access at render time; checking the user here would start a
+     * session on every anonymous request.
+     */
+    protected function registerSupport(): void
+    {
+        if (!$this->app->isRunThroughCommandLineInterface() && $this->app->make(SupportSettings::class)->isEnabled()) {
+            $this->app->make('helper/concrete/ui/menu')->addPageHeaderMenuItem('lgt_support', $this->pkgHandle, [
+                'icon' => 'life-ring',
+                'label' => t('Report a problem'),
+                'position' => 'right',
+            ]);
+        }
+    }
+
+    /**
      * Register URL Routes
      */
     public function registerRoutes(): void
@@ -439,6 +470,14 @@ class Controller extends PackageController
         $this->addSinglePage('/dashboard/lgt_toolkit', $pkg, t('LGT Toolkit'));
         $this->addSinglePage('/dashboard/lgt_toolkit/duplicate_express', $pkg, t('Duplicate Express Objects'), t('Duplicate Express Objects'));
         $this->addSinglePage('/dashboard/lgt_toolkit/redirections', $pkg, t('Redirections'), t('Manage 301 and 302 redirections to pages.'));
+        $this->addSinglePage('/dashboard/lgt_toolkit/support', $pkg, t('Support Settings'), t('Read-only status of the support ticket settings in .env.'));
+        $this->addSinglePage('/dashboard/support', $pkg, t('Support'), t('Report a problem or request help from Limegreentangerine.'));
+        // Super user only (checked in its controller); kept out of the dashboard menu and linked from Support.
+        $this->addSinglePage('/dashboard/support/tickets', $pkg, t('All Tickets'), t('Every support ticket submitted through this site.'))
+            ->setAttribute('exclude_nav', true);
+
+        // Install Tasks
+        $this->installContentFile('tasks.xml');
 
         // Attribute Setup
         $this->setupAttributes($pkg);
@@ -470,6 +509,7 @@ class Controller extends PackageController
         $this->registerMiddleware();
         $this->registerEvents();
         $this->registerTasks();
+        $this->registerSupport();
         $this->registerDebugBar();
     }
 

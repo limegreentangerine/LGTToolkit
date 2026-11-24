@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "limegreentangerine/class_kit",
-            "version": "2.0.0",
+            "version": "2.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/limegreentangerine/ClassKit.git",
-                "reference": "fbd158285376f4e68fea994ac72533ac5e022f79"
+                "reference": "318aee48c660d4a685265f601e5d6c6f9be7a206"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/limegreentangerine/ClassKit/zipball/fbd158285376f4e68fea994ac72533ac5e022f79",
-                "reference": "fbd158285376f4e68fea994ac72533ac5e022f79",
+                "url": "https://api.github.com/repos/limegreentangerine/ClassKit/zipball/318aee48c660d4a685265f601e5d6c6f9be7a206",
+                "reference": "318aee48c660d4a685265f601e5d6c6f9be7a206",
                 "shasum": ""
             },
             "require-dev": {
@@ -52,9 +52,9 @@
             "description": "Collection of helper classes for LGT packages.",
             "support": {
                 "issues": "https://github.com/limegreentangerine/ClassKit/issues",
-                "source": "https://github.com/limegreentangerine/ClassKit/tree/2.0.0"
+                "source": "https://github.com/limegreentangerine/ClassKit/tree/2.0.3"
             },
-            "time": "2026-10-19T11:40:44+00:00"
+            "time": "2026-11-04T11:22:22+00:00"
         },
         {
             "name": "php-debugbar/php-debugbar",

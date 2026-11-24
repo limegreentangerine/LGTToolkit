@@ -90,12 +90,16 @@ The package creates dashboard pages for common tasks:
 - `/dashboard/lgt_toolkit/cookie_popup`
 - `/dashboard/lgt_toolkit/duplicate_express`
 - `/dashboard/lgt_toolkit/redirections`
+- `/dashboard/lgt_toolkit/support`
+- `/dashboard/support`
+- `/dashboard/support/tickets` (super user only)
 
 These pages support configuration for:
 
 - cookie policy behaviour
 - duplicate Express object tooling
 - 301/302 redirections to pages
+- support tickets to the helpdesk
 
 ### Redirections
 
@@ -152,6 +156,96 @@ source,destination,code
 #### Page Redirector attribute
 
 Separately, the `lgt_page_redirector` attribute type and its `page_redirector` page attribute (in the Navigation and Indexing set) redirect an individual page, when it is viewed, to another page or an external URL using a chosen HTTP status. This is independent of the Redirections dashboard page.
+
+### Support tickets
+
+Logged-in users can raise a helpdesk ticket from **Dashboard > Support** (`/dashboard/support`), or from the **Report a problem** button in the page toolbar, which prefills the current page. Anyone who can view that page can submit a ticket. The ticket is sent server-to-server to the helpdesk portal API with diagnostics attached. The portal emails the submitter an acknowledgement with the ticket number.
+
+Tickets are categorised as **Something's broken**, **Content help** or **Change request**. There is no "site down" option: if the site is down this form can't be reached, so use email or phone instead. The portal sets the priority.
+
+If the portal can't be reached, the ticket is saved in a retry queue and sent later by the scheduled task. Queue rows (including attachments) are deleted as soon as the portal accepts the ticket.
+
+Every submission is also recorded in `LgtSupportTickets` (references, status, category, subject, submitter, page and the full message, but no attachments). Its status is updated as the ticket is delivered, queued or fails, and records older than 12 months are deleted by the scheduled task.
+
+#### All Tickets (super user only)
+
+**Dashboard > Support > All Tickets** (`/dashboard/support/tickets`) lists every recorded ticket. It is linked from the Support page for the super user only and hidden from the dashboard menu. Its controller refuses everyone else for every action, whatever the page permissions say.
+
+- The list uses the standard search classes (`src/Search/.../SupportTickets` and `controllers/search/support_tickets.php`), like Redirections: sortable columns (submitted, reference, status, category, subject, from), keyword search (references, subject, name, email), status and category filters, and pagination. The message is not shown in the list.
+- Click a ticket to open its detail view (`/dashboard/support/tickets/detail/{id}`), which shows everything stored: portal and local references, dates, category, sender, page, last error and the full message with diagnostics.
+- Delivered tickets link to the ticket in the portal. The link comes from the `url` field of the portal's 201 response and is only kept when it uses the same scheme and host as `LGT_SUPPORT_URL`.
+
+#### Requirements
+
+- The site must load its root `.env` file into the environment. The LGT site skeleton does this in `application/bootstrap/autoload.php` with Symfony Dotenv. The `vendor/bin/concrete` CLI loads the same file, so the scheduled task sees the same settings.
+- The site's canonical URL must be set (**System & Settings > SEO > URLs and Redirection**). Page links in tickets are only included when they are on that host.
+
+#### Configuration
+
+The settings live in the site's `.env` file, not in the database or Concrete's file config. See `.env.example`:
+
+| Variable                             | Required | Description                                                                                                                       |
+| ------------------------------------ | -------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `LGT_SUPPORT_API_KEY`                | Yes      | The site's key from the helpdesk portal. Sent privately; never commit it.                                                         |
+| `LGT_SUPPORT_URL`                    | No       | The portal endpoint. Defaults to `https://portal.limegreentangerine.co.uk/api/tickets.php`. Must be `https://`, or it is ignored. |
+| `LGT_SUPPORT_ENABLED_NON_PRODUCTION` | No       | `true` to allow tickets from staging/development sites. Their subjects are prefixed `[STAGING]` or `[DEV]`.                       |
+| `LGT_SUPPORT_FALLBACK_EMAIL`         | No       | Shown to users when a ticket can't be delivered.                                                                                  |
+
+The values are read from `$_ENV`, `$_SERVER`, or `getenv()`, in that order, so they can also be set as real server environment variables.
+
+**Non-production sites send nothing by default.** Staging sites are often copies of live, `.env` included, so they would otherwise create real tickets against the client. Without a key the form and the toolbar button are hidden.
+
+**Dashboard > LGT Toolkit > Support Settings** (`/dashboard/lgt_toolkit/support`) shows which settings are populated (the key is shown only as `••••••••`), whether the feature is enabled, and the queue's health. It has no "test key" button: the portal has no validation endpoint, and every request creates a real ticket.
+
+#### Retry queue and scheduling
+
+Queued tickets are sent **only** by the Concrete task **Send queued support tickets** (`lgt_support_retry`), run on a schedule set in the dashboard. Nothing else retries them: there is no "Retry now" button and no separate cron command. The task is registered when the package is installed or updated, so run **Update** after upgrading.
+
+1. Under **Dashboard > System & Settings > Automation > Tasks**, open **Send queued support tickets**, tick **Schedule**, and enter `*/5 * * * *` (every 5 minutes).
+2. Make sure the server runs Concrete's scheduler every minute (Plesk: **Scheduled Tasks**). Scheduled tasks run inside this process, so no messenger worker is needed:
+
+    ```
+    * * * * * cd /path/to/project && vendor/bin/concrete concrete:scheduler:run >> ~/logs/<site>/scheduler.log 2>&1
+    ```
+
+    Use the same PHP as `resources/deploy.sh` (phpenv shims or the Plesk PHP in `/opt/plesk/php/*/bin`) if `php` isn't on the cron `PATH`. Scheduling must be on (`concrete.jobs.enable_scheduling`, the default).
+
+**Dashboard > LGT Toolkit > Support Settings** shows the task's schedule and warns if there is none. **Dashboard > Support** warns when tickets are waiting and the task isn't scheduled, or when the oldest one is more than 30 minutes overdue.
+
+- Retries back off: 5 min, 15 min, 30 min, 1 h, then hourly. Items still pending after 72 hours are marked failed. Failed items are purged after 30 days.
+- A run sends at most 10 items and stops early if the portal rejects the site key or rate-limits the site. Runs take a Concrete mutex, so they never overlap.
+- The task fails visibly (in the scheduler log) if `LGT_SUPPORT_API_KEY` isn't available to the CLI.
+- **Dashboard > Support** lists queued and failed requests, and failed ones can be discarded.
+
+A ticket that times out or gets a 5xx may already have reached the portal. Its retry carries a delivery note with the local reference (`Q-YYYYMMDD-XXXX`) so the helpdesk can merge duplicates. A ticket is never sent again after the portal has accepted it.
+
+#### What is sent
+
+The user's description, category, summary, email, name, optional phone and page, plus up to 5 PNG/JPEG/WebP/PDF attachments (7 MB each, 12 MB in total). Diagnostics are appended to the message:
+
+- site name, canonical URL and environment
+- the page (ID, version, path, name), only if the user can view it. A specific (e.g. unapproved) version is only used if the user can view page versions; otherwise the live version is reported
+- the user's ID, username and groups
+- Concrete, PHP and installed package versions
+- the browser's user agent
+- the latest 15 errors from the core `Logs` table, with emails, passwords, tokens and card-like numbers removed
+
+Config, environment variables, cookies, session data and credentials are never included. Attachments are never written to the File Manager, and are not kept once the ticket is delivered.
+
+#### Local testing
+
+In development mode `LGT_SUPPORT_URL` may be `http://localhost/...` or `http://127.0.0.1/...`, so you can point it at a tiny mock script that returns the status you want to test, for example:
+
+```php
+<?php // public/mock-portal.php — returns 201 unless ?status= is given
+http_response_code((int) ($_GET['status'] ?? 201));
+header('Content-Type: application/json');
+echo json_encode(['ticket' => 1234, 'reference' => '#1234', 'url' => 'http://localhost/mock-portal.php?id=1234']);
+```
+
+The portal answers `201 {"ticket": 1234, "reference": "#1234", "url": "https://portal.limegreentangerine.co.uk/ticket.php?id=1234"}`. Any other status is handled as described above: a 5xx is retried and flagged as a possible duplicate, because the ticket may already exist.
+
+Delete the mock when you're done.
 
 ### Package services and integrations
 
