@@ -159,15 +159,25 @@ Separately, the `lgt_page_redirector` attribute type and its `page_redirector` p
 
 ### Support tickets
 
-Logged-in users can raise a helpdesk ticket from **Dashboard > Support** (`/dashboard/support`), or from the **Report a problem** button in the page toolbar, which prefills the current page. The ticket is sent server-to-server to the helpdesk portal API with diagnostics attached. The portal emails the submitter an acknowledgement with the ticket number.
+Logged-in users can raise a helpdesk ticket from **Dashboard > Support** (`/dashboard/support`), or from the **Report a problem** button in the page toolbar, which prefills the current page. Anyone who can view that page can submit a ticket. The ticket is sent server-to-server to the helpdesk portal API with diagnostics attached. The portal emails the submitter an acknowledgement with the ticket number.
+
+Tickets are categorised as **Something's broken**, **Content help** or **Change request**. There is no "site down" option: if the site is down this form can't be reached, so use email or phone instead. The portal sets the priority.
 
 If the portal can't be reached, the ticket is saved in a retry queue and sent later by the scheduled task. Queue rows (including attachments) are deleted as soon as the portal accepts the ticket.
 
-Every submission is also recorded in `LgtSupportTickets` (references, status, category, subject, submitter, page and the full message, but no attachments). The super user can see them under **Dashboard > Support > All Tickets** (`/dashboard/support/tickets`), linked from the Support page. The page is hidden from the dashboard menu and its controller refuses everyone except the super user, whatever the page permissions say. Records older than 12 months are deleted by the scheduled task.
+Every submission is also recorded in `LgtSupportTickets` (references, status, category, subject, submitter, page and the full message, but no attachments). Its status is updated as the ticket is delivered, queued or fails, and records older than 12 months are deleted by the scheduled task.
+
+#### All Tickets (super user only)
+
+**Dashboard > Support > All Tickets** (`/dashboard/support/tickets`) lists every recorded ticket. It is linked from the Support page for the super user only and hidden from the dashboard menu. Its controller refuses everyone else for every action, whatever the page permissions say.
+
+- The list uses the standard search classes (`src/Search/.../SupportTickets` and `controllers/search/support_tickets.php`), like Redirections: sortable columns (submitted, reference, status, category, subject, from), keyword search (references, subject, name, email), status and category filters, and pagination. The message is not shown in the list.
+- Click a ticket to open its detail view (`/dashboard/support/tickets/detail/{id}`), which shows everything stored: portal and local references, dates, category, sender, page, last error and the full message with diagnostics.
+- Delivered tickets link to the ticket in the portal. The link comes from the `url` field of the portal's 201 response and is only kept when it uses the same scheme and host as `LGT_SUPPORT_URL`.
 
 #### Requirements
 
-- The site must load its root `.env` file into the environment. The LGT site skeleton does this in `application/bootstrap/autoload.php` with Symfony Dotenv. The `vendor/bin/concrete` CLI loads the same file, so the retry command sees the same settings.
+- The site must load its root `.env` file into the environment. The LGT site skeleton does this in `application/bootstrap/autoload.php` with Symfony Dotenv. The `vendor/bin/concrete` CLI loads the same file, so the scheduled task sees the same settings.
 - The site's canonical URL must be set (**System & Settings > SEO > URLs and Redirection**). Page links in tickets are only included when they are on that host.
 
 #### Configuration
@@ -214,7 +224,7 @@ A ticket that times out or gets a 5xx may already have reached the portal. Its r
 The user's description, category, summary, email, name, optional phone and page, plus up to 5 PNG/JPEG/WebP/PDF attachments (7 MB each, 12 MB in total). Diagnostics are appended to the message:
 
 - site name, canonical URL and environment
-- the page (ID, version, path, name), only if the user can view it
+- the page (ID, version, path, name), only if the user can view it. A specific (e.g. unapproved) version is only used if the user can view page versions; otherwise the live version is reported
 - the user's ID, username and groups
 - Concrete, PHP and installed package versions
 - the browser's user agent
@@ -230,8 +240,10 @@ In development mode `LGT_SUPPORT_URL` may be `http://localhost/...` or `http://1
 <?php // public/mock-portal.php — returns 201 unless ?status= is given
 http_response_code((int) ($_GET['status'] ?? 201));
 header('Content-Type: application/json');
-echo json_encode(['ticket' => 1234, 'reference' => '#1234']);
+echo json_encode(['ticket' => 1234, 'reference' => '#1234', 'url' => 'http://localhost/mock-portal.php?id=1234']);
 ```
+
+The portal answers `201 {"ticket": 1234, "reference": "#1234", "url": "https://portal.limegreentangerine.co.uk/ticket.php?id=1234"}`. Any other status is handled as described above: a 5xx is retried and flagged as a possible duplicate, because the ticket may already exist.
 
 Delete the mock when you're done.
 
