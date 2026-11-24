@@ -54,6 +54,10 @@
 			"@format:php:check",
 			"@format:js:check"
 		],
+		"check": [
+			"@format:check",
+			"@test"
+		],
 		"post-install-cmd": [
 			"npm install"
 		]

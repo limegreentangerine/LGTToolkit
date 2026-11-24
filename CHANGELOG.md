@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0] - 2026-11-24
+
+### Added
+
+- Support tickets: **Dashboard > Support** (`/dashboard/support`) and a **Report a problem** toolbar button let users send a ticket, with diagnostics attached, to the helpdesk portal API. Tickets that can't be delivered are queued (`LgtSupportTicketQueue`) and retried only by the `lgt_support_retry` task, scheduled under Dashboard > System & Settings > Automation, with backoff, expiry and locking. Settings come from the site's `.env` (see `.env.example`); **Dashboard > LGT Toolkit > Support Settings** shows them read-only. Disabled on non-production sites unless `LGT_SUPPORT_ENABLED_NON_PRODUCTION=true`.
+- `composer check` script (format check and tests), which the CodeStandards workflow already ran.
+
 ## [0.0.12] - 2026-10-20
 
 ### Added
