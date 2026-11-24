@@ -43,7 +43,9 @@ class TicketSender
                 $this->logger->warning('Support ticket delivered (201) but the portal response could not be read.');
             }
 
-            return new DeliveryResult($action, $status, $ticket, $reference, droppedAttachments: $dropped);
+            $url = is_array($body) && is_string($body['url'] ?? null) ? $this->portalLink($body['url']) : null;
+
+            return new DeliveryResult($action, $status, $ticket, $reference, $url, droppedAttachments: $dropped);
         }
 
         return new DeliveryResult(
@@ -55,6 +57,22 @@ class TicketSender
                 : null,
             droppedAttachments: $dropped,
         );
+    }
+
+    /**
+     * The ticket's portal URL, only if it is on the same scheme and host as the configured endpoint,
+     * so a bad response can't plant a javascript: or off-site link in the dashboard.
+     */
+    private function portalLink(string $url): ?string
+    {
+        $link = parse_url($url);
+        $endpoint = parse_url($this->settings->url());
+        if (strlen($url) > 255 || !filter_var($url, FILTER_VALIDATE_URL) || !isset($link['scheme'], $link['host'], $endpoint['scheme'], $endpoint['host'])
+            || isset($link['user']) || isset($link['pass'])) {
+            return null;
+        }
+
+        return strcasecmp($link['scheme'], $endpoint['scheme']) === 0 && strcasecmp($link['host'], $endpoint['host']) === 0 ? $url : null;
     }
 
     private function errorText(Response $response, mixed $body): string

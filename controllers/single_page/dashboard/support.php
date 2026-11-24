@@ -3,6 +3,7 @@
 namespace Concrete\Package\LgtToolkit\Controller\SinglePage\Dashboard;
 
 use Concrete\Core\User\User;
+use LgtToolkit\Support\TicketLog;
 use LgtToolkit\Support\LocalReference;
 use LgtToolkit\Support\TicketCategory;
 use LgtToolkit\Support\SupportDefaults;
@@ -116,6 +117,30 @@ class Support extends DashboardPageController
         return $this->app->make(LoggerFactory::class)->createLogger(SupportServiceProvider::LOG_CHANNEL);
     }
 
+    /**
+     * Records the submission for the super user's ticket list. A failure here never affects the ticket itself.
+     */
+    protected function logTicket(
+        string $reference,
+        string $category,
+        string $email,
+        ?string $name,
+        ?int $uID,
+        string $subject,
+        string $message,
+        ?string $pageUrl,
+        string $status,
+        DeliveryResult $delivery,
+        ?string $error,
+        \DateTimeImmutable $now,
+    ): void {
+        try {
+            $this->app->make(TicketLog::class)->record($reference, $category, $email, $name, $uID, $subject, $message, $pageUrl, $status, $delivery->ticket, $delivery->reference, $delivery->url, $error, $now);
+        } catch (\Throwable $e) {
+            $this->logger()->error('Support ticket could not be recorded in the ticket list.', ['reference' => $reference, 'error' => $e->getMessage()]);
+        }
+    }
+
     public function on_start()
     {
         parent::on_start();
@@ -143,6 +168,7 @@ class Support extends DashboardPageController
         $this->set('stats', $queue->stats());
         $this->set('overdue', $queue->oldestOverdue($now));
         $this->set('scheduled', $this->app->make(RetrySchedule::class)->isScheduled());
+        $this->set('isSuperUser', $this->app->make(User::class)->isSuperUser());
         $this->set('dateHelper', $this->app->make('date'));
     }
 
@@ -205,8 +231,10 @@ class Support extends DashboardPageController
         }
 
         $delivery = $this->app->make(TicketSender::class)->send($payload, TicketSender::INTERACTIVE_TIMEOUT);
+        $log = fn(string $status, ?string $error = null) => $this->logTicket($reference, $submission->category->value, $submission->email, $submission->name, $uID ?: null, $subject, $message, $submission->pageUrl, $status, $delivery, $error, $now);
 
         if ($delivery->isDelivered()) {
+            $log(TicketLog::STATUS_DELIVERED);
             $this->flash('success', $this->deliveredText($delivery, $submission->email));
             $this->redirect('/dashboard/support');
         }
@@ -215,6 +243,7 @@ class Support extends DashboardPageController
             // A 400 lists what the helpdesk rejected; queueing would only fail again.
             $detail = $delivery->statusCode === 400 && $delivery->error ? ' ' . t('The helpdesk said: %s', $delivery->error) : '';
             $this->error->add(t('We couldn\'t submit your request.') . $detail . ' ' . $this->fallbackText());
+            $log(TicketLog::STATUS_FAILED, $delivery->error);
 
             return;
         }
@@ -235,10 +264,12 @@ class Support extends DashboardPageController
         } catch (\Throwable $e) {
             $this->logger()->error('Support ticket could not be queued.', ['reference' => $reference, 'error' => $e->getMessage()]);
             $this->error->add(t('We couldn\'t submit your request.') . ' ' . $this->fallbackText());
+            $log(TicketLog::STATUS_FAILED, t('The ticket could not be queued for retry.'));
 
             return;
         }
 
+        $log(TicketLog::STATUS_QUEUED, $delivery->error);
         $this->flash('success', t('Our helpdesk couldn\'t be reached just now. Your request has been saved (reference %s) and will be sent automatically.', $reference));
         $this->redirect('/dashboard/support');
     }

@@ -47,7 +47,7 @@ class Controller extends PackageController
      *
      * @var string
      */
-    protected $pkgVersion = '1.1.0';
+    protected $pkgVersion = '1.1.2';
 
     /**
      * The minimum Concrete version compatible with the package.
@@ -140,6 +140,7 @@ class Controller extends PackageController
     protected $databaseTables = [
         'LgtSupportTicketQueueAttachments',
         'LgtSupportTicketQueue',
+        'LgtSupportTickets',
     ];
 
     /**
@@ -471,6 +472,9 @@ class Controller extends PackageController
         $this->addSinglePage('/dashboard/lgt_toolkit/redirections', $pkg, t('Redirections'), t('Manage 301 and 302 redirections to pages.'));
         $this->addSinglePage('/dashboard/lgt_toolkit/support', $pkg, t('Support Settings'), t('Read-only status of the support ticket settings in .env.'));
         $this->addSinglePage('/dashboard/support', $pkg, t('Support'), t('Report a problem or request help from Limegreentangerine.'));
+        // Super user only (checked in its controller); kept out of the dashboard menu and linked from Support.
+        $this->addSinglePage('/dashboard/support/tickets', $pkg, t('All Tickets'), t('Every support ticket submitted through this site.'))
+            ->setAttribute('exclude_nav', true);
 
         // Install Tasks
         $this->installContentFile('tasks.xml');

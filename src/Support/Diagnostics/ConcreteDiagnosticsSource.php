@@ -40,13 +40,22 @@ class ConcreteDiagnosticsSource implements DiagnosticsSource
 
     public function page(int $cID, ?int $cvID): ?array
     {
-        $page = Page::getByID($cID, $cvID ?? 'ACTIVE');
+        $page = Page::getByID($cID, 'ACTIVE');
         if (!$page || $page->isError() || $page->isInTrash() || $page->isSystemPage()) {
             return null;
         }
 
-        if (!(new Checker($page))->canViewPage()) {
+        $checker = new Checker($page);
+        if (!$checker->canViewPage()) {
             return null;
+        }
+
+        // A specific (possibly unapproved) version only for users allowed to read versions; else the live one.
+        if ($cvID !== null && $checker->canViewPageVersions()) {
+            $version = Page::getByID($cID, $cvID);
+            if ($version && !$version->isError()) {
+                $page = $version;
+            }
         }
 
         $version = $page->getVersionObject();

@@ -15,6 +15,7 @@ final readonly class DeliveryResult
         public int $statusCode,
         public ?int $ticket = null,
         public ?string $reference = null,
+        public ?string $url = null,
         public ?string $error = null,
         public ?int $retryAfter = null,
         public array $droppedAttachments = [],

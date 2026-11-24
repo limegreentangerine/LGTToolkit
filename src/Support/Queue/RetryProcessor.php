@@ -4,6 +4,7 @@ namespace LgtToolkit\Support\Queue;
 
 use Psr\Log\NullLogger;
 use Psr\Log\LoggerInterface;
+use LgtToolkit\Support\TicketLog;
 use LgtToolkit\Support\SupportSettings;
 use LgtToolkit\Support\TicketPayloadBuilder;
 use LgtToolkit\Support\Delivery\TicketSender;
@@ -26,6 +27,7 @@ class RetryProcessor
         private readonly TicketPayloadBuilder $builder,
         private readonly SupportSettings $settings,
         private readonly MutexInterface $mutex,
+        private readonly TicketLog $log,
         private readonly LoggerInterface $logger = new NullLogger(),
     ) {}
 
@@ -38,7 +40,11 @@ class RetryProcessor
         }
 
         $this->queue->releaseStale($now);
-        $summary->expired = $this->queue->expire($now);
+        $expired = $this->queue->expire($now);
+        foreach ($expired as $reference) {
+            $this->log->markFailed($reference, t('Not delivered within 72 hours.'), $now);
+        }
+        $summary->expired = count($expired);
 
         foreach ($this->queue->due(self::BATCH_SIZE, $now) as $id) {
             if (!$this->queue->claim($id, $now)) {
@@ -54,12 +60,14 @@ class RetryProcessor
 
             if ($result->isDelivered()) {
                 $this->queue->markDelivered($id, $result->ticket, $now);
+                $this->log->markDelivered($item->localReference, $result->ticket, $result->reference, $result->url, $now);
                 $summary->delivered++;
             } elseif ($result->shouldRetry()) {
                 $this->queue->reschedule($item, $result, $now);
                 $summary->rescheduled++;
             } else {
                 $this->queue->markFailed($id, $result->statusCode, $result->error, $now);
+                $this->log->markFailed($item->localReference, $result->error, $now);
                 $summary->failed++;
             }
 
@@ -70,6 +78,7 @@ class RetryProcessor
         }
 
         $this->queue->purge($now);
+        $this->log->purge($now);
     }
 
     private function deliver(QueuedTicket $item, int $timeout, \DateTimeImmutable $now): DeliveryResult

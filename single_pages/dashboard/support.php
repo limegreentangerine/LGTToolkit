@@ -14,6 +14,10 @@ $value = static fn(string $name): string => h((string) ($values[$name] ?? ''));
 $mb = static fn(int $bytes): string => number_format($bytes / 1048576, 1);
 ?>
 
+<?php if ($isSuperUser) { ?>
+    <p class="text-end"><a href="<?php echo h((string) \URL::to('/dashboard/support/tickets')); ?>"><?php echo t('View all tickets submitted through this site'); ?></a></p>
+<?php } ?>
+
 <?php if ($stats['configError']) { ?>
     <div class="alert alert-danger" role="alert">
         <?php echo t('The helpdesk rejected this site\'s key — contact Limegreentangerine.'); ?>

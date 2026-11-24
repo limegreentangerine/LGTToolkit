@@ -63,6 +63,18 @@ final class TicketSenderTest extends TestCase
         $this->assertSame(['email' => 'a@example.com', 'subject' => 'S', 'message' => 'M'], json_decode((string) $request->getBody(), true));
     }
 
+    public function testPortalUrlKeptOnlyOnPortalHost(): void
+    {
+        $ok = $this->send([new Response(201, [], '{"ticket": 1234, "reference": "#1234", "url": "https://portal.limegreentangerine.co.uk/ticket.php?id=1234"}')]);
+        $this->assertSame('https://portal.limegreentangerine.co.uk/ticket.php?id=1234', $ok->url);
+
+        foreach (['javascript:alert(1)', 'https://evil.example.com/ticket.php?id=1', 'http://portal.limegreentangerine.co.uk/ticket.php?id=1', 'https://user:pass@portal.limegreentangerine.co.uk/'] as $url) {
+            $result = $this->send([new Response(201, [], json_encode(['ticket' => 1, 'url' => $url]))]);
+            $this->assertTrue($result->isDelivered());
+            $this->assertNull($result->url, $url);
+        }
+    }
+
     public function testCreatedWithUnreadableBodyStillDelivered(): void
     {
         $result = $this->send([new Response(201, [], 'OK')]);

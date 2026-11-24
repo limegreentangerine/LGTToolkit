@@ -235,18 +235,28 @@ class QueueService
 
     /**
      * Pending items older than 72 h fail. Items last held back by the portal's rate limit (429) are exempt.
+     *
+     * @return list<string> local references of the items that expired
      */
-    public function expire(\DateTimeImmutable $now): int
+    public function expire(\DateTimeImmutable $now): array
     {
-        return $this->db->executeStatement(
-            'UPDATE ' . self::TABLE . ' SET status = ?, date_updated = ? WHERE status = ? AND date_created < ? AND (lastStatusCode IS NULL OR lastStatusCode <> 429)',
-            [
-                self::STATUS_FAILED,
-                $now->format(self::DATE),
-                self::STATUS_PENDING,
-                $now->modify('-' . BackoffPolicy::EXPIRY_SECONDS . ' seconds')->format(self::DATE),
-            ],
+        $rows = $this->db->fetchAllAssociative(
+            'SELECT id, localReference FROM ' . self::TABLE . ' WHERE status = ? AND date_created < ? AND (lastStatusCode IS NULL OR lastStatusCode <> 429)',
+            [self::STATUS_PENDING, $now->modify('-' . BackoffPolicy::EXPIRY_SECONDS . ' seconds')->format(self::DATE)],
         );
+
+        $expired = [];
+        foreach ($rows as $row) {
+            // status guard: a run that claimed the item meanwhile keeps it.
+            if ($this->db->executeStatement(
+                'UPDATE ' . self::TABLE . ' SET status = ?, date_updated = ? WHERE id = ? AND status = ?',
+                [self::STATUS_FAILED, $now->format(self::DATE), $row['id'], self::STATUS_PENDING],
+            ) === 1) {
+                $expired[] = (string) $row['localReference'];
+            }
+        }
+
+        return $expired;
     }
 
     /**

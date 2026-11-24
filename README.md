@@ -92,6 +92,7 @@ The package creates dashboard pages for common tasks:
 - `/dashboard/lgt_toolkit/redirections`
 - `/dashboard/lgt_toolkit/support`
 - `/dashboard/support`
+- `/dashboard/support/tickets` (super user only)
 
 These pages support configuration for:
 
@@ -160,7 +161,9 @@ Separately, the `lgt_page_redirector` attribute type and its `page_redirector` p
 
 Logged-in users can raise a helpdesk ticket from **Dashboard > Support** (`/dashboard/support`), or from the **Report a problem** button in the page toolbar, which prefills the current page. The ticket is sent server-to-server to the helpdesk portal API with diagnostics attached. The portal emails the submitter an acknowledgement with the ticket number.
 
-If the portal can't be reached, the ticket is saved in a retry queue and sent later by a scheduled command. Tickets are only stored while delivery is failing. They are deleted as soon as the portal accepts them.
+If the portal can't be reached, the ticket is saved in a retry queue and sent later by the scheduled task. Queue rows (including attachments) are deleted as soon as the portal accepts the ticket.
+
+Every submission is also recorded in `LgtSupportTickets` (references, status, category, subject, submitter, page and the full message, but no attachments). The super user can see them under **Dashboard > Support > All Tickets** (`/dashboard/support/tickets`), linked from the Support page. The page is hidden from the dashboard menu and its controller refuses everyone except the super user, whatever the page permissions say. Records older than 12 months are deleted by the scheduled task.
 
 #### Requirements
 
@@ -217,7 +220,7 @@ The user's description, category, summary, email, name, optional phone and page,
 - the browser's user agent
 - the latest 15 errors from the core `Logs` table, with emails, passwords, tokens and card-like numbers removed
 
-Config, environment variables, cookies, session data and credentials are never included. Attachments are never written to the File Manager.
+Config, environment variables, cookies, session data and credentials are never included. Attachments are never written to the File Manager, and are not kept once the ticket is delivered.
 
 #### Local testing
 

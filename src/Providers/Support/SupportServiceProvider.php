@@ -2,6 +2,7 @@
 
 namespace LgtToolkit\Providers\Support;
 
+use LgtToolkit\Support\TicketLog;
 use LgtToolkit\Support\SupportSettings;
 use LgtToolkit\Support\TicketValidator;
 use LgtToolkit\Support\UserRateLimiter;
@@ -39,6 +40,7 @@ class SupportServiceProvider extends Provider
         $this->app->bind(TicketValidator::class, fn() => new TicketValidator(ConcreteDiagnosticsSource::canonicalUrl($this->app)));
 
         $this->app->bind(TicketSender::class, fn() => new TicketSender($this->app->make(SupportSettings::class), $logger()));
+        $this->app->bind(TicketLog::class, fn() => new TicketLog($this->app->make(Connection::class)));
         $this->app->bind(QueueService::class, fn() => new QueueService($this->app->make(Connection::class), $logger()));
         $this->app->bind(RetryProcessor::class, fn() => new RetryProcessor(
             $this->app->make(QueueService::class),
@@ -46,6 +48,7 @@ class SupportServiceProvider extends Provider
             $this->app->make(TicketPayloadBuilder::class),
             $this->app->make(SupportSettings::class),
             $this->app->make(MutexInterface::class),
+            $this->app->make(TicketLog::class),
             $logger(),
         ));
 

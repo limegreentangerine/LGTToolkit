@@ -7,6 +7,7 @@ use GuzzleHttp\HandlerStack;
 use Doctrine\DBAL\Connection;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
+use LgtToolkit\Support\TicketLog;
 use LgtToolkit\Support\SupportEnv;
 use Concrete\Core\Production\Modes;
 use GuzzleHttp\Handler\MockHandler;
@@ -28,6 +29,8 @@ final class RetryProcessorTest extends TestCase
     private Connection $db;
 
     private QueueService $queue;
+
+    private TicketLog $log;
 
     private array $history = [];
 
@@ -60,11 +63,14 @@ final class RetryProcessorTest extends TestCase
             }
         };
 
-        return new RetryProcessor($this->queue, new TicketSender($settings, handler: $stack), new TicketPayloadBuilder(), $settings, $mutex);
+        return new RetryProcessor($this->queue, new TicketSender($settings, handler: $stack), new TicketPayloadBuilder(), $settings, $mutex, $this->log);
     }
 
-    private function enqueue(string $ref, bool $possibleDuplicate = true): string
+    private function enqueue(string $ref, bool $possibleDuplicate = true, ?\DateTimeImmutable $at = null): string
     {
+        $at ??= $this->now->modify('-2 hours');
+        $this->log->record($ref, 'broken', 'a@example.com', null, null, 'Broken: form', 'Body', null, TicketLog::STATUS_QUEUED, null, null, null, null, $at);
+
         return $this->queue->enqueue(
             $ref,
             'a@example.com',
@@ -75,8 +81,13 @@ final class RetryProcessorTest extends TestCase
             null,
             [],
             new DeliveryResult($possibleDuplicate ? DeliveryAction::Retryable : DeliveryAction::ConfigError, $possibleDuplicate ? 500 : 401),
-            $this->now->modify('-2 hours'),
+            $at,
         );
+    }
+
+    private function logStatus(string $ref): array
+    {
+        return $this->db->fetchAssociative('SELECT status, portalTicket, portalReference, portalUrl, lastError FROM LgtSupportTickets WHERE localReference = ?', [$ref]);
     }
 
     public function testMixedBatch(): void
@@ -86,7 +97,7 @@ final class RetryProcessorTest extends TestCase
         $rejected = $this->enqueue('Q-3');
 
         $summary = $this->processor([
-            new Response(201, [], '{"ticket": 1}'),
+            new Response(201, [], '{"ticket": 1, "reference": "#1", "url": "https://portal.limegreentangerine.co.uk/ticket.php?id=1"}'),
             new Response(503),
             new Response(400, [], '{"errors": ["bad"]}'),
         ])->run(now: $this->now);
@@ -99,6 +110,30 @@ final class RetryProcessorTest extends TestCase
         $first = json_decode((string) $this->history[0]['request']->getBody(), true)['message'];
         $this->assertStringContainsString('(attempt 2)', $first);
         $this->assertStringContainsString('if a ticket with local reference Q-1 already exists', $first);
+
+        $this->assertSame(['status' => 'delivered', 'portalTicket' => 1, 'portalReference' => '#1', 'portalUrl' => 'https://portal.limegreentangerine.co.uk/ticket.php?id=1', 'lastError' => null], $this->logStatus('Q-1'));
+        $this->assertSame('queued', $this->logStatus('Q-2')['status']);
+        $this->assertSame(['failed', 'bad'], [$this->logStatus('Q-3')['status'], $this->logStatus('Q-3')['lastError']]);
+    }
+
+    public function testExpiredTicketsAreMarkedFailedInTheLog(): void
+    {
+        $this->enqueue('Q-1', at: $this->now->modify('-73 hours'));
+
+        $summary = $this->processor([])->run(now: $this->now);
+
+        $this->assertSame(1, $summary->expired);
+        $this->assertSame('failed', $this->logStatus('Q-1')['status']);
+    }
+
+    public function testLogRecordsOlderThan12MonthsArePurged(): void
+    {
+        $this->log->record('Q-OLD', 'broken', 'a@example.com', null, null, 'S', 'M', null, TicketLog::STATUS_DELIVERED, 1, '#1', null, null, $this->now->modify('-13 months'));
+        $this->log->record('Q-NEW', 'broken', 'a@example.com', null, null, 'S', 'M', null, TicketLog::STATUS_DELIVERED, 2, '#2', null, null, $this->now->modify('-11 months'));
+
+        $this->processor([])->run(now: $this->now);
+
+        $this->assertSame(['Q-NEW'], $this->db->fetchFirstColumn('SELECT localReference FROM LgtSupportTickets'));
     }
 
     public function testStopsEarlyOnConfigError(): void
@@ -174,6 +209,7 @@ final class RetryProcessorTest extends TestCase
         $_ENV[SupportEnv::API_KEY] = 'key';
         $this->db = $this->queueDatabase();
         $this->queue = new QueueService($this->db);
+        $this->log = new TicketLog($this->db);
         $this->history = [];
         $this->now = new \DateTimeImmutable('2026-11-24 12:00:00');
     }

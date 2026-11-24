@@ -150,7 +150,7 @@ final class QueueServiceTest extends TestCase
         $limited = $this->enqueue('Q-2', new DeliveryResult(DeliveryAction::RateLimited, 429), at: $old);
         $fresh = $this->enqueue('Q-3');
 
-        $this->assertSame(1, $this->queue->expire($this->now));
+        $this->assertSame(['Q-1'], $this->queue->expire($this->now));
         $this->assertSame('failed', $this->queue->find($expiring)->status);
         $this->assertSame('pending', $this->queue->find($limited)->status);
         $this->assertSame('pending', $this->queue->find($fresh)->status);
