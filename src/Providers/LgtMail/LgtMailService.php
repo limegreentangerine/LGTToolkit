@@ -3,7 +3,7 @@
 namespace LgtToolkit\Providers\LgtMail;
 
 use Core;
-use Exception;
+use Throwable;
 use LgtToolkit\Mail\SendEmailRequest;
 use Concrete\Core\Error\ErrorList\ErrorList;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,24 +16,24 @@ use Concrete\Core\File\Service\File as FileService;
 class LgtMailService
 {
     protected ErrorList $error;
-    protected string $templateBasePath;
+
+    /** @var list<string> */
+    protected array $templatePaths = [];
 
     /**
-     * Resolves the template base path for the active package or application.
+     * Lists the template directories to search, most specific first.
+     * The package or application folder wins; the toolkit's own mail/ folder is the fallback.
      *
      * @param SendEmailRequest $request The email request being processed.
      *
-     * @return string The template base path.
+     * @return list<string> The template directories.
      */
-    protected function getTemplateBasePath(SendEmailRequest $request): string
+    protected function getTemplatePaths(SendEmailRequest $request): array
     {
-        $documentRoot = $_SERVER['DOCUMENT_ROOT'] ?? '';
-
-        if ($request->pkg) {
-            return rtrim($documentRoot, DIRECTORY_SEPARATOR) . '/' . ltrim($request->pkg->getRelativePath(), '/') . '/mail';
-        }
-
-        return rtrim($documentRoot, DIRECTORY_SEPARATOR) . '/application/mail';
+        return [
+            $request->pkg ? $request->pkg->getPackagePath() . '/mail' : DIR_APPLICATION . '/mail',
+            dirname(__DIR__, 3) . '/mail',
+        ];
     }
 
     /**
@@ -46,13 +46,14 @@ class LgtMailService
      */
     protected function readTemplate(FileService $fh, string $templateName): string
     {
-        $template = $fh->getContents(sprintf('%s/%s.php', $this->templateBasePath, $templateName));
-
-        if (!$template) {
-            throw new Exception(t('Template "%s" not found', $templateName));
+        foreach ($this->templatePaths as $path) {
+            $file = sprintf('%s/%s.php', $path, $templateName);
+            if (is_file($file) && ($template = $fh->getContents($file)) !== false) {
+                return $template;
+            }
         }
 
-        return $template;
+        throw new \RuntimeException(t('Template "%s" not found', $templateName));
     }
 
     /**
@@ -105,7 +106,7 @@ class LgtMailService
      */
     protected function renderBody(FileService $fh, SendEmailRequest $request): string
     {
-        $this->templateBasePath = $this->getTemplateBasePath($request);
+        $this->templatePaths = $this->getTemplatePaths($request);
 
         $emailTemplate = $this->readTemplate($fh, $request->body_template ?? 'email_template');
         $emailContent = $this->readTemplate($fh, $request->template ?? 'default');
@@ -151,7 +152,7 @@ class LgtMailService
      */
     protected function getBaseUrl(): string
     {
-        return 'https://' . ($_SERVER['HTTP_HOST'] ?? 'localhost');
+        return rtrim((string) Core::make('url/canonical'), '/');
     }
 
     /**
@@ -179,6 +180,8 @@ class LgtMailService
      */
     public function sendEmail(SendEmailRequest $request): Response
     {
+        // Fresh per call: the service is a container singleton.
+        $this->error = new ErrorList();
         $this->checkRequestForErrors($request);
 
         if ($this->error->has()) {
@@ -190,7 +193,6 @@ class LgtMailService
 
         $mh = Core::make('mail');
         $fh = Core::make('helper/file');
-        $config = Core::make('config');
 
         try {
             $body = $this->renderBody($fh, $request);
@@ -220,11 +222,9 @@ class LgtMailService
                 $mh->replyto($request->args['reply_to']);
             }
 
-            // Set From
+            // Set From (sendMail() falls back to concrete.email.default address + name)
             if (array_key_exists('from', $request->args)) {
                 $mh->from($request->args['from']);
-            } else {
-                $mh->from($config->get('concrete.email.default.address'));
             }
 
             $mh->setSubject($request->args['subject']);
@@ -233,14 +233,17 @@ class LgtMailService
 
             $mh->setTesting($request->testing ?? false);
 
+            $sent = $mh->sendMail();
+
             return new JsonResponse([
-                'success' => $mh->sendMail(),
-            ], Response::HTTP_ACCEPTED);
-        } catch (Exception $e) {
+                'success' => $sent,
+            ], $sent ? Response::HTTP_ACCEPTED : Response::HTTP_INTERNAL_SERVER_ERROR);
+        } catch (Throwable $e) {
+            // Mailer exception codes can be SMTP codes, so never use them as the HTTP status.
             return new JsonResponse([
                 'success' => false,
                 'errors' => $e->getMessage(),
-            ], $e->getCode() ?: Response::HTTP_INTERNAL_SERVER_ERROR);
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }
